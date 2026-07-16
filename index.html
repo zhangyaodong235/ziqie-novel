@@ -299,6 +299,7 @@ img{max-width:100%}
 .reader-toolbar .title-info{flex:1;font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .reader-content-wrap{
   flex:1;overflow-y:auto;padding:32px 20px;display:flex;justify-content:center;
+  position:relative;
 }
 .reader-content-wrap::-webkit-scrollbar{width:5px}
 .reader-content-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
@@ -403,6 +404,109 @@ img{max-width:100%}
   .main-container{padding:0 12px}
   .section-title{font-size:18px}
 }
+
+/* ==================== 紫茄币系统 ==================== */
+.coin-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;
+  background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#7c2d12;
+  border:none;cursor:pointer;transition:all var(--transition);
+  font-family:inherit;white-space:nowrap;
+}
+.coin-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(245,158,11,0.35)}
+.coin-btn.low{background:linear-gradient(135deg,#f87171,#ef4444);color:#fff;animation:pulse-coin 1.5s infinite}
+@keyframes pulse-coin{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)}}
+
+/* Paywall Overlay */
+.paywall-overlay{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,0.55);z-index:20;backdrop-filter:blur(6px);
+}
+.paywall-card{
+  background:var(--bg-card);border-radius:16px;padding:32px 28px;
+  text-align:center;max-width:380px;width:90%;
+  box-shadow:0 16px 48px rgba(0,0,0,0.3);border:1px solid var(--border);
+}
+.paywall-card .lock-icon{font-size:52px;margin-bottom:12px}
+.paywall-card h3{font-size:20px;font-weight:700;margin-bottom:4px}
+.paywall-card .ch-price{font-size:14px;color:var(--text-muted);margin-bottom:16px}
+.paywall-card .ch-price strong{color:#f59e0b;font-size:18px}
+.paywall-card .balance-info{
+  display:inline-flex;align-items:center;gap:4px;padding:4px 12px;
+  border-radius:14px;background:var(--primary-bg);font-size:13px;margin-bottom:18px;
+}
+.paywall-card .balance-info .coin-icon{font-size:18px}
+.paywall-card .pay-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.paywall-card .pay-actions .btn{min-width:120px;justify-content:center}
+
+/* Recharge Modal */
+.recharge-modal{max-width:500px!important}
+.current-balance{
+  display:flex;align-items:center;gap:6px;padding:8px 16px;
+  border-radius:20px;background:linear-gradient(135deg,#fffbeb,#fef3c7);
+  font-weight:600;font-size:15px;color:#92400e;margin-bottom:20px;
+}
+[data-theme="dark"] .current-balance{background:linear-gradient(135deg,#292524,#44403c);color:#fbbf24}
+.package-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.package-card{
+  padding:16px;border-radius:12px;border:2px solid var(--border);
+  cursor:pointer;transition:all var(--transition);text-align:center;
+  background:var(--bg);
+}
+.package-card:hover{border-color:var(--primary-light);transform:translateY(-2px)}
+.package-card.selected{border-color:#f59e0b;background:#fffbeb;box-shadow:0 4px 16px rgba(245,158,11,0.15)}
+[data-theme="dark"] .package-card.selected{background:#292524}
+.package-card .pkg-coins{font-size:26px;font-weight:800;color:#b45309}
+.package-card .pkg-coins .icon{font-size:22px}
+.package-card .pkg-price{font-size:20px;font-weight:700;margin:6px 0}
+.package-card .pkg-bonus{font-size:12px;color:#ef4444;font-weight:500}
+.package-card .pkg-bonus:empty{display:none}
+.recharge-qr-wrap{display:flex;gap:24px;justify-content:center;margin:16px 0;flex-wrap:wrap}
+.recharge-qr{
+  text-align:center;padding:16px;border-radius:12px;
+  border:1px solid var(--border);background:var(--bg);
+}
+.recharge-qr .qr-placeholder{
+  width:140px;height:140px;margin:0 auto 8px;border-radius:8px;
+  background:var(--border);display:flex;align-items:center;justify-content:center;
+  font-size:64px;color:var(--text-muted);
+}
+.recharge-qr .qr-label{font-size:12px;font-weight:600;margin-bottom:4px}
+.recharge-qr .qr-hint{font-size:11px;color:var(--text-muted)}
+.simulate-divider{
+  display:flex;align-items:center;gap:12px;margin:16px 0;
+  color:var(--text-muted);font-size:12px;
+}
+.simulate-divider::before,.simulate-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Chapter lock/purchased badges */
+.ch-lock{font-size:13px;margin-left:6px}
+.ch-lock.free{color:#22c55e}
+.ch-lock.purchased{color:#3b82f6}
+.ch-lock.locked{color:#f59e0b}
+
+/* Purchase confirm dialog */
+.confirm-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:250;
+  display:flex;align-items:center;justify-content:center;
+}
+.confirm-dialog{
+  background:var(--bg-card);border-radius:16px;padding:24px;
+  max-width:360px;width:92%;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.35);
+}
+.confirm-dialog h4{font-size:17px;margin-bottom:12px}
+.confirm-dialog .confirm-detail{font-size:14px;color:var(--text-secondary);margin-bottom:8px}
+.confirm-dialog .confirm-cost{font-size:13px;color:var(--text-muted);margin-bottom:16px}
+.confirm-dialog .confirm-actions{display:flex;gap:10px;justify-content:center}
+.confirm-dialog .confirm-actions .btn{min-width:100px;justify-content:center}
+
+/* VIP badge on novel cards */
+.novel-card .vip-badge{
+  position:absolute;top:8px;right:8px;
+  padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;
+  background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#7c2d12;
+}
 </style>
 </head>
 <body>
@@ -422,6 +526,7 @@ img{max-width:100%}
     <input type="text" id="searchInput" placeholder="搜索小说名或作者..." oninput="handleSearch(this.value)">
   </div>
   <div class="header-actions">
+    <button class="coin-btn" id="coinBtn" onclick="openRecharge()" title="紫茄币充值">🍆 <span id="coinBalance">30</span></button>
     <button class="btn-icon" onclick="toggleTheme()" title="切换主题">🌓</button>
     <button class="btn-icon" onclick="openSettings()" title="设置">⚙️</button>
   </div>
@@ -601,6 +706,50 @@ img{max-width:100%}
   </div>
 </div>
 
+<!-- ==================== RECHARGE MODAL ==================== -->
+<div class="modal-overlay" id="rechargeModal">
+  <div class="modal recharge-modal">
+    <div class="recharge-header-row">
+      <h3>🍆 紫茄币充值</h3>
+      <button class="btn-icon" onclick="closeRecharge()">✕</button>
+    </div>
+    <div class="current-balance">
+      🍆 当前余额：<strong id="rechargeBalance">30</strong> 紫茄币
+    </div>
+    <div class="package-grid" id="packageGrid"></div>
+    <div class="recharge-qr-wrap">
+      <div class="recharge-qr">
+        <div class="qr-label">💚 微信支付</div>
+        <div class="qr-placeholder">💚</div>
+        <div class="qr-hint">请替换为真实收款码</div>
+      </div>
+      <div class="recharge-qr">
+        <div class="qr-label">💙 支付宝</div>
+        <div class="qr-placeholder">💙</div>
+        <div class="qr-hint">请替换为真实收款码</div>
+      </div>
+    </div>
+    <div class="simulate-divider">测试功能（模拟充值）</div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="simulateRecharge()">🧪 模拟充值 (立即到账)</button>
+  </div>
+</div>
+
+<!-- ==================== PURCHASE CONFIRM DIALOG ==================== -->
+<div class="confirm-overlay" id="confirmDialog" style="display:none">
+  <div class="confirm-dialog">
+    <h4>🔒 购买本章节</h4>
+    <div class="confirm-detail" id="confirmChTitle"></div>
+    <div class="confirm-cost">
+      价格：<strong>🍆 <span id="confirmPrice">10</span></strong> 紫茄币
+      &nbsp;|&nbsp; 余额：🍆 <span id="confirmBalance">30</span>
+    </div>
+    <div class="confirm-actions">
+      <button class="btn btn-outline" onclick="closeConfirmDialog()">取消</button>
+      <button class="btn btn-primary" id="confirmBuyBtn" onclick="confirmPurchaseChapter()">🍆 确认购买</button>
+    </div>
+  </div>
+</div>
+
 <!-- ==================== TOAST CONTAINER ==================== -->
 <div class="toast-container" id="toastContainer"></div>
 
@@ -717,6 +866,10 @@ const STATE = {
   readingProgress: {},     // {novelId: chapterIdx}
   bookmarks: {},           // {novelId: [chapterIdx, ...]}
   history: [],             // [{novelId, chapterIdx, time}]
+  coins: 30,               // 紫茄币余额 (新用户赠送30)
+  purchasedChapters: {},   // {novelId: [chapterIdx, ...]}
+  pendingPurchase: null,   // {novelId, chapterIdx}
+  selectedPackage: null,   // 选中的充值套餐索引
 };
 
 // ============================================================
@@ -731,6 +884,7 @@ function init() {
   renderAllSections();
   bindGlobalEvents();
   updateReaderFontLabel();
+  updateCoinDisplay();
 
   // 恢复上次阅读
   if (STATE.currentNovelId) {
@@ -751,6 +905,8 @@ function loadState() {
     if (saved.userNovels) STATE.userNovels = saved.userNovels;
     if (saved.currentNovelId) STATE.currentNovelId = saved.currentNovelId;
     if (saved.currentChapterIdx !== undefined) STATE.currentChapterIdx = saved.currentChapterIdx;
+    if (saved.coins !== undefined) STATE.coins = saved.coins;
+    if (saved.purchasedChapters) STATE.purchasedChapters = saved.purchasedChapters;
   } catch(e) { /* ignore */ }
 }
 
@@ -766,6 +922,8 @@ function saveState() {
       userNovels: STATE.userNovels,
       currentNovelId: STATE.currentNovelId,
       currentChapterIdx: STATE.currentChapterIdx,
+      coins: STATE.coins,
+      purchasedChapters: STATE.purchasedChapters,
     }));
   } catch(e) {
     showToast('⚠️ 存储空间不足');
@@ -891,14 +1049,23 @@ function openNovelDetail(novelId) {
   }
 
   // Chapter list
-  document.getElementById('chapterCount').textContent = `共 ${novel.chapters.length} 章`;
+  document.getElementById('chapterCount').textContent = `共 ${novel.chapters.length} 章 · ${FREE_CHAPTERS}章免费`;
   const listEl = document.getElementById('chapterListDetail');
-  listEl.innerHTML = novel.chapters.map((ch, i) => `
+  listEl.innerHTML = novel.chapters.map((ch, i) => {
+    let lockIcon = '';
+    if (isChapterFree(i)) {
+      lockIcon = '<span class="ch-lock free">[免费]</span>';
+    } else if (isChapterPurchased(novelId, i)) {
+      lockIcon = '<span class="ch-lock purchased">[已购]</span>';
+    } else {
+      lockIcon = '<span class="ch-lock locked">🔒</span>';
+    }
+    return `
     <div class="chapter-row" onclick="openNovel('${novelId}', ${i})">
-      <span class="ch-title">${escHtml(ch.title)}</span>
+      <span class="ch-title">${escHtml(ch.title)}${lockIcon}</span>
       <span class="ch-meta">${Math.floor(ch.content.length/1000)+1}千字</span>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 
   window.scrollTo({top: 0, behavior: 'smooth'});
   setActiveNav(null);
@@ -996,6 +1163,178 @@ function setActiveNav(page) {
 }
 
 // ============================================================
+//  COIN / PAYWALL SYSTEM
+// ============================================================
+const COIN_PACKAGES = [
+  { coins: 100, price: 1, label: '100 紫茄币', bonus: '' },
+  { coins: 500, price: 5, label: '500 紫茄币', bonus: '' },
+  { coins: 1000, price: 10, label: '1000 紫茄币', bonus: '送 100' },
+  { coins: 5000, price: 50, label: '5000 紫茄币', bonus: '送 800' },
+];
+const CHAPTER_PRICE = 10;   // 每章10紫茄币
+const FREE_CHAPTERS = 3;    // 前3章免费
+
+function updateCoinDisplay() {
+  const el = document.getElementById('coinBalance');
+  if (el) el.textContent = STATE.coins;
+  const el2 = document.getElementById('rechargeBalance');
+  if (el2) el2.textContent = STATE.coins;
+  const btn = document.getElementById('coinBtn');
+  if (btn) btn.classList.toggle('low', STATE.coins < 10);
+}
+
+function isChapterFree(chapterIdx) {
+  return chapterIdx < FREE_CHAPTERS;
+}
+
+function isChapterPurchased(novelId, chapterIdx) {
+  if (isChapterFree(chapterIdx)) return true;
+  const purchased = STATE.purchasedChapters[novelId];
+  return purchased && purchased.includes(chapterIdx);
+}
+
+function purchaseChapter(novelId, chapterIdx) {
+  if (!STATE.purchasedChapters[novelId]) {
+    STATE.purchasedChapters[novelId] = [];
+  }
+  STATE.purchasedChapters[novelId].push(chapterIdx);
+  STATE.coins -= CHAPTER_PRICE;
+  saveState();
+  updateCoinDisplay();
+}
+
+function showPaywall(novelId, chapterIdx) {
+  const novel = STATE.novels.find(n => n.id === novelId);
+  if (!novel) return;
+  const ch = novel.chapters[chapterIdx];
+  if (!ch) return;
+
+  STATE.pendingPurchase = { novelId, chapterIdx };
+
+  const contentWrap = document.getElementById('readerContentWrap');
+  // Remove existing paywall if any
+  const existing = contentWrap.querySelector('.paywall-overlay');
+  if (existing) existing.remove();
+
+  const paywall = document.createElement('div');
+  paywall.className = 'paywall-overlay';
+  paywall.innerHTML = `
+    <div class="paywall-card">
+      <div class="lock-icon">🔒</div>
+      <h3>本章为付费章节</h3>
+      <div class="ch-price">${escHtml(ch.title)} &nbsp;·&nbsp; <strong>🍆 ${CHAPTER_PRICE}</strong> 紫茄币</div>
+      <div class="balance-info">
+        <span class="coin-icon">🍆</span> 我的余额：<strong>${STATE.coins}</strong> 紫茄币
+      </div>
+      <div class="pay-actions">
+        <button class="btn btn-outline" onclick="openRecharge()">💰 充值</button>
+        <button class="btn btn-primary" onclick="confirmPurchase()" ${STATE.coins < CHAPTER_PRICE ? 'disabled style="opacity:0.5;pointer-events:none"' : ''}>
+          🍆 购买本章
+        </button>
+      </div>
+      ${STATE.coins < CHAPTER_PRICE ? '<p style="margin-top:12px;font-size:12px;color:#ef4444">⚠️ 余额不足，请先充值</p>' : ''}
+    </div>
+  `;
+  contentWrap.appendChild(paywall);
+}
+
+function hidePaywall() {
+  const contentWrap = document.getElementById('readerContentWrap');
+  const existing = contentWrap.querySelector('.paywall-overlay');
+  if (existing) existing.remove();
+}
+
+function confirmPurchase() {
+  if (!STATE.pendingPurchase) return;
+  const chIdx = STATE.pendingPurchase.chapterIdx;
+  const novel = STATE.novels.find(n => n.id === STATE.pendingPurchase.novelId);
+  if (!novel) return;
+
+  document.getElementById('confirmChTitle').textContent = novel.chapters[chIdx].title;
+  document.getElementById('confirmPrice').textContent = CHAPTER_PRICE;
+  document.getElementById('confirmBalance').textContent = STATE.coins;
+  document.getElementById('confirmBuyBtn').disabled = STATE.coins < CHAPTER_PRICE;
+  document.getElementById('confirmDialog').style.display = '';
+}
+
+function confirmPurchaseChapter() {
+  if (!STATE.pendingPurchase) return;
+  const { novelId, chapterIdx } = STATE.pendingPurchase;
+  if (STATE.coins < CHAPTER_PRICE) {
+    showToast('⚠️ 紫茄币不足，请先充值');
+    closeConfirmDialog();
+    openRecharge();
+    return;
+  }
+  purchaseChapter(novelId, chapterIdx);
+  hidePaywall();
+  closeConfirmDialog();
+  showToast('✅ 购买成功！已解锁本章');
+  renderReaderChapter();
+  renderReaderChapterList();
+}
+
+function closeConfirmDialog() {
+  document.getElementById('confirmDialog').style.display = 'none';
+  STATE.pendingPurchase = null;
+}
+
+// ============================================================
+//  RECHARGE
+// ============================================================
+function openRecharge() {
+  STATE.selectedPackage = 2; // default 1000 coins
+  renderPackages();
+  updateCoinDisplay();
+  document.getElementById('rechargeModal').classList.add('show');
+}
+
+function closeRecharge() {
+  document.getElementById('rechargeModal').classList.remove('show');
+}
+
+function selectPackage(idx) {
+  STATE.selectedPackage = idx;
+  renderPackages();
+}
+
+function renderPackages() {
+  const grid = document.getElementById('packageGrid');
+  if (!grid) return;
+  grid.innerHTML = COIN_PACKAGES.map((pkg, i) => `
+    <div class="package-card${i === STATE.selectedPackage ? ' selected' : ''}" onclick="selectPackage(${i})">
+      <div class="pkg-coins"><span class="icon">🍆</span> ${pkg.coins}</div>
+      <div class="pkg-price">¥${pkg.price}</div>
+      <div class="pkg-bonus">${pkg.bonus}</div>
+    </div>
+  `).join('');
+}
+
+function simulateRecharge() {
+  if (STATE.selectedPackage === null || STATE.selectedPackage === undefined) {
+    showToast('⚠️ 请先选择充值套餐');
+    return;
+  }
+  const pkg = COIN_PACKAGES[STATE.selectedPackage];
+  let totalCoins = pkg.coins;
+  // Add bonus
+  if (pkg.bonus) {
+    const bonusMatch = pkg.bonus.match(/\d+/);
+    if (bonusMatch) totalCoins += parseInt(bonusMatch[0]);
+  }
+  STATE.coins += totalCoins;
+  saveState();
+  updateCoinDisplay();
+  renderPackages(); // re-render for updated balance
+  showToast(`✅ 充值成功！获得 ${totalCoins} 紫茄币 (¥${pkg.price})`);
+  // If we came from a paywall, refresh it
+  const contentWrap = document.getElementById('readerContentWrap');
+  if (contentWrap && contentWrap.querySelector('.paywall-overlay') && STATE.pendingPurchase) {
+    showPaywall(STATE.pendingPurchase.novelId, STATE.pendingPurchase.chapterIdx);
+  }
+}
+
+// ============================================================
 //  READER
 // ============================================================
 function renderReaderChapterList() {
@@ -1003,12 +1342,21 @@ function renderReaderChapterList() {
   if (!novel) return;
 
   const listEl = document.getElementById('readerChapterList');
-  listEl.innerHTML = novel.chapters.map((ch, i) => `
+  listEl.innerHTML = novel.chapters.map((ch, i) => {
+    let lockIcon = '';
+    if (isChapterFree(i)) {
+      lockIcon = '<span class="ch-lock free">免费</span>';
+    } else if (isChapterPurchased(novel.id, i)) {
+      lockIcon = '<span class="ch-lock purchased">已购</span>';
+    } else {
+      lockIcon = '<span class="ch-lock locked">🔒</span>';
+    }
+    return `
     <button class="reader-ch-item${i === STATE.currentChapterIdx ? ' active' : ''}"
             onclick="openNovel('${novel.id}', ${i})">
-      ${escHtml(ch.title)}
-    </button>
-  `).join('');
+      ${escHtml(ch.title)}${lockIcon}
+    </button>`;
+  }).join('');
 
   // Scroll to active
   setTimeout(() => {
@@ -1023,6 +1371,28 @@ function renderReaderChapter() {
 
   const ch = novel.chapters[STATE.currentChapterIdx];
   if (!ch) return;
+
+  // Hide any previous paywall
+  hidePaywall();
+
+  // Check if chapter is locked
+  if (!isChapterPurchased(novel.id, STATE.currentChapterIdx)) {
+    // Show chapter titles but hide content
+    document.getElementById('readerChapterTitle').textContent = ch.title;
+    document.getElementById('readerChapterInfo').textContent = `《${novel.title}》· ${novel.author}`;
+    document.getElementById('readerTitleInfo').textContent = `《${novel.title}》`;
+    document.getElementById('readerChapterBody').innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:60px 0">本章为付费章节，请购买后阅读</p>';
+    document.getElementById('readerContentWrap').scrollTop = 0;
+
+    // Update chapter list highlight
+    document.querySelectorAll('.reader-ch-item').forEach((btn, i) => {
+      btn.classList.toggle('active', i === STATE.currentChapterIdx);
+    });
+
+    // Show paywall overlay
+    showPaywall(novel.id, STATE.currentChapterIdx);
+    return;
+  }
 
   document.getElementById('readerChapterTitle').textContent = ch.title;
   document.getElementById('readerChapterInfo').textContent = `《${novel.title}》· ${novel.author}`;
@@ -1170,7 +1540,20 @@ function bindGlobalEvents() {
   // Keyboard shortcuts
   document.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
-    if (document.getElementById('settingsModal').classList.contains('show')) return;
+
+    // Handle modals first
+    if (document.getElementById('rechargeModal').classList.contains('show')) {
+      if (e.key === 'Escape') { e.preventDefault(); closeRecharge(); }
+      return;
+    }
+    if (document.getElementById('confirmDialog').style.display !== 'none') {
+      if (e.key === 'Escape') { e.preventDefault(); closeConfirmDialog(); }
+      return;
+    }
+    if (document.getElementById('settingsModal').classList.contains('show')) {
+      if (e.key === 'Escape') { e.preventDefault(); closeSettings(); }
+      return;
+    }
 
     const readerVisible = document.getElementById('readerView').style.display !== 'none';
     if (readerVisible) {
@@ -1193,6 +1576,16 @@ function bindGlobalEvents() {
   // Settings overlay click
   document.getElementById('settingsModal').addEventListener('click', function(e) {
     if (e.target === this) closeSettings();
+  });
+
+  // Recharge overlay click
+  document.getElementById('rechargeModal').addEventListener('click', function(e) {
+    if (e.target === this) closeRecharge();
+  });
+
+  // Confirm dialog overlay click
+  document.getElementById('confirmDialog').addEventListener('click', function(e) {
+    if (e.target === this) closeConfirmDialog();
   });
 
   // Header nav clicks
@@ -1336,6 +1729,7 @@ function showToast(msg) {
 init();
 console.log('🍆 紫茄小说已就绪');
 console.log(`   预置 ${BUILTIN_NOVELS.length} 本小说 · ${BUILTIN_NOVELS.reduce((s,n)=>s+n.chapters.length,0)} 章`);
+console.log('   🍆 紫茄币系统 · 前3章免费 · 后续每章10币');
 console.log('   拖拽 .txt 文件到页面可添加更多');
 console.log('   快捷键: ← → 翻章 | M 目录 | Esc 返回');
 </script>
