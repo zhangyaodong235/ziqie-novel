@@ -507,6 +507,113 @@ img{max-width:100%}
   padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;
   background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#7c2d12;
 }
+
+/* ==================== Admin Panel ==================== */
+.admin-overlay{
+  position:fixed;inset:0;z-index:400;display:none;
+  background:var(--bg);
+}
+.admin-overlay.show{display:flex}
+.admin-sidebar{
+  width:220px;min-width:220px;background:var(--bg-card);
+  border-right:1px solid var(--border);display:flex;flex-direction:column;
+  padding:16px 0;
+}
+.admin-sidebar h3{
+  padding:0 20px 16px;font-size:17px;font-weight:700;
+  border-bottom:1px solid var(--border);margin-bottom:8px;
+  display:flex;align-items:center;gap:8px;
+}
+.admin-nav-item{
+  padding:10px 20px;font-size:14px;cursor:pointer;transition:all var(--transition);
+  display:flex;align-items:center;gap:8px;color:var(--text-secondary);
+  border:none;background:transparent;font-family:inherit;text-align:left;width:100%;
+}
+.admin-nav-item:hover{background:var(--primary-bg);color:var(--primary)}
+.admin-nav-item.active{background:var(--primary-bg);color:var(--primary);font-weight:600;border-right:3px solid var(--primary)}
+.admin-main{
+  flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;
+}
+.admin-toolbar{
+  display:flex;align-items:center;gap:12px;padding:12px 20px;
+  background:var(--bg-header);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+}
+.admin-toolbar .admin-title{flex:1;font-size:16px;font-weight:700}
+.admin-content{
+  flex:1;overflow-y:auto;padding:20px;
+}
+.admin-section{display:none}
+.admin-section.active{display:block}
+
+/* Admin Dashboard */
+.admin-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+.admin-stat-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px;
+  text-align:center;
+}
+.admin-stat-card .val{font-size:32px;font-weight:800;color:var(--primary)}
+.admin-stat-card .lbl{font-size:12px;color:var(--text-muted);margin-top:4px}
+
+/* Admin Forms */
+.admin-form-group{margin-bottom:16px}
+.admin-form-group label{
+  display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text-secondary);
+}
+.admin-form-group input,.admin-form-group textarea,.admin-form-group select{
+  width:100%;padding:10px 14px;border-radius:var(--radius-sm);
+  border:1.5px solid var(--border);background:var(--bg);
+  color:var(--text);font-size:14px;font-family:inherit;
+  outline:none;transition:border-color var(--transition);resize:vertical;
+}
+.admin-form-group input:focus,.admin-form-group textarea:focus,.admin-form-group select:focus{
+  border-color:var(--primary);
+}
+.admin-form-group textarea{min-height:100px;font-family:var(--font-reader);line-height:1.8}
+
+/* Admin Table */
+.admin-table-wrap{overflow-x:auto}
+.admin-table{width:100%;border-collapse:collapse;font-size:13px}
+.admin-table th{
+  text-align:left;padding:10px 14px;border-bottom:2px solid var(--border);
+  font-weight:600;color:var(--text-muted);font-size:12px;white-space:nowrap;
+}
+.admin-table td{
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+.admin-table td.title-col{max-width:200px;overflow:hidden;text-overflow:ellipsis}
+.admin-table tr:hover td{background:var(--primary-bg)}
+.admin-table .actions{display:flex;gap:6px}
+
+/* Admin Login */
+.admin-login-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;
+  display:flex;align-items:center;justify-content:center;
+}
+.admin-login-card{
+  background:var(--bg-card);border-radius:16px;padding:32px;
+  width:92%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  text-align:center;
+}
+.admin-login-card h2{font-size:22px;margin-bottom:6px}
+.admin-login-card .subtitle{font-size:13px;color:var(--text-muted);margin-bottom:20px}
+.admin-login-card input{
+  width:100%;padding:12px 16px;border-radius:10px;margin-bottom:14px;
+  border:1.5px solid var(--border);background:var(--bg);
+  color:var(--text);font-size:15px;font-family:inherit;outline:none;
+  text-align:center;letter-spacing:4px;
+}
+.admin-login-card input:focus{border-color:var(--primary)}
+.admin-login-card .login-error{font-size:12px;color:#ef4444;margin-bottom:10px;min-height:18px}
+
+/* Admin tag/badge */
+.admin-tag{
+  display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;
+}
+.admin-tag.builtin{background:var(--primary-bg);color:var(--primary)}
+.admin-tag.user{background:#fef3c7;color:#b45309}
 </style>
 </head>
 <body>
@@ -703,6 +810,7 @@ img{max-width:100%}
       </div>
     </div>
     <button class="btn btn-primary" style="width:100%;margin-top:20px" onclick="closeSettings()">完成</button>
+    <button class="btn btn-ghost" style="width:100%;margin-top:8px;font-size:12px;color:var(--text-muted)" onclick="closeSettings();openAdminLogin()">🔑 管理后台</button>
   </div>
 </div>
 
@@ -747,6 +855,41 @@ img{max-width:100%}
       <button class="btn btn-outline" onclick="closeConfirmDialog()">取消</button>
       <button class="btn btn-primary" id="confirmBuyBtn" onclick="confirmPurchaseChapter()">🍆 确认购买</button>
     </div>
+  </div>
+</div>
+
+<!-- ==================== ADMIN LOGIN ==================== -->
+<div class="admin-login-overlay" id="adminLoginOverlay" style="display:none">
+  <div class="admin-login-card">
+    <h2>🍆 管理后台</h2>
+    <p class="subtitle">请输入管理密码</p>
+    <input type="password" id="adminPasswordInput" placeholder="请输入密码" onkeydown="if(event.key==='Enter')adminLogin()">
+    <div class="login-error" id="adminLoginError"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="adminLogin()">🔑 登录</button>
+    <button class="btn btn-ghost" style="margin-top:8px;width:100%;justify-content:center" onclick="closeAdminLogin()">取消</button>
+    <p style="font-size:11px;color:var(--text-muted);margin-top:16px">默认密码：admin123</p>
+  </div>
+</div>
+
+<!-- ==================== ADMIN PANEL ==================== -->
+<div class="admin-overlay" id="adminPanel">
+  <aside class="admin-sidebar">
+    <h3>🍆 管理后台</h3>
+    <button class="admin-nav-item active" data-admin-page="dashboard" onclick="switchAdminPage('dashboard')">📊 仪表盘</button>
+    <button class="admin-nav-item" data-admin-page="novels" onclick="switchAdminPage('novels')">📚 小说管理</button>
+    <button class="admin-nav-item" data-admin-page="chapters" onclick="switchAdminPage('chapters')">📝 章节管理</button>
+    <button class="admin-nav-item" data-admin-page="pricing" onclick="switchAdminPage('pricing')">💰 定价设置</button>
+    <button class="admin-nav-item" data-admin-page="reset" onclick="switchAdminPage('reset')">🔄 数据管理</button>
+    <div style="flex:1"></div>
+    <button class="admin-nav-item" onclick="closeAdminPanel()" style="color:#ef4444">🚪 退出后台</button>
+  </aside>
+  <div class="admin-main">
+    <div class="admin-toolbar">
+      <span class="admin-title" id="adminPageTitle">📊 仪表盘</span>
+      <button class="btn btn-ghost btn-sm" onclick="refreshAdminData()">🔄 刷新</button>
+      <button class="btn-icon" onclick="closeAdminPanel()">✕</button>
+    </div>
+    <div class="admin-content" id="adminContent"></div>
   </div>
 </div>
 
@@ -877,6 +1020,7 @@ const STATE = {
 // ============================================================
 function init() {
   loadState();
+  getAdminPassword(); // init admin password
   // 合并用户上传的小说
   STATE.novels = [...BUILTIN_NOVELS, ...STATE.userNovels];
   applyTheme();
@@ -885,6 +1029,7 @@ function init() {
   bindGlobalEvents();
   updateReaderFontLabel();
   updateCoinDisplay();
+  checkAdminHash();
 
   // 恢复上次阅读
   if (STATE.currentNovelId) {
@@ -1542,6 +1687,14 @@ function bindGlobalEvents() {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
 
     // Handle modals first
+    if (document.getElementById('adminLoginOverlay').style.display !== 'none') {
+      if (e.key === 'Escape') { e.preventDefault(); closeAdminLogin(); }
+      return;
+    }
+    if (document.getElementById('adminPanel').classList.contains('show')) {
+      if (e.key === 'Escape') { e.preventDefault(); closeAdminPanel(); }
+      return;
+    }
     if (document.getElementById('rechargeModal').classList.contains('show')) {
       if (e.key === 'Escape') { e.preventDefault(); closeRecharge(); }
       return;
@@ -1586,6 +1739,11 @@ function bindGlobalEvents() {
   // Confirm dialog overlay click
   document.getElementById('confirmDialog').addEventListener('click', function(e) {
     if (e.target === this) closeConfirmDialog();
+  });
+
+  // Admin login overlay click
+  document.getElementById('adminLoginOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeAdminLogin();
   });
 
   // Header nav clicks
@@ -1721,6 +1879,476 @@ function showToast(msg) {
     toast.classList.remove('show');
     setTimeout(() => toast.remove(), 300);
   }, 2000);
+}
+
+// ============================================================
+//  ADMIN PANEL
+// ============================================================
+const ADMIN_DEFAULT_PASSWORD = 'admin123';
+let adminPassword = null;
+let adminEditingNovel = null;
+let adminEditingChapter = null;
+
+function getAdminPassword() {
+  if (adminPassword) return adminPassword;
+  adminPassword = localStorage.getItem('ziqie_admin_password') || ADMIN_DEFAULT_PASSWORD;
+  return adminPassword;
+}
+
+function openAdminLogin() {
+  document.getElementById('adminLoginOverlay').style.display = '';
+  document.getElementById('adminPasswordInput').value = '';
+  document.getElementById('adminLoginError').textContent = '';
+  setTimeout(() => document.getElementById('adminPasswordInput').focus(), 100);
+}
+
+function closeAdminLogin() {
+  document.getElementById('adminLoginOverlay').style.display = 'none';
+}
+
+function adminLogin() {
+  const input = document.getElementById('adminPasswordInput').value;
+  if (input === getAdminPassword()) {
+    document.getElementById('adminLoginOverlay').style.display = 'none';
+    document.getElementById('adminPanel').classList.add('show');
+    document.body.style.overflow = 'hidden';
+    switchAdminPage('dashboard');
+    refreshAdminData();
+    showToast('✅ 欢迎进入管理后台');
+  } else {
+    document.getElementById('adminLoginError').textContent = '❌ 密码错误，请重试';
+    document.getElementById('adminPasswordInput').value = '';
+  }
+}
+
+function closeAdminPanel() {
+  document.getElementById('adminPanel').classList.remove('show');
+  document.body.style.overflow = '';
+  showToast('已退出管理后台');
+}
+
+function switchAdminPage(page) {
+  document.querySelectorAll('.admin-nav-item[data-admin-page]').forEach(el => {
+    el.classList.toggle('active', el.dataset.adminPage === page);
+  });
+  const titles = {
+    dashboard: '📊 仪表盘', novels: '📚 小说管理', chapters: '📝 章节管理',
+    pricing: '💰 定价设置', reset: '🔄 数据管理'
+  };
+  document.getElementById('adminPageTitle').textContent = titles[page] || page;
+  adminEditingNovel = null;
+  adminEditingChapter = null;
+  renderAdminPage(page);
+}
+
+function refreshAdminData() {
+  const active = document.querySelector('.admin-nav-item.active');
+  if (active) renderAdminPage(active.dataset.adminPage);
+}
+
+function renderAdminPage(page) {
+  const container = document.getElementById('adminContent');
+  switch(page) {
+    case 'dashboard': container.innerHTML = renderAdminDashboard(); break;
+    case 'novels': container.innerHTML = renderAdminNovels(); break;
+    case 'chapters': container.innerHTML = renderAdminChapters(); break;
+    case 'pricing': container.innerHTML = renderAdminPricing(); break;
+    case 'reset': container.innerHTML = renderAdminReset(); break;
+    default: container.innerHTML = '<p>未知页面</p>';
+  }
+}
+
+// ---- Dashboard ----
+function renderAdminDashboard() {
+  const totalNovels = STATE.novels.length;
+  const totalChapters = STATE.novels.reduce((s, n) => s + n.chapters.length, 0);
+  const totalFree = STATE.novels.reduce((s, n) => s + Math.min(n.chapters.length, FREE_CHAPTERS), 0);
+  const totalPaid = totalChapters - totalFree;
+  const userNovels = STATE.userNovels.length;
+  return `
+    <div class="admin-stats">
+      <div class="admin-stat-card"><div class="val">${totalNovels}</div><div class="lbl">总小说数</div></div>
+      <div class="admin-stat-card"><div class="val">${totalChapters}</div><div class="lbl">总章节数</div></div>
+      <div class="admin-stat-card"><div class="val">${totalFree}</div><div class="lbl">免费章节</div></div>
+      <div class="admin-stat-card"><div class="val">${totalPaid}</div><div class="lbl">付费章节</div></div>
+      <div class="admin-stat-card"><div class="val">${userNovels}</div><div class="lbl">用户上传</div></div>
+      <div class="admin-stat-card"><div class="val">${BUILTIN_NOVELS.length}</div><div class="lbl">内置小说</div></div>
+    </div>
+    <h4 style="margin-bottom:12px">📋 小说列表</h4>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>小说名</th><th>作者</th><th>分类</th><th>章节</th><th>状态</th><th>来源</th></tr></thead>
+        <tbody>${STATE.novels.map(n => `
+          <tr>
+            <td class="title-col">${escHtml(n.title)}</td>
+            <td>${escHtml(n.author)}</td>
+            <td>${n.category||'-'}</td>
+            <td>${n.chapters.length}章</td>
+            <td>${n.status||'-'}</td>
+            <td><span class="admin-tag ${n.id.startsWith('builtin')?'builtin':'user'}">${n.id.startsWith('builtin')?'内置':'用户'}</span></td>
+          </tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+// ---- Novels Management ----
+function renderAdminNovels() {
+  if (adminEditingNovel) {
+    return renderAdminNovelForm(adminEditingNovel);
+  }
+  return `
+    <div style="margin-bottom:16px">
+      <button class="btn btn-primary btn-sm" onclick="adminAddNovel()">＋ 添加小说</button>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>小说名</th><th>作者</th><th>分类</th><th>章节数</th><th>操作</th></tr></thead>
+        <tbody>${STATE.novels.map(n => `
+          <tr>
+            <td class="title-col">${escHtml(n.title)}</td>
+            <td>${escHtml(n.author)}</td>
+            <td>${n.category||'-'}</td>
+            <td>${n.chapters.length}</td>
+            <td class="actions">
+              <button class="btn btn-outline btn-sm" onclick="adminEditNovel('${n.id}')">编辑</button>
+              <button class="btn btn-outline btn-sm" onclick="adminDeleteNovel('${n.id}')" style="color:#ef4444;border-color:#ef4444">删除</button>
+            </td>
+          </tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+function adminAddNovel() {
+  adminEditingNovel = {
+    id: 'admin_' + Date.now(),
+    title: '', author: '', category: '玄幻', tags: [], status: '连载中',
+    cover: '📖', coverGradient: 'linear-gradient(135deg,#7c3aed,#5b21b6)',
+    desc: '', chapters: [],
+    hot: 0, rating: 0
+  };
+  renderAdminPage('novels');
+}
+
+function adminEditNovel(novelId) {
+  const novel = STATE.novels.find(n => n.id === novelId);
+  if (!novel) return;
+  adminEditingNovel = JSON.parse(JSON.stringify(novel));
+  renderAdminPage('novels');
+}
+
+function adminDeleteNovel(novelId) {
+  const novel = STATE.novels.find(n => n.id === novelId);
+  if (!novel) return;
+  if (!confirm(`确定要删除「${novel.title}」吗？此操作不可恢复！`)) return;
+  const idx = STATE.novels.findIndex(n => n.id === novelId);
+  if (idx === -1) return;
+  // Check if builtin
+  if (novelId.startsWith('builtin_')) {
+    // Built-in novels can't be truly deleted, just hidden
+    showToast('⚠️ 内置小说无法删除，但可编辑其内容');
+    return;
+  }
+  STATE.novels.splice(idx, 1);
+  STATE.userNovels = STATE.novels.filter(n => !n.id.startsWith('builtin_'));
+  delete STATE.readingProgress[novelId];
+  saveState();
+  renderAllSections();
+  refreshAdminData();
+  showToast('✅ 已删除');
+}
+
+function renderAdminNovelForm(novel) {
+  const isNew = !STATE.novels.find(n => n.id === novel.id);
+  return `
+    <h4 style="margin-bottom:16px">${isNew ? '＋ 添加小说' : '✏️ 编辑小说'}</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="admin-form-group">
+        <label>书名 *</label>
+        <input type="text" id="afTitle" value="${escHtml(novel.title||'')}" placeholder="小说名称">
+      </div>
+      <div class="admin-form-group">
+        <label>作者</label>
+        <input type="text" id="afAuthor" value="${escHtml(novel.author||'')}" placeholder="作者名">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div class="admin-form-group">
+        <label>分类</label>
+        <select id="afCategory">
+          ${['玄幻','仙侠','都市','悬疑','言情','科幻','历史','自定义'].map(c => `<option value="${c}" ${novel.category===c?'selected':''}>${c}</option>`).join('')}
+        </select>
+      </div>
+      <div class="admin-form-group">
+        <label>状态</label>
+        <select id="afStatus">
+          <option value="连载中" ${novel.status==='连载中'?'selected':''}>连载中</option>
+          <option value="已完结" ${novel.status==='已完结'?'selected':''}>已完结</option>
+        </select>
+      </div>
+      <div class="admin-form-group">
+        <label>封面图标</label>
+        <input type="text" id="afCover" value="${novel.cover||'📖'}" placeholder="emoji">
+      </div>
+    </div>
+    <div class="admin-form-group">
+      <label>简介</label>
+      <textarea id="afDesc" placeholder="小说简介...">${escHtml(novel.desc||'')}</textarea>
+    </div>
+    <div class="admin-form-group">
+      <label>标签 (逗号分隔)</label>
+      <input type="text" id="afTags" value="${(novel.tags||[]).join(',')}" placeholder="热血,修仙,剑道">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="btn btn-primary" onclick="adminSaveNovel()">💾 保存</button>
+      <button class="btn btn-outline" onclick="adminEditingNovel=null;renderAdminPage('novels')">取消</button>
+    </div>`;
+}
+
+function adminSaveNovel() {
+  const novel = adminEditingNovel;
+  if (!novel) return;
+  novel.title = document.getElementById('afTitle').value.trim();
+  novel.author = document.getElementById('afAuthor').value.trim() || '未知作者';
+  novel.category = document.getElementById('afCategory').value;
+  novel.status = document.getElementById('afStatus').value;
+  novel.cover = document.getElementById('afCover').value || '📖';
+  novel.desc = document.getElementById('afDesc').value.trim();
+  novel.tags = document.getElementById('afTags').value.split(',').map(t => t.trim()).filter(Boolean);
+  if (!novel.title) { showToast('⚠️ 请输入书名'); return; }
+
+  const existIdx = STATE.novels.findIndex(n => n.id === novel.id);
+  if (existIdx >= 0) {
+    // Preserve chapters
+    novel.chapters = STATE.novels[existIdx].chapters;
+    STATE.novels[existIdx] = novel;
+  } else {
+    STATE.novels.push(novel);
+  }
+  STATE.userNovels = STATE.novels.filter(n => !n.id.startsWith('builtin_'));
+  saveState();
+  renderAllSections();
+  adminEditingNovel = null;
+  renderAdminPage('novels');
+  showToast('✅ 已保存');
+}
+
+// ---- Chapters Management ----
+function renderAdminChapters() {
+  const selectedNovelId = adminEditingChapter?.novelId || null;
+  return `
+    <div class="admin-form-group">
+      <label>选择小说</label>
+      <select id="acNovelSelect" onchange="adminSelectNovelForChapters(this.value)">
+        <option value="">-- 请选择小说 --</option>
+        ${STATE.novels.map(n => `<option value="${n.id}" ${n.id===selectedNovelId?'selected':''}>${escHtml(n.title)} (${n.chapters.length}章)</option>`).join('')}
+      </select>
+    </div>
+    <div id="acChapterArea">
+      ${selectedNovelId ? renderAdminChapterEditor(selectedNovelId) : '<p style="color:var(--text-muted)">请先选择一本小说</p>'}
+    </div>`;
+}
+
+function adminSelectNovelForChapters(novelId) {
+  adminEditingChapter = { novelId, editingIdx: null };
+  const area = document.getElementById('acChapterArea');
+  if (area) area.innerHTML = renderAdminChapterEditor(novelId);
+}
+
+function renderAdminChapterEditor(novelId) {
+  const novel = STATE.novels.find(n => n.id === novelId);
+  if (!novel) return '<p>小说未找到</p>';
+  const editIdx = adminEditingChapter?.editingIdx;
+  if (editIdx !== null && editIdx !== undefined) {
+    return renderChapterForm(novel, editIdx);
+  }
+  return `
+    <div style="margin-bottom:12px">
+      <button class="btn btn-primary btn-sm" onclick="adminAddChapter()">＋ 添加章节</button>
+      <span style="margin-left:12px;font-size:13px;color:var(--text-muted)">共 ${novel.chapters.length} 章 · 前${FREE_CHAPTERS}章免费</span>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>#</th><th>章节标题</th><th>字数</th><th>类型</th><th>操作</th></tr></thead>
+        <tbody>${novel.chapters.map((ch, i) => `
+          <tr>
+            <td>${i+1}</td>
+            <td class="title-col">${escHtml(ch.title)}</td>
+            <td>${ch.content.length}字</td>
+            <td>${i < FREE_CHAPTERS ? '<span class="admin-tag" style="background:#dcfce7;color:#16a34a">免费</span>' : '<span class="admin-tag builtin">付费</span>'}</td>
+            <td class="actions">
+              <button class="btn btn-outline btn-sm" onclick="adminEditChapter(${i})">编辑</button>
+              <button class="btn btn-outline btn-sm" onclick="adminDeleteChapter(${i})" style="color:#ef4444;border-color:#ef4444">删除</button>
+            </td>
+          </tr>`).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+function adminAddChapter() {
+  if (!adminEditingChapter) return;
+  adminEditingChapter.editingIdx = -1; // -1 means new
+  const area = document.getElementById('acChapterArea');
+  if (area) area.innerHTML = renderAdminChapterEditor(adminEditingChapter.novelId);
+}
+
+function adminEditChapter(idx) {
+  if (!adminEditingChapter) return;
+  adminEditingChapter.editingIdx = idx;
+  const area = document.getElementById('acChapterArea');
+  if (area) area.innerHTML = renderAdminChapterEditor(adminEditingChapter.novelId);
+}
+
+function adminDeleteChapter(idx) {
+  if (!adminEditingChapter) return;
+  const novel = STATE.novels.find(n => n.id === adminEditingChapter.novelId);
+  if (!novel) return;
+  if (!confirm(`确定要删除第${idx+1}章「${novel.chapters[idx].title}」吗？`)) return;
+  novel.chapters.splice(idx, 1);
+  saveState();
+  renderAllSections();
+  adminEditingChapter.editingIdx = null;
+  const area = document.getElementById('acChapterArea');
+  if (area) area.innerHTML = renderAdminChapterEditor(adminEditingChapter.novelId);
+  showToast('✅ 已删除');
+}
+
+function renderChapterForm(novel, idx) {
+  const ch = idx >= 0 ? novel.chapters[idx] : { title: '', content: '' };
+  const isNew = idx < 0;
+  return `
+    <h4 style="margin-bottom:16px">${isNew ? '＋ 添加章节' : '✏️ 编辑章节'} — ${escHtml(novel.title)}</h4>
+    <div class="admin-form-group">
+      <label>章节标题 *</label>
+      <input type="text" id="acTitle" value="${escHtml(ch.title)}" placeholder="如：第一章 剑帝重生">
+    </div>
+    <div class="admin-form-group">
+      <label>章节内容</label>
+      <textarea id="acContent" style="min-height:300px" placeholder="章节正文...">${escHtml(ch.content)}</textarea>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="btn btn-primary" onclick="adminSaveChapter(${idx})">💾 保存</button>
+      <button class="btn btn-outline" onclick="adminEditingChapter.editingIdx=null;const a=document.getElementById('acChapterArea');if(a)a.innerHTML=renderAdminChapterEditor(adminEditingChapter.novelId)">取消</button>
+    </div>`;
+}
+
+function adminSaveChapter(idx) {
+  if (!adminEditingChapter) return;
+  const novel = STATE.novels.find(n => n.id === adminEditingChapter.novelId);
+  if (!novel) return;
+  const title = document.getElementById('acTitle').value.trim();
+  const content = document.getElementById('acContent').value.trim();
+  if (!title) { showToast('⚠️ 请输入章节标题'); return; }
+  if (idx >= 0) {
+    novel.chapters[idx] = { title, content };
+  } else {
+    novel.chapters.push({ title, content });
+  }
+  saveState();
+  renderAllSections();
+  adminEditingChapter.editingIdx = null;
+  const area = document.getElementById('acChapterArea');
+  if (area) area.innerHTML = renderAdminChapterEditor(adminEditingChapter.novelId);
+  showToast('✅ 已保存');
+}
+
+// ---- Pricing ----
+function renderAdminPricing() {
+  return `
+    <h4 style="margin-bottom:16px">💰 定价设置</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:500px">
+      <div class="admin-form-group">
+        <label>每章价格 (紫茄币)</label>
+        <input type="number" id="apPricePerChapter" value="${CHAPTER_PRICE}" min="1" max="9999">
+      </div>
+      <div class="admin-form-group">
+        <label>免费章数</label>
+        <input type="number" id="apFreeChapters" value="${FREE_CHAPTERS}" min="0" max="999">
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="adminSavePricing()" style="margin-top:8px">💾 保存定价</button>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:8px">⚠️ 注意：这些是全局常量，修改后需要刷新页面生效（因为 JS const 不可动态修改）。此功能展示当前配置。</p>
+    <h4 style="margin:24px 0 12px">🍆 充值套餐</h4>
+    <div class="admin-table-wrap" style="max-width:600px">
+      <table class="admin-table">
+        <thead><tr><th>紫茄币</th><th>价格 (¥)</th><th>赠送</th></tr></thead>
+        <tbody>${COIN_PACKAGES.map(p => `
+          <tr><td>${p.coins}</td><td>¥${p.price}</td><td>${p.bonus||'-'}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:8px">套餐在代码中定义，如需修改请联系开发者</p>`;
+}
+
+// ---- Reset / Data Management ----
+function renderAdminReset() {
+  return `
+    <h4 style="margin-bottom:16px">🔄 数据管理</h4>
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:400px">
+      <div style="padding:16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)">
+        <strong>修改管理密码</strong>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <input type="password" id="arNewPassword" placeholder="新密码" style="flex:1;padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-card);color:var(--text);font-family:inherit">
+          <button class="btn btn-primary btn-sm" onclick="adminChangePassword()">修改</button>
+        </div>
+      </div>
+      <button class="btn btn-outline" onclick="adminExportData()">📥 导出所有数据 (JSON)</button>
+      <button class="btn btn-outline" onclick="adminImportData()">📤 导入数据 (JSON)</button>
+      <input type="file" id="arImportFile" accept=".json" style="display:none" onchange="adminHandleImport(this)">
+      <button class="btn btn-outline" onclick="if(confirm('确定重置所有阅读进度和购买记录？')){STATE.readingProgress={};STATE.purchasedChapters={};STATE.coins=30;saveState();showToast('✅ 已重置')}" style="color:#ef4444;border-color:#ef4444">🗑 重置阅读/购买数据</button>
+      <button class="btn btn-outline" onclick="if(confirm('⚠️ 确定重置所有用户上传的小说？此操作不可恢复！')){STATE.userNovels=[];STATE.novels=[...BUILTIN_NOVELS];saveState();renderAllSections();refreshAdminData();showToast('✅ 已重置')}" style="color:#ef4444;border-color:#ef4444">🗑 清除用户上传小说</button>
+    </div>`;
+}
+
+function adminChangePassword() {
+  const newPwd = document.getElementById('arNewPassword').value.trim();
+  if (!newPwd) { showToast('⚠️ 请输入新密码'); return; }
+  if (newPwd.length < 4) { showToast('⚠️ 密码至少4位'); return; }
+  adminPassword = newPwd;
+  localStorage.setItem('ziqie_admin_password', newPwd);
+  showToast('✅ 密码已修改');
+}
+
+function adminExportData() {
+  const data = JSON.parse(localStorage.getItem('ziqie_novel_state') || '{}');
+  data.userNovels = STATE.userNovels;
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'ziqie_novel_backup.json';
+  a.click(); URL.revokeObjectURL(url);
+  showToast('✅ 数据已导出');
+}
+
+function adminImportData() {
+  document.getElementById('arImportFile').click();
+}
+
+function adminHandleImport(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!confirm('确定导入数据？这将覆盖当前所有数据！')) return;
+      localStorage.setItem('ziqie_novel_state', JSON.stringify(data));
+      loadState();
+      STATE.novels = [...BUILTIN_NOVELS, ...STATE.userNovels];
+      saveState();
+      renderAllSections();
+      refreshAdminData();
+      showToast('✅ 数据已导入，请刷新页面');
+    } catch(err) {
+      showToast('❌ 无效的JSON文件');
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+// Also support URL hash #admin to open login
+function checkAdminHash() {
+  if (window.location.hash === '#admin') {
+    openAdminLogin();
+  }
 }
 
 // ============================================================
