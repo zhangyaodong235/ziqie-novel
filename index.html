@@ -621,7 +621,7 @@ img{max-width:100%}
 <!-- ==================== HEADER ==================== -->
 <header class="header">
   <div class="header-logo" onclick="goHome()">
-    <span class="icon">🍆</span>紫茄小说 <span style="font-size:10px;color:var(--text-muted);font-weight:400">v2.1</span>
+    <span class="icon">🍆</span>紫茄小说 <span style="font-size:10px;color:var(--text-muted);font-weight:400">v2.2</span>
   </div>
   <nav class="header-nav" id="headerNav">
     <a href="#" class="active" data-page="home">首页</a>
@@ -899,13 +899,13 @@ img{max-width:100%}
 <script>
 // 调试：检测 JS 是否能执行
 window.__JS_LOADED = false;
-window.addEventListener('DOMContentLoaded', function() {
+(function check() {
   setTimeout(function() {
     if (!window.__JS_LOADED) {
       document.body.innerHTML = '<div style="padding:40px;text-align:center;color:red;font-family:sans-serif"><h2>❌ 主脚本未能执行</h2><p>可能存在语法错误导致整个脚本解析失败</p><p>请打开浏览器控制台 (F12) 查看具体错误</p></div>';
     }
-  }, 1000);
-});
+  }, 1500);
+})();
 </script>
 <script>
 // ============================================================
