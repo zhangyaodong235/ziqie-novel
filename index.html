@@ -621,7 +621,7 @@ img{max-width:100%}
 <!-- ==================== HEADER ==================== -->
 <header class="header">
   <div class="header-logo" onclick="goHome()">
-    <span class="icon">🍆</span>紫茄小说 <span style="font-size:10px;color:var(--text-muted);font-weight:400">v2.2</span>
+    <span class="icon">🍆</span>紫茄小说 <span style="font-size:10px;color:var(--text-muted);font-weight:400">v2.3</span>
   </div>
   <nav class="header-nav" id="headerNav">
     <a href="#" class="active" data-page="home">首页</a>
@@ -2391,9 +2391,18 @@ function checkAdminHash() {
 try {
   init();
   window.__JS_LOADED = true;
+
+  // 诊断面板
+  var diag = document.createElement('div');
+  diag.style.cssText = 'position:fixed;bottom:10px;right:10px;background:#1a1a2e;color:#0f0;padding:10px 14px;border-radius:8px;font-size:11px;font-family:monospace;z-index:9999;max-width:300px;opacity:0.9';
+  diag.innerHTML = 'BUILTIN: ' + BUILTIN_NOVELS.length + ' | STATE.novels: ' + STATE.novels.length + ' | coins: ' + STATE.coins;
+  document.body.appendChild(diag);
+
   console.log('🍆 紫茄小说已就绪');
+  console.log('STATE.novels:', STATE.novels.length, 'novels');
+  console.log('BUILTIN_NOVELS:', BUILTIN_NOVELS.length, 'builtin');
 } catch(e) {
-  document.body.innerHTML = '<div style="padding:40px;text-align:center;color:red;font-family:sans-serif"><h2>❌ JS 运行时错误</h2><pre style="text-align:left;background:#fee;padding:20px;border-radius:8px;margin:20px auto;max-width:700px;overflow:auto">' + e.stack + '</pre></div>';
+  document.body.innerHTML = '<div style="padding:40px;text-align:center;font-family:sans-serif"><h2 style="color:red">❌ JS 运行时错误</h2><pre style="text-align:left;background:#fee;padding:20px;border-radius:8px;margin:20px auto;max-width:700px;overflow:auto;font-size:12px">' + e.stack + '\n\n错误: ' + e.message + '</pre><p>请截图发给我</p></div>';
   console.error(e);
 }
 console.log(`   预置 ${BUILTIN_NOVELS.length} 本小说 · ${BUILTIN_NOVELS.reduce((s,n)=>s+n.chapters.length,0)} 章`);
