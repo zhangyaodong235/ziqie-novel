@@ -897,6 +897,17 @@ img{max-width:100%}
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
+// 调试：检测 JS 是否能执行
+window.__JS_LOADED = false;
+window.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    if (!window.__JS_LOADED) {
+      document.body.innerHTML = '<div style="padding:40px;text-align:center;color:red;font-family:sans-serif"><h2>❌ 主脚本未能执行</h2><p>可能存在语法错误导致整个脚本解析失败</p><p>请打开浏览器控制台 (F12) 查看具体错误</p></div>';
+    }
+  }, 1000);
+});
+</script>
+<script>
 // ============================================================
 //  DATA: 预置小说库
 // ============================================================
@@ -2377,8 +2388,14 @@ function checkAdminHash() {
 // ============================================================
 //  BOOT
 // ============================================================
-init();
-console.log('🍆 紫茄小说已就绪');
+try {
+  init();
+  window.__JS_LOADED = true;
+  console.log('🍆 紫茄小说已就绪');
+} catch(e) {
+  document.body.innerHTML = '<div style="padding:40px;text-align:center;color:red;font-family:sans-serif"><h2>❌ JS 运行时错误</h2><pre style="text-align:left;background:#fee;padding:20px;border-radius:8px;margin:20px auto;max-width:700px;overflow:auto">' + e.stack + '</pre></div>';
+  console.error(e);
+}
 console.log(`   预置 ${BUILTIN_NOVELS.length} 本小说 · ${BUILTIN_NOVELS.reduce((s,n)=>s+n.chapters.length,0)} 章`);
 console.log('   🍆 紫茄币系统 · 前3章免费 · 后续每章10币');
 console.log('   拖拽 .txt 文件到页面可添加更多');
