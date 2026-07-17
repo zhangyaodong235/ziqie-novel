@@ -1061,12 +1061,9 @@ function renderReaderChapterList() {
   if (!novel) return;
 
   const listEl = document.getElementById('readerChapterList');
-  listEl.innerHTML = novel.chapters.map((ch, i) => `
-    <button class="reader-ch-item${i === STATE.currentChapterIdx ? ' active' : ''}"
-            onclick="openNovel('${novel.id}', ${i})">
-      ${escHtml(ch.title)}
-    </button>
-  `).join('');
+  listEl.innerHTML = novel.chapters.map(function(ch, i) {
+    return '<button class="reader-ch-item' + (i === STATE.currentChapterIdx ? ' active' : '') + '" onclick="openNovel(\'' + novel.id + '\', ' + i + ')">' + escHtml(ch.title) + '</button>';
+  }).join('');
 
   // Scroll to active
   setTimeout(() => {
@@ -1099,7 +1096,7 @@ function renderReaderChapter() {
     if (paragraphs.length === 0) paragraphs = [ch.content];
   }
   document.getElementById('readerChapterBody').innerHTML = paragraphs
-    .map(p => `<p>${escHtml(p.trim())}</p>`).join('\n');
+    .map(function(p) { return '<p>' + escHtml(p.trim()) + '</p>'; }).join('\n');
   
   var st2 = document.getElementById('readerStatus');
   if (st2) { st2.textContent = 'OK: ' + novel.title + ' - Ch' + (STATE.currentChapterIdx+1) + ' (' + paragraphs.length + ' paragraphs, ' + document.getElementById('readerChapterBody').innerHTML.length + ' bytes)'; }
@@ -1121,7 +1118,7 @@ function updateReaderProgress() {
 
   const pct = ((STATE.currentChapterIdx + 1) / novel.chapters.length * 100).toFixed(0);
   document.getElementById('readerProgressFill').style.width = pct + '%';
-  document.getElementById('readerProgressText').textContent = `${STATE.currentChapterIdx + 1}/${novel.chapters.length}`;
+  document.getElementById('readerProgressText').textContent = (STATE.currentChapterIdx + 1) + '/' + novel.chapters.length;
   
   // Also update toolbar progress
   var tpt = document.getElementById('toolbarProgressText');
