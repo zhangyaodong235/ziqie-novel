@@ -545,6 +545,9 @@ img{max-width:100%}
           <span style="font-size:12px;color:var(--text-muted);min-width:36px;text-align:center" id="readerFontSizeLabel">18px</span>
           <button class="btn-icon" onclick="changeReaderFontSize(1)">A+</button>
         </div>
+        <button class="btn-icon" onclick="readerPrevChapter()" id="toolbarPrevBtn" style="font-size:14px" title="上一章">◀</button>
+        <span style="font-size:12px;color:var(--text-muted)" id="toolbarProgressText"></span>
+        <button class="btn-icon" onclick="readerNextChapter()" id="toolbarNextBtn" style="font-size:14px" title="下一章">▶</button>
         <button class="btn-icon" onclick="openSettings()">⚙️</button>
         <button class="btn-icon" onclick="closeReader()">✕</button>
       </div>
@@ -1093,6 +1096,16 @@ function updateReaderProgress() {
   const pct = ((STATE.currentChapterIdx + 1) / novel.chapters.length * 100).toFixed(0);
   document.getElementById('readerProgressFill').style.width = pct + '%';
   document.getElementById('readerProgressText').textContent = `${STATE.currentChapterIdx + 1}/${novel.chapters.length}`;
+  
+  // Also update toolbar progress
+  var tpt = document.getElementById('toolbarProgressText');
+  if (tpt) tpt.textContent = (STATE.currentChapterIdx + 1) + '/' + novel.chapters.length;
+  
+  var tpb = document.getElementById('toolbarPrevBtn');
+  if (tpb) tpb.style.opacity = STATE.currentChapterIdx === 0 ? '0.3' : '1';
+  
+  var tnb = document.getElementById('toolbarNextBtn');  
+  if (tnb) tnb.style.opacity = STATE.currentChapterIdx >= novel.chapters.length - 1 ? '0.3' : '1';
 
   document.getElementById('readerPrevBtn').disabled = STATE.currentChapterIdx === 0;
   document.getElementById('readerNextBtn').disabled = STATE.currentChapterIdx >= novel.chapters.length - 1;
