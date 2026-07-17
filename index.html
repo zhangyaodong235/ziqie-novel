@@ -405,11 +405,8 @@ img{max-width:100%}
     transform:translateX(-100%);margin-left:0;
     transition:transform 0.25s;
   }
-  .reader-sidebar.open{transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,0.3)}
-  .reader-sidebar-overlay{
-    display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:65;
-  }
-  .reader-sidebar-overlay.show{display:block}
+  .reader-sidebar:not(.collapsed){transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,0.3)}
+
   .reader-content-wrap{padding:20px 14px}
   .reader-content .chapter-body{font-size:16px;line-height:1.9}
   .reader-content h1.chapter-heading{font-size:22px}
@@ -549,7 +546,6 @@ img{max-width:100%}
       </div>
       <div class="reader-sidebar-list" id="readerChapterList"></div>
     </aside>
-    <div class="reader-sidebar-overlay" id="readerSidebarOverlay" onclick="toggleReaderSidebar()"></div>
 
     <!-- Reader Main -->
     <div class="reader-main" id="readerMain">
@@ -967,7 +963,7 @@ const novel = STATE.novels.find(n => n.id === novelId);
   rv.style.background = 'var(--bg)';
   document.body.style.overflow = 'hidden';
 
-  // Sidebar: visible on desktop, hidden on mobile
+  // Desktop: show sidebar; Mobile: hide sidebar
   var sb = document.getElementById('readerSidebar');
   if (window.innerWidth >= 769) {
     sb.classList.remove('collapsed');
@@ -983,14 +979,9 @@ const novel = STATE.novels.find(n => n.id === novelId);
 
 function closeReader() {
   saveState();
-  var sidebar = document.getElementById('readerSidebar');
-  if (sidebar) { sidebar.classList.remove('open'); sidebar.classList.add('collapsed'); }
-  var overlay = document.getElementById('readerSidebarOverlay');
-  if (overlay) overlay.classList.remove('show');
   document.getElementById('readerView').style.display = 'none';
   document.getElementById('readerView').classList.remove('active');
   document.body.style.overflow = '';
-  // Always go back to home page
   STATE.currentNovelId = null;
   goHome();
 }
@@ -1157,22 +1148,7 @@ function readerNextChapter() {
 }
 
 function toggleReaderSidebar() {
-  var sidebar = document.getElementById('readerSidebar');
-  if (window.innerWidth < 769) {
-    // Mobile: use 'open' class for slide-in sidebar
-    var overlay = document.getElementById('readerSidebarOverlay');
-    var isOpen = sidebar.classList.contains('open');
-    if (isOpen) {
-      sidebar.classList.remove('open');
-      if (overlay) overlay.classList.remove('show');
-    } else {
-      sidebar.classList.add('open');
-      if (overlay) overlay.classList.add('show');
-    }
-  } else {
-    // Desktop: use 'collapsed' class for flex sidebar
-    sidebar.classList.toggle('collapsed');
-  }
+  document.getElementById('readerSidebar').classList.toggle('collapsed');
 }
 
 // ============================================================
