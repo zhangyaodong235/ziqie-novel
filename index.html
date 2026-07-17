@@ -405,7 +405,11 @@ img{max-width:100%}
     transform:translateX(-100%);margin-left:0;
     transition:transform 0.25s;
   }
-  .reader-sidebar:not(.collapsed){transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,0.3)}
+  .reader-sidebar.open{transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,0.3)}
+  .reader-sidebar-overlay{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:65;
+  }
+  .reader-sidebar-overlay.show{display:block}
   .reader-content-wrap{padding:20px 14px}
   .reader-content .chapter-body{font-size:16px;line-height:1.9}
   .reader-content h1.chapter-heading{font-size:22px}
@@ -538,13 +542,14 @@ img{max-width:100%}
 <div class="reader-view" id="readerView">
   <div class="reader-layout">
     <!-- Reader Sidebar -->
-    <aside class="reader-sidebar collapsed" id="readerSidebar">
+    <aside class="reader-sidebar" id="readerSidebar">
       <div class="reader-sidebar-head">
         📑 目录
         <button class="btn-icon" onclick="toggleReaderSidebar()" style="font-size:14px">✕</button>
       </div>
       <div class="reader-sidebar-list" id="readerChapterList"></div>
     </aside>
+    <div class="reader-sidebar-overlay" id="readerSidebarOverlay" onclick="toggleReaderSidebar()"></div>
 
     <!-- Reader Main -->
     <div class="reader-main" id="readerMain">
@@ -946,12 +951,14 @@ function openNovel(novelId, chapterIdx = 0) {
   document.getElementById('readerView').classList.add('active');
   document.body.style.overflow = 'hidden';
 
-  // Desktop: show sidebar by default; Mobile: hide after selecting chapter
+  // Desktop: show sidebar; Mobile: hide sidebar after chapter select
   var sb = document.getElementById('readerSidebar');
   if (window.innerWidth >= 769) {
     sb.classList.remove('collapsed');
   } else {
-    sb.classList.add('collapsed');
+    sb.classList.remove('open');
+    var ov = document.getElementById('readerSidebarOverlay');
+    if (ov) ov.classList.remove('show');
   }
   
   renderReaderChapterList();
@@ -962,6 +969,10 @@ function openNovel(novelId, chapterIdx = 0) {
 
 function closeReader() {
   saveState();
+  var sidebar = document.getElementById('readerSidebar');
+  if (sidebar) { sidebar.classList.remove('open'); sidebar.classList.add('collapsed'); }
+  var overlay = document.getElementById('readerSidebarOverlay');
+  if (overlay) overlay.classList.remove('show');
   document.getElementById('readerView').style.display = 'none';
   document.getElementById('readerView').classList.remove('active');
   document.body.style.overflow = '';
@@ -1120,7 +1131,22 @@ function readerNextChapter() {
 }
 
 function toggleReaderSidebar() {
-  document.getElementById('readerSidebar').classList.toggle('collapsed');
+  var sidebar = document.getElementById('readerSidebar');
+  if (window.innerWidth < 769) {
+    // Mobile: use 'open' class for slide-in sidebar
+    var overlay = document.getElementById('readerSidebarOverlay');
+    var isOpen = sidebar.classList.contains('open');
+    if (isOpen) {
+      sidebar.classList.remove('open');
+      if (overlay) overlay.classList.remove('show');
+    } else {
+      sidebar.classList.add('open');
+      if (overlay) overlay.classList.add('show');
+    }
+  } else {
+    // Desktop: use 'collapsed' class for flex sidebar
+    sidebar.classList.toggle('collapsed');
+  }
 }
 
 // ============================================================
