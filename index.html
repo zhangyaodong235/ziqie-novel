@@ -949,6 +949,10 @@ function openNovel(novelId, chapterIdx = 0) {
 
   STATE.currentNovelId = novelId;
   STATE.currentChapterIdx = chapterIdx;
+  
+  // Show initial status
+  var st = document.getElementById('readerStatus');
+  if (st) { st.style.display = 'block'; st.textContent = 'Opening: ' + novelId + ' chapter ' + (chapterIdx+1); }
 
 
   document.getElementById('homePage').style.display = 'none';
