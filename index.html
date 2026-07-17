@@ -563,6 +563,7 @@ img{max-width:100%}
 
       <div class="reader-content-wrap" id="readerContentWrap">
         <div class="reader-content">
+          <div id="readerStatus" style="font-size:12px;color:#999;text-align:center;padding:4px;display:none"></div>
           <h1 class="chapter-heading" id="readerChapterTitle"></h1>
           <div class="chapter-info" id="readerChapterInfo"></div>
           <div class="chapter-body" id="readerChapterBody"></div>
@@ -937,6 +938,8 @@ function openNovel(novelId, chapterIdx = 0) {
   const novel = STATE.novels.find(n => n.id === novelId);
   if (!novel) {
     document.getElementById('readerChapterBody').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px">未找到小说: ' + novelId + '</p>';
+    var st3 = document.getElementById('readerStatus');
+    if (st3) { st3.style.display = 'block'; st3.textContent = 'ERROR: Novel not found: ' + novelId; }
     document.getElementById('readerView').style.display = 'block';
     document.getElementById('readerView').classList.add('active');
     document.getElementById('homePage').style.display = 'none';
@@ -1076,6 +1079,8 @@ function renderReaderChapter() {
   if (!ch) { console.log('[DEBUG] renderReaderChapter: no chapter at index', STATE.currentChapterIdx); return; }
   console.log('[DEBUG] renderReaderChapter: rendering', novel.title, 'ch', STATE.currentChapterIdx+1, 'content length:', ch.content.length);
 
+  var st = document.getElementById('readerStatus');
+  if (st) { st.style.display = 'block'; st.textContent = 'OK: Rendering chapter...'; }
   document.getElementById('readerChapterTitle').textContent = ch.title;
   document.getElementById('readerChapterInfo').textContent = `《${novel.title}》· ${novel.author}`;
   document.getElementById('readerTitleInfo').textContent = `《${novel.title}》`;
@@ -1088,6 +1093,9 @@ function renderReaderChapter() {
   }
   document.getElementById('readerChapterBody').innerHTML = paragraphs
     .map(p => `<p>${escHtml(p.trim())}</p>`).join('\n');
+  
+  var st2 = document.getElementById('readerStatus');
+  if (st2) { st2.textContent = 'OK: ' + novel.title + ' - Ch' + (STATE.currentChapterIdx+1) + ' (' + paragraphs.length + ' paragraphs, ' + document.getElementById('readerChapterBody').innerHTML.length + ' bytes)'; }
   // Update chapter list highlight
   document.querySelectorAll('.reader-ch-item').forEach((btn, i) => {
     btn.classList.toggle('active', i === STATE.currentChapterIdx);
