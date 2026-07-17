@@ -975,8 +975,8 @@ const novel = STATE.novels.find(n => n.id === novelId);
     sb.classList.add('collapsed');
   }
   
-  renderReaderChapterList();
   renderReaderChapter(novel);
+  renderReaderChapterList();
   updateReaderProgress();
   setActiveNav(null);
 }
@@ -1069,6 +1069,7 @@ function renderReaderChapterList() {
 }
 
 function renderReaderChapter(novel) {
+  try {
   if (!novel) { novel = getCurrentNovel(); }
   var body = document.getElementById('readerChapterBody');
   if (!novel) { body.innerHTML = '<p>ERROR: no novel</p>'; return; }
@@ -1107,6 +1108,10 @@ function renderReaderChapter(novel) {
   STATE.history.push({novelId: novel.id, chapterIdx: STATE.currentChapterIdx, time: Date.now()});
   if (STATE.history.length > 100) STATE.history = STATE.history.slice(-50);
   saveState();
+  } catch(e) {
+    var b = document.getElementById('readerChapterBody');
+    if (b) b.innerHTML = '<p style="color:red">EXCEPTION: ' + e.message + ' (line ' + e.lineNumber + ')</p>';
+  }
 }
 
 function updateReaderProgress() {
