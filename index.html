@@ -807,7 +807,7 @@ function createNovelCard(n) {
   var ratingHtml = n.rating ? '<span>⭐ ' + n.rating + '</span>' : '';
   var hotHtml = n.hot ? '<span class="hot">👁 ' + formatNum(n.hot) + '</span>' : '';
 
-  return '<div class="novel-card" onclick="openNovelDetail(\'' + n.id + '\')"><div class="cover-wrap"><div class="cover-img" style="background:' + (n.coverGradient || 'linear-gradient(135deg,#7c3aed,#5b21b6)') + '">' + (n.cover || '📖') + '</div>' + (n.status ? '<span class="cover-badge">' + n.status + '</span>' : '') + (n.category ? '<span class="cover-tag">' + n.category + '</span>' : '') + '</div><div class="info"><h3>' + escHtml(n.title) + '</h3><div class="author">' + escHtml(n.author) + '</div><div class="meta"><span>' + progressStr + '</span>' + ratingHtml + hotHtml + '</div></div></div>';
+  return '<div class="novel-card" onclick="openNovel(\'' + n.id + '\')"><div class="cover-wrap"><div class="cover-img" style="background:' + (n.coverGradient || 'linear-gradient(135deg,#7c3aed,#5b21b6)') + '">' + (n.cover || '📖') + '</div>' + (n.status ? '<span class="cover-badge">' + n.status + '</span>' : '') + (n.category ? '<span class="cover-tag">' + n.category + '</span>' : '') + '</div><div class="info"><h3>' + escHtml(n.title) + '</h3><div class="author">' + escHtml(n.author) + '</div><div class="meta"><span>' + progressStr + '</span>' + ratingHtml + hotHtml + '</div></div></div>';
 }
 function renderHotNovels() {
   const sorted = [...STATE.novels].sort((a,b) => (b.hot||0) - (a.hot||0)).slice(0, 6);
