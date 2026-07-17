@@ -1096,12 +1096,17 @@ function updateReaderProgress() {
 
   document.getElementById('readerPrevBtn').disabled = STATE.currentChapterIdx === 0;
   document.getElementById('readerNextBtn').disabled = STATE.currentChapterIdx >= novel.chapters.length - 1;
+  
+  // Update diagnostic
+  var dbg2 = document.getElementById('debugPanel');
+  if (dbg2) dbg2.innerHTML += '<br><b style="color:#0ff">° Progress: Ch' + (STATE.currentChapterIdx+1) + '/' + novel.chapters.length + '</b>';
 }
 
 function readerPrevChapter() {
   if (STATE.currentChapterIdx > 0) {
     STATE.currentChapterIdx--;
     renderReaderChapter();
+    renderReaderChapterList();
     updateReaderProgress();
   }
 }
@@ -1111,6 +1116,7 @@ function readerNextChapter() {
   if (novel && STATE.currentChapterIdx < novel.chapters.length - 1) {
     STATE.currentChapterIdx++;
     renderReaderChapter();
+    renderReaderChapterList();
     updateReaderProgress();
   }
 }
