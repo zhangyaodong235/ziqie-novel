@@ -1070,37 +1070,24 @@ function renderReaderChapter(novel) {
   document.getElementById('readerChapterInfo').textContent = '《' + novel.title + '》· ' + novel.author;
   document.getElementById('readerTitleInfo').textContent = '《' + novel.title + '》';
 
-  // Clear body
-  while (body.firstChild) { body.removeChild(body.firstChild); }
-
-  // Render content line by line
-  var text = ch.content;
-  var lines = text.split('\n');
-  var p = document.createElement('p');
-  
+  // Simple reliable rendering
+  var html = '';
+  var lines = ch.content.split('\n');
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i];
     if (line === '') {
-      // Blank line = new paragraph
-      if (p.childNodes.length > 0) {
-        body.appendChild(p);
-        p = document.createElement('p');
-      }
+      html += '<p>&nbsp;</p>';
     } else {
-      if (p.childNodes.length > 0) {
-        p.appendChild(document.createElement('br'));
+      if (html !== '' && html.slice(-4) !== '</p>') {
+        html += '<br>';
       }
-      p.appendChild(document.createTextNode(line));
+      html += line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
   }
-  if (p.childNodes.length > 0) {
-    body.appendChild(p);
+  if (html.indexOf('<p>') !== 0) {
+    html = '<p>' + html + '</p>';
   }
-
-  // If nothing was rendered, show a message
-  if (body.childNodes.length === 0 && text.length > 0) {
-    body.textContent = text;
-  }
+  body.innerHTML = html;
 
   // Update chapter list highlight
   var items = document.querySelectorAll('.reader-ch-item');
