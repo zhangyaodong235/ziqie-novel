@@ -1076,6 +1076,9 @@ function renderReaderChapterList() {
 }
 
 function renderReaderChapter() {
+  // DIRECT VISIBLE TEST
+  document.getElementById('readerChapterBody').innerHTML = '<p style="color:red;font-size:20px">TEST: renderReaderChapter called</p>';
+  
   const novel = getCurrentNovel();
   if (!novel) { console.log('[DEBUG] renderReaderChapter: no novel found'); return; }
 
