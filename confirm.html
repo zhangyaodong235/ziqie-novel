@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍆 紫茄小说 — 精品阅读平台 v3-stable</title>
+<style>
+/* ==================== CSS Variables ==================== */
+:root {
+  --primary: #7c3aed;
+  --primary-light: #a78bfa;
+  --primary-dark: #5b21b6;
+  --primary-bg: #f5f3ff;
+  --bg: #fafafa;
+  --bg-card: #ffffff;
+  --bg-header: rgba(255,255,255,0.92);
+  --text: #1e1b2e;
+  --text-secondary: #6b647a;
+  --text-muted: #9c95ac;
+  --border: #e8e5f0;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 2px 12px rgba(124,58,237,0.06);
+  --shadow-lg: 0 8px 32px rgba(124,58,237,0.10);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+  --font-reader: "Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+  --reader-bg: #fdfbf7;
+  --reader-text: #2d2418;
+}
+
+[data-theme="dark"] {
+  --primary: #a78bfa;
+  --primary-light: #c4b5fd;
+  --primary-dark: #7c3aed;
+  --primary-bg: #1e1835;
+  --bg: #0f0b1a;
+  --bg-card: #1a1530;
+  --bg-header: rgba(15,11,26,0.92);
+  --text: #e8e4f0;
+  --text-secondary: #a69dba;
+  --text-muted: #6b647a;
+  --border: #2a1f45;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow: 0 2px 12px rgba(0,0,0,0.25);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.35);
+  --reader-bg: #1a1528;
+  --reader-text: #d4cfe0;
+}
+
+/* ==================== Reset & Base ==================== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family: "PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  transition:background var(--transition),color var(--transition);
+  overflow-x:hidden;
+}
+::selection{background:var(--primary-light);color:#fff}
+a{color:var(--primary);text-decoration:none}
+a:hover{color:var(--primary-dark)}
+ul,ol{list-style:none}
+img{max-width:100%}
+
+/* ==================== Buttons ==================== */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 20px;border-radius:24px;font-size:14px;font-weight:500;
+  cursor:pointer;border:none;transition:all var(--transition);
+  font-family:inherit;white-space:nowrap;
+}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark);color:#fff;transform:translateY(-1px);box-shadow:0 4px 16px rgba(124,58,237,0.3)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+.btn-ghost{background:transparent;color:var(--text-secondary)}
+.btn-ghost:hover{background:var(--primary-bg);color:var(--primary)}
+.btn-sm{padding:6px 14px;font-size:13px;border-radius:20px}
+.btn-icon{width:38px;height:38px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:16px;background:transparent;border:none;cursor:pointer;color:var(--text-secondary);transition:all var(--transition)}
+.btn-icon:hover{background:var(--primary-bg);color:var(--primary)}
+
+/* ==================== Header ==================== */
+.header{
+  position:sticky;top:0;z-index:100;
+  background:var(--bg-header);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;height:60px;
+  display:flex;align-items:center;gap:8px;
+}
+.header-logo{
+  display:flex;align-items:center;gap:8px;
+  font-size:20px;font-weight:700;color:var(--primary);
+  cursor:pointer;user-select:none;
+}
+.header-logo .icon{font-size:26px}
+.header-nav{display:flex;align-items:center;gap:4px;margin-left:24px}
+.header-nav a{
+  padding:8px 16px;border-radius:20px;font-size:14px;color:var(--text-secondary);
+  transition:all var(--transition);font-weight:500;
+}
+.header-nav a:hover,.header-nav a.active{background:var(--primary-bg);color:var(--primary)}
+.header-search{
+  flex:1;max-width:360px;margin-left:auto;position:relative;
+}
+.header-search input{
+  width:100%;padding:8px 16px 8px 38px;border-radius:20px;
+  border:1.5px solid var(--border);background:var(--bg);
+  font-size:14px;font-family:inherit;color:var(--text);
+  transition:all var(--transition);outline:none;
+}
+.header-search input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(124,58,237,0.08)}
+.header-search .search-icon{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  font-size:16px;color:var(--text-muted);pointer-events:none;
+}
+.header-actions{display:flex;align-items:center;gap:4px;margin-left:8px}
+
+/* ==================== Layout ==================== */
+.main-container{max-width:1280px;margin:0 auto;padding:0 24px}
+
+/* ==================== Hero Banner ==================== */
+.hero{
+  position:relative;margin:24px 0 32px;
+  border-radius:20px;overflow:hidden;
+  background:linear-gradient(135deg,#7c3aed 0%,#5b21b6 30%,#3b0f8f 60%,#1e064a 100%);
+  padding:48px 56px;color:#fff;min-height:260px;
+  display:flex;align-items:center;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 70% 30%,rgba(167,139,250,0.3) 0%,transparent 60%),
+             radial-gradient(ellipse at 20% 80%,rgba(196,181,253,0.15) 0%,transparent 50%);
+  pointer-events:none;
+}
+.hero-content{position:relative;z-index:1;max-width:600px}
+.hero-badge{
+  display:inline-block;padding:4px 14px;border-radius:20px;
+  background:rgba(255,255,255,0.15);font-size:13px;margin-bottom:16px;
+  backdrop-filter:blur(4px);
+}
+.hero h1{font-size:36px;font-weight:800;margin-bottom:10px;line-height:1.3}
+.hero p{font-size:15px;opacity:0.85;line-height:1.7;margin-bottom:24px}
+.hero-stats{display:flex;gap:24px;font-size:13px;opacity:0.75}
+.hero-stats span{display:flex;align-items:center;gap:4px}
+
+/* ==================== Section ==================== */
+.section{margin-bottom:40px}
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+}
+.section-title{
+  font-size:22px;font-weight:700;display:flex;align-items:center;gap:10px;
+}
+.section-title::before{
+  content:'';width:4px;height:22px;border-radius:2px;
+  background:var(--primary);
+}
+.section-more{font-size:13px;color:var(--text-muted);cursor:pointer;transition:color var(--transition)}
+.section-more:hover{color:var(--primary)}
+
+/* ==================== Novel Cards Grid ==================== */
+.novel-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:16px;
+}
+.novel-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  cursor:pointer;transition:all var(--transition);
+  box-shadow:var(--shadow-sm);
+}
+.novel-card:hover{
+  transform:translateY(-4px);
+  box-shadow:var(--shadow-lg);
+  border-color:var(--primary-light);
+}
+.novel-card .cover-wrap{
+  position:relative;aspect-ratio:3/4;overflow:hidden;
+}
+.novel-card .cover-img{
+  width:100%;height:100%;object-fit:cover;
+  display:flex;align-items:center;justify-content:center;
+  font-size:48px;color:#fff;
+  transition:transform 0.3s;
+}
+.novel-card:hover .cover-img{transform:scale(1.05)}
+.novel-card .cover-badge{
+  position:absolute;top:8px;left:8px;
+  padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600;
+  background:rgba(0,0,0,0.55);color:#fff;backdrop-filter:blur(4px);
+}
+.novel-card .cover-tag{
+  position:absolute;bottom:8px;right:8px;
+  padding:2px 10px;border-radius:12px;font-size:11px;
+  background:var(--primary);color:#fff;
+}
+.novel-card .info{padding:14px}
+.novel-card .info h3{
+  font-size:15px;font-weight:600;margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.novel-card .info .author{font-size:12px;color:var(--text-muted);margin-bottom:6px}
+.novel-card .info .meta{
+  display:flex;gap:12px;font-size:11px;color:var(--text-muted);
+}
+.novel-card .info .meta .hot{color:#ef4444}
+
+/* ==================== Row Layout (horizontal scroll) ==================== */
+.novel-row{
+  display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;
+  scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+}
+.novel-row::-webkit-scrollbar{height:4px}
+.novel-row::-webkit-scrollbar-track{background:transparent}
+.novel-row::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.novel-row .novel-card{min-width:180px;max-width:180px;scroll-snap-align:start}
+
+/* ==================== Category Tags ==================== */
+.cat-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.cat-tag{
+  padding:6px 18px;border-radius:20px;font-size:13px;font-weight:500;
+  background:var(--bg-card);border:1.5px solid var(--border);
+  cursor:pointer;transition:all var(--transition);color:var(--text-secondary);
+}
+.cat-tag:hover,.cat-tag.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* ==================== Novel Detail ==================== */
+.detail-view{display:none}
+.detail-header{
+  display:flex;gap:32px;padding:32px 0;border-bottom:1px solid var(--border);
+}
+.detail-cover{
+  width:180px;min-width:180px;aspect-ratio:3/4;
+  border-radius:var(--radius);display:flex;align-items:center;justify-content:center;
+  font-size:72px;color:#fff;box-shadow:var(--shadow-lg);
+}
+.detail-info{flex:1;display:flex;flex-direction:column;justify-content:center}
+.detail-info h1{font-size:28px;font-weight:700;margin-bottom:8px}
+.detail-info .author{font-size:14px;color:var(--text-muted);margin-bottom:12px}
+.detail-info .tags{display:flex;gap:6px;margin-bottom:14px}
+.detail-info .tags span{
+  padding:3px 12px;border-radius:14px;font-size:12px;
+  background:var(--primary-bg);color:var(--primary);font-weight:500;
+}
+.detail-info .desc{font-size:14px;color:var(--text-secondary);line-height:1.8;margin-bottom:16px}
+.detail-actions{display:flex;gap:10px}
+.detail-stats{display:flex;gap:20px;margin-top:12px;font-size:13px;color:var(--text-muted)}
+.chapter-section{margin-top:32px}
+.chapter-section h2{
+  font-size:18px;font-weight:700;margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.chapter-section h2 .count{font-size:13px;color:var(--text-muted);font-weight:400}
+.chapter-list-detail{display:flex;flex-direction:column;gap:1px}
+.chapter-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border-radius:var(--radius-sm);cursor:pointer;
+  transition:all var(--transition);
+}
+.chapter-row:hover{background:var(--primary-bg)}
+.chapter-row .ch-title{font-size:14px;font-weight:500}
+.chapter-row .ch-meta{font-size:12px;color:var(--text-muted);white-space:nowrap;margin-left:12px}
+
+/* ==================== Reader ==================== */
+.reader-view{display:none}
+.reader-view.active{
+  display:block;position:fixed;top:60px;left:0;right:0;bottom:0;z-index:50;
+  overflow-y:auto;overflow-x:hidden;
+  background:var(--bg);
+}
+.reader-layout{display:flex;min-height:100%}
+.reader-sidebar{
+  width:280px;min-width:280px;background:var(--bg-card);
+  border-right:1px solid var(--border);overflow-y:auto;
+  transition:all 0.3s;display:flex;flex-direction:column;
+}
+.reader-sidebar.collapsed{margin-left:-280px}
+.reader-sidebar-head{
+  padding:16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  font-weight:600;font-size:15px;position:sticky;top:0;background:var(--bg-card);z-index:1;
+}
+.reader-sidebar-list{flex:1;overflow-y:auto;padding:8px}
+.reader-sidebar-list::-webkit-scrollbar{width:3px}
+.reader-sidebar-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.reader-ch-item{
+  display:block;width:100%;text-align:left;padding:10px 14px;
+  border-radius:var(--radius-sm);font-size:13px;cursor:pointer;
+  background:transparent;border:none;color:var(--text-secondary);
+  transition:all var(--transition);font-family:inherit;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.reader-ch-item:hover{background:var(--primary-bg);color:var(--text)}
+.reader-ch-item.active{background:var(--primary);color:#fff;font-weight:500}
+.reader-main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--reader-bg);transition:background var(--transition)}
+.reader-toolbar{
+  display:flex;align-items:center;gap:6px;padding:10px 14px;
+  background:var(--bg-header);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);flex-wrap:nowrap;position:sticky;top:0;z-index:10;overflow-x:auto;
+}
+.reader-toolbar .title-info{flex:0 1 auto;font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+.reader-content-wrap{
+  flex:1;overflow-y:auto;padding:32px 20px;display:flex;justify-content:center;
+}
+.reader-content-wrap::-webkit-scrollbar{width:5px}
+.reader-content-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.reader-content{max-width:780px;width:100%}
+.reader-content h1.chapter-heading{
+  font-family:var(--font-reader);font-size:28px;font-weight:700;
+  text-align:center;margin-bottom:8px;color:var(--reader-text);
+}
+.reader-content .chapter-info{
+  text-align:center;font-size:13px;color:var(--text-muted);margin-bottom:36px;
+}
+.reader-content .chapter-body{
+  font-family:var(--font-reader);font-size:18px;line-height:2.1;
+  color:var(--reader-text);text-align:justify;transition:font-size var(--transition);
+}
+.reader-content .chapter-body p{text-indent:2em;margin-bottom:0.8em}
+.reader-footer{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  padding:14px 20px;background:var(--bg-card);border-top:1px solid var(--border);
+}
+.reader-footer .progress-wrap{flex:1;max-width:280px}
+.reader-footer .progress-bar{
+  height:3px;background:var(--border);border-radius:2px;overflow:hidden;
+}
+.reader-footer .progress-fill{
+  height:100%;background:var(--primary);border-radius:2px;transition:width 0.3s;
+}
+
+/* ==================== Modals ==================== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity 0.25s;
+}
+.modal-overlay.show{opacity:1;pointer-events:auto}
+.modal{
+  background:var(--bg-card);border-radius:16px;padding:28px;
+  width:92%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+.modal h3{font-size:18px;margin-bottom:20px}
+.modal .setting-row{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;
+}
+.modal .setting-label{font-size:14px;font-weight:500}
+
+.theme-dots{display:flex;gap:8px}
+.theme-dot{
+  width:34px;height:34px;border-radius:50%;cursor:pointer;border:2px solid transparent;
+  transition:all var(--transition);position:relative;
+}
+.theme-dot.active{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-light)}
+.theme-dot.sepia{background:#f5f0e8}
+.theme-dot.light{background:#fff;border:2px solid #ddd}
+.theme-dot.dark{background:#1a1528}
+.theme-dot::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;opacity:0}
+.theme-dot.active::after{opacity:1}
+
+.font-select{
+  padding:6px 12px;border-radius:8px;border:1.5px solid var(--border);
+  background:var(--bg);color:var(--text);font-family:inherit;font-size:13px;
+}
+
+/* ==================== Toast ==================== */
+.toast-container{position:fixed;top:80px;right:24px;z-index:300;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{
+  padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;
+  background:var(--bg-card);color:var(--text);box-shadow:var(--shadow-lg);
+  border:1px solid var(--border);transform:translateX(120%);transition:transform 0.3s;
+  pointer-events:auto;max-width:360px;
+}
+.toast.show{transform:translateX(0)}
+
+/* ==================== Loading Skeleton ==================== */
+.skeleton{background:linear-gradient(90deg,var(--border) 25%,transparent 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-sm)}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ==================== Scrollbar ==================== */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-muted)}
+
+/* ==================== Responsive ==================== */
+@media(max-width:768px){
+  .header{padding:0 12px;gap:4px}
+  .header-nav{display:none}
+  .header-search{max-width:200px}
+  .hero{padding:32px 24px;min-height:200px}
+  .hero h1{font-size:24px}
+  .hero p{font-size:13px}
+  .novel-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .novel-card .info{padding:10px}
+  .novel-card .info h3{font-size:13px}
+  .detail-header{flex-direction:column;align-items:center;text-align:center;gap:20px}
+  .detail-cover{width:140px;min-width:140px}
+  .detail-actions{justify-content:center}
+  .reader-sidebar{
+    position:fixed;left:0;top:0;bottom:0;z-index:70;width:280px;
+    transform:translateX(-100%);margin-left:0;
+    transition:transform 0.25s;
+  }
+  .reader-sidebar:not(.collapsed){transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,0.3)}
+
+  .reader-content-wrap{padding:20px 14px}
+  .reader-content .chapter-body{font-size:16px;line-height:1.9}
+  .reader-content h1.chapter-heading{font-size:22px}
+  .main-container{padding:0 12px}
+  .section-title{font-size:18px}
+  .reader-footer{flex-wrap:wrap;gap:8px;padding:10px 14px}
+  .reader-footer .btn-sm{font-size:12px;padding:6px 10px}
+  .reader-content .chapter-heading{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== HEADER ==================== -->
+<header class="header">
+  <div class="header-logo" onclick="goHome()">
+    <span class="icon">🍆</span>紫茄小说
+  </div>
+  <nav class="header-nav" id="headerNav">
+    <a href="#" class="active" data-page="home">首页</a>
+    <a href="#" data-page="category" data-cat="all">分类</a>
+    <a href="#" data-page="rank">排行</a>
+  </nav>
+  <div class="header-search">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="搜索小说名或作者..." oninput="handleSearch(this.value)">
+  </div>
+  <div class="header-actions">
+    <button class="btn-icon" onclick="toggleTheme()" title="切换主题">🌓</button>
+    <button class="btn-icon" onclick="openSettings()" title="设置">⚙️</button>
+  </div>
+</header>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<div class="main-container" id="mainContainer">
+
+  <!-- ===== HOME PAGE ===== -->
+  <div id="homePage">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">🔥 今日推荐 <span style="font-size:10px;opacity:0.7">v3-stable</span></div>
+        <h1>一池洮河水</h1>
+        <p>作者森燚。一部关于水、土地与人心的长篇纪实小说。在陇中黄土高原，年均降水不足三百毫米，一代代人守着干涸的河床，等待着引洮河水的到来。从1958年到2021年，六十三年，一条河，几代人的命运。</p>
+        <div class="hero-stats">
+          <span>📖 3章免费试读</span><span>✍️ 森燚</span><span>⭐ 9.8分</span>
+        </div>
+        <div style="margin-top:16px">
+          <button class="btn btn-primary" onclick="openNovel('builtin_6')">免费阅读 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hot Novels -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">🔥 热门推荐</div>
+        <span class="section-more" onclick="viewCategory('hot')">更多 →</span>
+      </div>
+      <div class="novel-grid" id="hotNovelGrid"></div>
+    </div>
+
+    <!-- Recent Updates -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">🆕 最近更新</div>
+        <span class="section-more" onclick="viewCategory('new')">更多 →</span>
+      </div>
+      <div class="novel-grid" id="newNovelGrid"></div>
+    </div>
+
+    <!-- Completed -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">✅ 完本佳作</div>
+        <span class="section-more" onclick="viewCategory('completed')">更多 →</span>
+      </div>
+      <div class="novel-grid" id="completedNovelGrid"></div>
+    </div>
+
+    <!-- All Novels (shown when searching/category) -->
+    <div class="section" id="allNovelsSection" style="display:none">
+      <div class="section-header">
+        <div class="section-title" id="allNovelsTitle">📚 全部小说</div>
+      </div>
+      <div class="cat-tags" id="catTags">
+        <span class="cat-tag active" data-cat="all" onclick="filterByCategory('all',this)">全部</span>
+        <span class="cat-tag" data-cat="玄幻" onclick="filterByCategory('玄幻',this)">玄幻</span>
+        <span class="cat-tag" data-cat="仙侠" onclick="filterByCategory('仙侠',this)">仙侠</span>
+        <span class="cat-tag" data-cat="都市" onclick="filterByCategory('都市',this)">都市</span>
+        <span class="cat-tag" data-cat="悬疑" onclick="filterByCategory('悬疑',this)">悬疑</span>
+        <span class="cat-tag" data-cat="言情" onclick="filterByCategory('言情',this)">言情</span>
+        <span class="cat-tag" data-cat="科幻" onclick="filterByCategory('科幻',this)">科幻</span>
+        <span class="cat-tag" data-cat="历史" onclick="filterByCategory('历史',this)">历史</span>
+      </div>
+      <div class="novel-grid" id="allNovelGrid"></div>
+      <div id="searchEmpty" style="display:none;text-align:center;padding:40px;color:var(--text-muted)">
+        <div style="font-size:48px;margin-bottom:12px">🔍</div>
+        <p>没有找到匹配的小说</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DETAIL PAGE ===== -->
+  <div class="detail-view" id="detailPage">
+    <div class="detail-header">
+      <div class="detail-cover" id="detailCover">📖</div>
+      <div class="detail-info">
+        <h1 id="detailTitle"></h1>
+        <div class="author" id="detailAuthor"></div>
+        <div class="tags" id="detailTags"></div>
+        <div class="desc" id="detailDesc"></div>
+        <div class="detail-actions">
+          <button class="btn btn-primary" id="detailReadBtn" onclick="startReading()">📖 开始阅读</button>
+          <button class="btn btn-outline" id="detailContinueBtn" onclick="continueReading()" style="display:none">📌 继续阅读</button>
+        </div>
+        <div class="detail-stats" id="detailStats"></div>
+      </div>
+    </div>
+    <div class="chapter-section">
+      <h2>📑 章节目录 <span class="count" id="chapterCount"></span></h2>
+      <div class="chapter-list-detail" id="chapterListDetail"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== READER (full screen overlay) ==================== -->
+<div class="reader-view" id="readerView">
+  <div class="reader-layout">
+    <!-- Reader Sidebar -->
+    <aside class="reader-sidebar" id="readerSidebar">
+      <div class="reader-sidebar-head">
+        📑 目录
+        <button class="btn-icon" onclick="toggleReaderSidebar()" style="font-size:14px">✕</button>
+      </div>
+      <div class="reader-sidebar-list" id="readerChapterList"></div>
+    </aside>
+
+    <!-- Reader Main -->
+    <div class="reader-main" id="readerMain">
+      <div class="reader-toolbar">
+        <button class="btn-icon" onclick="closeReader()" style="flex-shrink:0" title="返回">✕</button>
+        <button class="btn-icon" onclick="readerPrevChapter()" id="toolbarPrevBtn" title="上一章" style="flex-shrink:0">◀</button>
+        <span style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;flex-shrink:0;min-width:40px;text-align:center" id="toolbarProgressText"></span>
+        <button class="btn-icon" onclick="readerNextChapter()" id="toolbarNextBtn" title="下一章" style="flex-shrink:0">▶</button>
+        <button class="btn-icon" onclick="toggleReaderSidebar()" style="flex-shrink:0" title="目录">📑</button>
+      </div>
+
+      <div class="reader-content-wrap" id="readerContentWrap">
+        <div class="reader-content">
+          <h1 class="chapter-heading" id="readerChapterTitle"></h1>
+          <div class="chapter-info" id="readerChapterInfo"></div>
+          <div class="chapter-body" id="readerChapterBody"></div>
+        </div>
+      </div>
+
+      <div class="reader-footer">
+        <button class="btn btn-outline btn-sm" id="readerPrevBtn" onclick="readerPrevChapter()">◀ 上一章</button>
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" id="readerProgressFill" style="width:0%"></div></div>
+        </div>
+        <span style="font-size:12px;color:var(--text-muted);white-space:nowrap" id="readerProgressText"></span>
+        <button class="btn btn-outline btn-sm" id="readerNextBtn" onclick="readerNextChapter()">下一章 ▶</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SETTINGS MODAL ==================== -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <h3>⚙️ 阅读设置</h3>
+    <div class="setting-row">
+      <span class="setting-label">主题模式</span>
+      <div class="theme-dots">
+        <span class="theme-dot sepia active" data-theme="sepia" onclick="setTheme('sepia')"></span>
+        <span class="theme-dot light" data-theme="light" onclick="setTheme('light')"></span>
+        <span class="theme-dot dark" data-theme="dark" onclick="setTheme('dark')"></span>
+      </div>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">正文字体</span>
+      <select class="font-select" id="fontSelect" onchange="setFontFamily(this.value)">
+        <option value="serif">宋体 (衬线)</option>
+        <option value="sans">黑体 (无衬线)</option>
+        <option value="kai">楷体</option>
+        <option value="yahei">微软雅黑</option>
+      </select>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">字体大小</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="btn btn-outline btn-sm" onclick="changeReaderFontSize(-1)">A-</button>
+        <span style="min-width:44px;text-align:center" id="settingsFontSize">18px</span>
+        <button class="btn btn-outline btn-sm" onclick="changeReaderFontSize(1)">A+</button>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;margin-top:20px" onclick="closeSettings()">完成</button>
+  </div>
+</div>
+
+<!-- ==================== TOAST CONTAINER ==================== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="data.js"></script>
+<script>
+// ============================================================
+//  DATA: 预置小说库
+// ============================================================
+const BUILTIN_NOVELS = [
+  {
+    id: 'builtin_1',
+    title: '剑道独尊',
+    author: '青衫剑客',
+    category: '玄幻',
+    tags: ['热血', '修仙', '剑道'],
+    status: '连载中',
+    hot: 1280000,
+    rating: 9.6,
+    cover: '⚔️',
+    coverGradient: 'linear-gradient(135deg,#1e3a5f,#2d5a87,#4a90c4)',
+    desc: '少年叶尘，天生剑骨，却被家族视为废物。一次意外觉醒上古剑帝记忆，从此剑道之路势不可挡。一剑破万法，一剑斩苍穹，万千天骄只能仰望。且看叶尘如何在这波澜壮阔的修仙世界，以手中三尺青锋，书写不朽剑道传奇！',
+    chapters: [
+      {title:'第一章 剑帝重生',content:'天玄大陆，青云城，叶家后山。\n\n月色如水，洒在少年清秀的脸庞上。叶尘盘膝而坐，双手结印，周身萦绕着淡淡的灵气波动。\n\n"还是不行么……"他缓缓睁开眼，眸中闪过一丝苦涩。\n\n十六岁了，却还停留在炼气三层，连家族中最小的族弟都已经突破炼气五层。在这以武为尊的叶家，他就是个彻头彻尾的笑话。\n\n"废物叶尘，还不滚出来！"\n\n一声嚣张的喝骂从山下传来，叶尘微微皱眉，站起身来。只见山道上走来三个锦衣少年，为首的是叶家大长老的孙子——叶凌云。\n\n"叶凌云，你又想怎样？"叶尘语气平静。\n\n"怎样？"叶凌云冷笑，"三日后就是族比，我劝你趁早认输滚出叶家，省得在台上丢人现眼。"\n\n叶尘握了握拳，指节发白。族比——那是家族年轻一辈争夺修炼资源的比试，垫底者将被剥夺修炼资源，发配到矿山。\n\n"谁输谁赢，还不一定。"叶尘淡淡道。\n\n"哈哈哈！"三个少年哄堂大笑，"就凭你一个炼气三层的废物？"\n\n笑声中，叶尘忽然感到脑海中一阵剧痛，无数陌生的记忆碎片如潮水般涌入。恍惚间，他仿佛看到了一尊凌驾于九天之上的剑帝身影，那一剑斩落星辰、崩塌万界的绝世风采……\n\n"唔——"叶尘闷哼一声，单膝跪地。\n\n"装死？给我打！"叶凌云一挥手，三人就要上前。\n\n然而下一瞬，一股凌厉无匹的剑气从叶尘体内轰然爆发！\n\n轰——\n\n三个少年如同断线风筝般倒飞出去，重重摔在地上，口吐鲜血。\n\n叶尘缓缓站起，眼神已经完全变了。深邃、凌厉，仿佛历经万古沧桑。\n\n"区区炼气，也敢在吾面前放肆。"\n\n他的声音很轻，却让叶凌云三人感到一股来自灵魂深处的颤栗。\n\n剑帝——归来！'},
+      {title:'第二章 族比扬威',content:'三日时间转瞬即逝。\n\n叶家演武场上，彩旗招展，人声鼎沸。数百族人齐聚一堂，等待着一年一度的族比开始。\n\n高台之上，叶家族长叶天雄端坐正中，左右是几位长老。\n\n"诸位——"叶天雄声如洪钟，"今日族比，前十名将获得进入青云秘境修炼的资格。望诸位子弟奋力一搏，光耀门楣！"\n\n演武场中，数十名叶家年轻子弟摩拳擦掌。叶凌云站在最前方，不时回头看向人群角落。\n\n叶尘静静站在那里，气息收敛，却给人一种深不可测的感觉。\n\n"比试开始！"\n\n第一轮，叶尘对阵叶家排名第五的叶虎。\n\n"叶尘？那个废物？"叶虎咧嘴一笑，"给你个机会，认输吧，免得受伤。"\n\n叶尘抬眼："出手。"\n\n叶虎怒吼一声，挥拳轰来，拳风猎猎。\n\n叶尘只是轻轻抬手，食指虚虚一点。一道纤细如丝的剑气激射而出，精准无比地点在叶虎拳劲最薄弱之处。\n\n"啊——"叶虎惨叫一声，倒飞而出，拳头上一道血痕深可见骨。\n\n全场寂静。\n\n一指！仅仅一指就击败了炼气七层的叶虎！\n\n"这……怎么可能？！"\n\n高台上，几位长老齐齐变色。叶天雄眼中精光一闪："剑气外放……这小子什么时候……"\n\n接下来的比试，叶尘势如破竹。无论对手是谁，都是轻描淡写的一指一剑，无人能挡。\n\n最终决战——叶尘对叶凌云。\n\n"你……你到底得到了什么奇遇？"叶凌云咬牙切齿。\n\n"与你无关。"叶尘淡淡道。\n\n"狂妄！"叶凌云暴喝，浑身灵力爆发到极致，一柄银色长枪出现在手中——这是他的本命法器！\n\n"银龙破！"\n\n枪出如龙，银芒贯日。\n\n叶尘终于动了。他右手虚握，天地间的灵气疯狂汇聚，化作一柄璀璨光剑。\n\n"剑道——破虚。"\n\n光剑落下，银龙破碎。叶凌云手中的长枪寸寸崩裂，整个人被剑气余波扫中，衣衫碎裂，狼狈不堪地摔在演武台下。\n\n"叶尘——胜！"\n\n满场哗然。\n\n叶尘转身，面向高台，神情不卑不亢：\n\n"族长，我的母亲被关在后山禁地十年。我要见她。"\n\n叶天雄瞳孔骤然收缩。\n\n禁地之中，究竟隐藏着怎样的秘密？'},
+      {title:'第三章 禁地秘密',content:'演武场一片寂静。\n\n"大胆！"大长老叶镇山拍案而起，"禁地乃叶家重地，岂是你一个后辈说进就进的？"\n\n叶尘目光平静地看向大长老："我母亲叶清雪，十年前被关入禁地。族规第三十七条——凡族人被禁闭超过十年者，族中天才有权提请重审。我刚刚拿了族比第一，有这个资格。"\n\n叶天雄沉默良久。十年前那件事，一直是他心头一根刺。\n\n"好，我给你一个机会。"叶天雄缓缓开口，"明日，你去禁地。"\n\n"族长！"几位长老齐声反对。\n\n"我意已决。"叶天雄一挥手，目光深沉地看着叶尘，"不过你要想清楚，禁地之中有叶家世代镇守的——剑魔封印。若是惊动了它，后果不是你能承担的。"\n\n叶尘心中微动。剑魔？在他的剑帝记忆中，似乎有关于"剑魔"的片段……\n\n——\n\n"你终于来了。"\n\n女子一身素衣，面容清丽绝伦，虽然鬓角已见风霜，但眉目间那股英气丝毫不减。\n\n叶尘站在禁地深处一间石室前，隔着铁栏，第一次见到了被囚禁十年的母亲。\n\n"母亲……"\n\n叶清雪缓缓抬头，眼中泪光晶莹："尘儿，你长大了。"\n\n"母亲，到底发生了什么？他们为什么关你？"\n\n叶清雪沉默片刻，低声道："因为你父亲。"\n\n"我父亲是谁？"\n\n"他叫叶孤城——曾经的天玄第一剑修。"叶清雪的声音带着深深的怀念，"二十年前，他为了寻求剑道极致，闯入了万剑秘境。后来他回来了，却带回了一样不该带回的东西……剑魔之心。"\n\n叶尘心中大震。\n\n"剑魔之心，是上古剑魔陨落后留下的一道不灭剑意。它被封印在禁地深处，由叶家世代镇守。而你父亲……妄图融合剑魔之心，结果被剑意反噬，化作了新的剑魔，被镇压在封印之下。"\n\n"他们关我，是因为我是唯一知道真相的人。而叶家，不敢让外人知道，所谓世代守护的封印，其实囚禁着自己家族最杰出的弟子。"\n\n叶尘的手在微微颤抖。\n\n"那……父亲他还活着吗？"\n\n叶清雪没有回答，只是望向禁地更深处。\n\n那里，剑气冲霄，魔意滔天。'},
+      {title:'第四章 剑魔之心',content:'禁地深处，剑气与魔气交织。\n\n叶尘一步步走向封印核心。越靠近，那股剑意就越强烈——凌厉、狂傲、不可一世。但同时，又蕴含着深沉到极致的悲伤。\n\n"来者……何人……"\n\n沙哑的声音从黑暗中传来。\n\n叶尘停下脚步。前方是一道巨大的封印光幕，光幕之后，隐约可见一道人影。那人白发披散，浑身缠绕着漆黑的锁链，每一根锁链都由纯粹的封印之力凝聚而成。\n\n"叶孤城……父亲？"\n\n那人影一震，缓缓抬起头。\n\n那是一张和叶尘有五分相似的脸，只是更加沧桑、更加锋锐。眼眸之中没有瞳仁，只有两团幽暗的剑芒在流转。\n\n"你……是……清雪的……孩子？"\n\n"是我。我叫叶尘。"\n\n叶孤城沉默了很久，忽然仰天长笑，声震四野。笑着笑着，两行血泪从眼眶中滑落。\n\n"好！好！我叶孤城的儿子，果然不凡！居然能觉醒剑帝的记忆，哈哈哈！天不绝我剑道一脉！"\n\n"父亲，我要怎样才能救你出去？"\n\n"救我？"叶孤城摇头，"不必救我。我已被剑魔之心彻底侵蚀，能保持一丝清明已是不易。一旦离开封印，剑魔就会彻底苏醒，届时整个青云城都将化为废墟。"\n\n"不过……"他话锋一转，"你可以继承我未走完的路。"\n\n话音落下，一道璀璨至极的剑芒从叶孤城胸口飞出，穿过封印，悬停在叶尘面前。\n\n那是一颗拳头大小、如同琉璃般的心脏虚影。一半金黄，一半漆黑——剑意与魔意各占一半。\n\n"这是剥离出的一半剑魔之心——剑心。"叶孤城道，"融合它，你将获得完整的剑道传承。但代价是……你将继承剑魔的因果。终有一日，你会面对真正的剑魔本体。"\n\n叶尘没有犹豫，伸手握住那颗跳动的心脏。\n\n轰——！\n\n无穷剑意涌入体内。剑帝的记忆、剑魔的因果、剑道的极致——在这一瞬间融为一体。\n\n叶尘的气息开始暴涨。\n\n炼气四层、五层、六层……筑基！\n\n筑基一重、二重、三重……筑基圆满！\n\n嗡——\n\n一柄虚幻的剑影在叶尘身后浮现。那是他的剑道意志——斩天剑意！\n\n"成了！"叶孤城欣慰地看着这一幕，缓缓闭上眼睛，"尘儿，带着为父的剑意走下去。记住——剑道之巅，不是毁灭，而是守护。"\n\n"父亲！"\n\n封印深处，剑魔咆哮。\n\n而叶尘知道，这只是开始。\n\n真正的剑道之路，才刚刚在脚下展开。'},
+      {title:'第五章 新的征程',content:'三日后，叶尘离开了青云城。\n\n临行前，他去见了叶清雪。母亲没有挽留，只是轻轻抚着他的脸庞，说了一句："别像你父亲那么倔。"\n\n叶尘笑了笑，转身离去。\n\n他的目标是整个天玄大陆。\n\n据剑帝的记忆，天玄大陆只是三千世界中的一个下位面。而剑帝当年之所以陨落，是因为他在冲击剑道至高境界时，遭到了来自天外的三位至强者的围攻。\n\n那三位至强者，自称来自"神域"。\n\n剑帝在陨落前，将自己的记忆碎片洒向万界，等待有缘人继承。而叶孤城得到的剑魔之心，便是其中最关键的一块碎片——因为那其中封印着剑帝对至高剑道的最终领悟。\n\n如今，这份领悟已经有一部分融入了叶尘体内。\n\n"筑基层次的修为，在前世我弹指可灭。但这一世，我要走得比前世更远。"叶尘握紧拳头。\n\n他计划先去青云山脉深处的万剑城——那里是整个天玄大陆的剑修圣地，也是叶孤城当年去过的地方。\n\n万剑秘境，就在万剑城的地下。\n\n——\n\n"前面的人站住！"\n\n刚离开青云城不到百里，叶尘就被一队人马拦住了去路。为首的是一个身穿黑袍的中年人，修为赫然在筑基巅峰。\n\n"叶家弃子，盗取禁地秘宝，还不束手就擒！"\n\n叶尘微微眯眼："大长老的人？"\n\n"哼，识相的就交出剑魔之心，我可以给你留个全尸。"\n\n叶尘笑了。他缓缓抬手，斩天剑意在指尖凝聚。\n\n"那就来试试。正好，我也想知道——筑基圆满的剑意，威力究竟如何。"\n\n一道剑光冲天而起，斩碎了天边浮云。\n\n新的征程，就此展开。'}
+    ]
+  },
+  {
+    id: 'builtin_2',
+    title: '长安十二雨',
+    author: '烟雨江南',
+    category: '言情',
+    tags: ['古风', '权谋', '虐恋'],
+    status: '连载中',
+    hot: 965000,
+    rating: 9.3,
+    cover: '🌸',
+    coverGradient: 'linear-gradient(135deg,#831843,#9d174d,#db2777)',
+    desc: '长安城下，十二场大雨见证了他们的相遇与别离。她是权倾朝野的长公主，他是来历不明的江湖客。一场阴谋，一次邂逅，一段注定悲伤的爱恋。当真相揭开，他们能否冲破重重阻碍？',
+    chapters: [
+      {title:'第一章 长安夜雨',content:'长安城的第一场大雨来得毫无征兆。\n\n永安三年的暮春，豆大的雨点毫无预兆地砸下来，将朱雀大街上的行人打得四散奔逃。街边卖糖人的老李头手忙脚乱地收摊，卖花的姑娘用衣袖护着竹篮，茶楼的伙计赶紧去收二楼的遮阳布。\n\n沈清商站在茶楼二楼的廊下，看着这场突如其来的大雨。\n\n他背上斜背着一柄破旧的长剑，剑鞘上缠着褪色的红绳。雨水顺着屋檐滴落，打湿了他的青衫下摆，他却浑然不觉。\n\n"这雨，下得有些古怪。"他眯起眼睛。\n\n话音刚落，街角处忽然传来一阵急促的马蹄声。一辆华丽的马车从雨幕中冲出，四匹骏马浑身湿透，车夫疯狂地挥舞着马鞭。\n\n"让开！都让开！"\n\n然而马车在拐弯时，车轮碾过一块松动的地砖，车厢猛然倾斜。一袭素白的身影从车厢中被甩了出来，眼看就要摔在坚硬的青石路上——\n\n沈清商动了。\n\n他的身影如一道青烟掠过雨幕，在白衣女子即将落地的瞬间稳稳接住了她。\n\n那是一个极美的女子。\n\n雨水打湿了她的鬓发，却掩不住那张清冷如玉的容颜。她的眼睛——是淡淡的琥珀色，像两块被雨淋过的琉璃。\n\n"放开我。"女子冷冷开口，语气威严。\n\n沈清商将她放下，退后一步："失礼了。"\n\n女子站稳后，打量了他一眼。目光在他背上那柄缠着红绳的旧剑上停顿了一瞬。\n\n"你叫什么名字？"\n\n"沈清商。初来长安。"\n\n"沈清商……"女子低声重复了一遍这个名字，像是在记忆什么。然后她淡淡道："本宫欠你一个人情。"\n\n说罢转身，在赶来的侍卫簇拥下消失在雨幕之中。\n\n"本宫？"沈清商微微挑眉。\n\n身后，茶楼伙计小声告诉他："客官，您刚才救了长公主殿下——永安长公主，当今皇上的亲姐姐，权倾朝野的那位。"\n\n沈清商没有说话，只是仰头看向灰蒙蒙的天空。\n\n他来到长安是为了查一个真相。一个被掩埋了十八年的真相。\n\n而这第一场夜雨，似乎只是一个开始。'},
+      {title:'第二章 宫中密诏',content:'长安宫，凤仪殿。\n\n"你确定那人是从漠北来的？"\n\n永安长公主——李长宁，坐在凤榻之上，手中把玩着一枚温润的白玉棋子。她已经换了一身干爽的宫装，墨发如瀑，容颜如画。\n\n"回殿下，属下已派人查过。沈清商，年二十四，半月前从北境入关。自称江湖游侠，但在凉州境内曾一人一剑击退了三十名马匪。他背上的那柄剑……"侍卫统领袁岳迟疑了一下，"和当年那位的一样，剑鞘缠红绳。"\n\n李长宁手中的玉棋微微一顿。\n\n"你是说……他是那个人的后人？"\n\n"属下不敢妄断。只是那红绳缠剑鞘的习惯，确实只有当年的北境剑神——沈惊鸿会用。"\n\n沈惊鸿。\n\n这个名字在十八年前曾响彻天下。他是北境第一剑客，也是先帝最信任的密使。然而十八年前，沈惊鸿忽然叛变，刺杀先帝未遂，被满门抄斩。据说沈家上下三十七口，无一活口。\n\n但李长宁知道，那是一个天大的冤案。\n\n"安排一下，我要单独见他。"\n\n"殿下——此人身份未明，贸然……"\n\n"袁岳。"李长宁打断他，声音很轻，却带着不容置疑的威仪，"本宫等了十八年，就是在等一个背红绳剑的人。如今他来了，我不能错过。"\n\n袁岳默然，躬身退下。\n\n殿中只剩下李长宁一人。她缓缓起身，走到窗前，望着宫墙外层层叠叠的殿宇楼阁。\n\n十八年前，她只有九岁。那一夜，父皇在御书房遇刺，她躲在内室的衣柜里，从门缝中看到了全部过程。\n\n那个被指控为刺客的人——沈惊鸿，当时浑身浴血地跪在父皇面前，说的最后一句话是：\n\n"陛下，臣死不足惜。但长宁公主……她是……"\n\n话未说完，一支冷箭从暗处飞来，射穿了他的喉咙。\n\n父皇，也不是沈惊鸿杀的。\n\n杀父皇的，是当今太后——她的亲生母亲。\n\n这个秘密，李长宁在心里藏了十八年。她一直在暗中寻找沈家的后人，因为只有沈家才知道一个足以掀翻整个朝廷的秘密。\n\n"沈清商……你究竟是不是沈惊鸿的儿子？"'},
+      {title:'第三章 剑指太庙',content:'长安城的第五场雨落下时，沈清商已经查到了他想找的东西。\n\n太庙——皇家祭祀先祖的地方。\n\n按照他父亲留下的暗语："太庙地宫，龙椅之下，藏天下真相。"十八年来，这十二个字像是刻在他骨头上一样。\n\n今夜，他要闯太庙。\n\n雨夜的长安格外寂静。沈清商换了一身夜行衣，悄无声息地潜入了太庙。他的身法极快，像一道融入夜色的影子，巡逻的禁军无人发觉。\n\n然而当他进入地宫时，却发现里面已经有人了。\n\n一袭白衣，一盏孤灯。\n\n李长宁坐在龙椅下的暗格旁，手中捧着一卷泛黄的卷轴，泪流满面。\n\n"你来了。"她没有回头，"我知道你会找到这里。"\n\n沈清商缓缓走近，手按在剑柄上："你究竟是谁？"\n\n"永安长公主，李长宁。"她终于抬起头，琥珀色的眼睛里泪光晶莹，"也是……沈惊鸿的私生女。你的——姐姐。"\n\n沈清商浑身一震。\n\n"你说什么？"\n\n李长宁将手中的卷轴递给他。那是一份血书，落款是沈惊鸿的签名，上面详细记录了当年的真相——\n\n先帝晚年宠信妖道，服食丹药导致神志不清，屡次想要废太子、诛杀忠良。当今太后为保江山，联合几位老臣发动了一场无声的政变。先帝确实死于毒酒，但下毒的不是沈惊鸿，而是太后。\n\n沈惊鸿被叫来，是因为太后想让这位天下第一剑客做见证——见证先帝是"病逝"而非"被害"。\n\n但沈惊鸿拒绝了。\n\n所以他必须死。沈家三十七口，也必须死。\n\n而李长宁，是沈惊鸿与先帝的一位妃子——沈惊鸿的亲妹妹——所生。这是皇室最大的丑闻，太后用这个秘密胁迫了沈惊鸿整整十年。\n\n"我从九岁起就知道真相。"李长宁的声音颤抖，"我苟活到现在，就是为了等你——等沈家的后人回来，一起为父亲报仇。"\n\n沈清商沉默了很久。\n\n雨声透过厚重的石壁传进来，沉闷而遥远。\n\n然后他拔出背上那柄缠着红绳的剑。\n\n"这把剑叫「惊鸿」，是父亲留给我的。"他将剑横在两人之间，"姐姐，你说我们下一步，该去哪里？"\n\n李长宁站起来，擦干眼泪，眼中闪过一抹决绝。\n\n"去皇宫。是时候让母后，偿还这笔血债了。"'}
+    ]
+  },
+  {
+    id: 'builtin_3',
+    title: '深渊游戏',
+    author: '黑猫探长',
+    category: '悬疑',
+    tags: ['推理', '惊悚', '都市'],
+    status: '连载中',
+    hot: 752000,
+    rating: 9.1,
+    cover: '🕵️',
+    coverGradient: 'linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)',
+    desc: '一款神秘的手游在大学生中悄然流传。凡是通关的人，都在第七天离奇失踪。大三学生林一舟意外下载了这款游戏，发现每一个关卡都对应着一个真实的凶案现场。而游戏的终点，指向了十年前的一桩灭门惨案……',
+    chapters: [
+      {title:'第一章 死亡邀请',content:'林一舟收到那条短信的时候，正在图书馆准备期末论文。\n\n"想玩一个游戏吗？"\n\n短信来自一个未知号码，没有归属地，没有签名。按照常理，这种消息他看都不会看就直接删除——但那天他不知道为什么，鬼使神差地点开了消息里的链接。\n\n那是一个纯黑的网页，只有一行白色的小字：\n\n「深渊游戏 — 第七轮即将开始。你是否接受邀请？」\n\n下面有两个按钮：接受 / 拒绝。\n\n林一舟犹豫了片刻，点了拒绝。\n\n网页消失了，取而代之的是一条新的短信：\n\n"你已收到邀请。游戏将在今晚零点自动开始。祝你好运。"\n\n"什么鬼？"林一舟皱眉，试着回拨那个号码，却提示是空号。他没有多想，只当是谁的恶作剧，收起手机继续看书。\n\n但他没有注意到的是，在他点开链接的那一瞬间，手机屏幕的角落里，一个猩红色的眼睛图标一闪而过。\n\n——\n\n当晚，林一舟做了一个奇怪的梦。\n\n梦里他站在一间漆黑的屋子里，脚下是冰冷的水泥地面。房间中央放着一张桌子，桌上有一张照片和一把钥匙。\n\n他拿起照片——那是一张新闻剪报：\n\n"2014年3月15日，本市发生一起恶性入室杀人案。受害者一家四口惨死家中，凶手至今在逃。"\n\n照片上的案发现场，正是他现在站着的这间屋子。\n\n林一舟猛地惊醒，汗流浃背。\n\n手机屏幕亮着。\n\n上面显示着一个计时器：06:23:45:12。倒计时，七天。\n\n下面有一行字：\n\n"第一关：找到照片中的地点。你有24小时。"\n\n林一舟的手开始发抖。这不是恶作剧——他从未搜索过这起案件，十年前的旧案，怎么可能出现在他手机里？\n\n他试着删除那个App，但每次删除后它都会自动重新出现。\n\n关机——无效。\n\n拔电池——无效。\n\n那个倒计时仍然在屏幕上跳动着，一秒一秒地流逝。\n\n林一舟深吸一口气，强迫自己冷静下来。他仔细看了看那张现场照片，忽然注意到一个细节——照片背景中，墙壁上隐约有一个涂鸦符号：一个圆圈里面套着一个三角形。\n\n这个符号他见过。就在学校的旧教学楼后面。'},
+      {title:'第二章 死者留言',content:'南江大学的旧教学楼是一栋废弃多年的红砖楼，据说因为年久失修有安全隐患，校方用铁丝网围了起来。\n\n林一舟费了一番功夫才翻进去。\n\n他在楼后的墙上找到了那个符号——圆圈套三角。符号下面，有人用红色油漆写了一行小字：\n\n"404号教室，真相开始的地方。"\n\n破旧的走廊里回荡着他的脚步声。四楼很快就到了，404号教室的门虚掩着。\n\n推开门，林一舟愣住了。\n\n教室里的课桌被整齐地摆成了一个圆形，每一张桌子上都放着一张照片。他走近一看——那些照片全是不同年份的凶案现场照。\n\n三年前坠楼的女学生。\n\n五年前溺死在湖里的教授。\n\n七年前在出租屋被杀的情侣。\n\n……\n\n一共十二张照片，十二个案件。\n\n而在圆圈中央的地板上，用白色粉笔写着一句话：\n\n"找出它们的共同点，否则下一个就是你。"\n\n林一舟的后背已经被冷汗浸透。他强迫自己蹲下来，仔细查看每一张照片。\n\n第一张：死者手腕上有一个奇怪的勒痕，像是什么细绳留下的。\n\n第二张：死者的手机屏幕裂了，但隐约可以看到屏保上有一个眼睛图标。\n\n第三张：死者的书桌上有一本翻开的笔记本，上面画着一个圆圈套三角的符号……\n\n所有案件，都出现了两个共同元素：\n\n1. 圆圈套三角的符号\n2. 一个猩红色的眼睛图标\n\n"他们是……这个游戏的上一轮玩家？"林一舟喃喃自语。\n\n手机忽然震动。\n\n计时器的下方出现了新消息：\n\n"第一关通过。第二关：十二个死者中，有一个是假的。找出那个人，你有48小时。"\n\n"等等——什么？假的？"林一舟盯着那些照片，"你是说，十二个案件里有一个是伪造的？还是说……有一个死者根本没有死？"\n\n手机没有回答。\n\n就在这时，林一舟听到楼下传来了脚步声。\n\n不是一个人的脚步声——是好几个人，步履整齐，正在上楼。\n\n他迅速躲到门后，从门缝中往外看去。\n\n五个穿着黑色连帽衫的人走上了四楼，每个人都戴着口罩，看不清面容。为首的那人手中提着一个黑色塑料袋，袋子里不知道装着什么。\n\n他们在403号教室门口停了下来。\n\n"那个叫林一舟的，确认找到了这里？"\n\n"确认。App显示他已经进入了旧教学楼。"\n\n"好。等他解完第二关，就把他带来。七号祭品的位置，已经空了很久了。"\n\n林一舟浑身冰凉。\n\n他悄悄退到窗边，往下看去——四层楼的高度，下面是一片灌木丛。如果在平时他绝对不敢跳，但现在……\n\n他深吸一口气，攀上窗台，松开了手。'},
+      {title:'第三章 逃与追',content:'林一舟重重地摔在灌木丛中，尖锐的枝条划破了他的手臂和脸颊，但他根本顾不上疼痛。\n\n他从灌木丛中爬出来，拔腿就跑。身后的旧教学楼中，已经有人从四楼窗口探出头来——那个戴着口罩的黑衣人。\n\n"他跑了！追！"\n\n夜风在耳边呼啸而过。林一舟拼命往校门口跑，同时掏出手机想要报警——但手机屏幕上除了那个该死的倒计时外，其他功能全部被锁死。\n\n"该死！该死！"\n\n他冲到大街上，拦了一辆出租车。\n\n"师傅，去最近的警察局——"\n\n"警察局帮不了你。"\n\n林一舟猛地转头。出租车司机缓缓转过头——是一个五十来岁、面容沧桑的中年男人，眼神异常犀利。\n\n"你……你是谁？"\n\n"我叫孟河，以前是刑警。"中年男人发动了汽车，却不是开往警察局，而是拐进了一条僻静的小巷，"三年前，我女儿也收到了邀请——深渊游戏的邀请。第七天，她消失了。"\n\n林一舟的心脏狂跳："你女儿……"\n\n"她已经失踪三年了。三年来，我追查这个游戏，发现一共有六轮玩家——每轮十二人。七十二个玩家中，六十六人失踪。剩下的六个人，成了游戏的维护者。刚才追你的那些人，就是上一轮的幸存者。"\n\n"他们为什么要这么做？"\n\n"因为游戏的终点——"孟河的眼睛盯着前方，"那个通关的人，据说可以实现任何一个愿望。不管是财富、权力，还是让死人复活。"\n\n他转过头，看着林一舟："而你，是第七轮的第十二个玩家。最后一个。"\n\n出租车停在一栋老旧的居民楼前。\n\n"下车。在我这里你暂时安全。但你只有六天时间——六天后，如果你不能通关或者找到游戏的幕后主使者，你就会像我女儿一样，永远从这个世界上消失。"\n\n林一舟下车时，手机再次震动。\n\n是一条新的消息：\n\n"温馨提示：逃跑不算违规。但如果你在24小时内没有进展，惩罚会自动触发。祝你好运。"\n\n林一舟握紧了手机，指节发白。\n\n他不想通关什么游戏。\n\n他要做的，是把这该死的游戏连同幕后的所有人——连根拔起。'}
+    ]
+  },
+  {
+    id: 'builtin_4',
+    title: '星海纪元',
+    author: '未来之笔',
+    category: '科幻',
+    tags: ['星际', '机甲', '热血'],
+    status: '已完结',
+    hot: 634000,
+    rating: 9.4,
+    cover: '🚀',
+    coverGradient: 'linear-gradient(135deg,#0c4a6e,#0369a1,#0284c7)',
+    desc: '公元2347年，人类已遍布银河系。机甲战士陆辰在一次太空战中被卷入虫洞，醒来时发现银河系已经过去了三千年。昔日的文明变成了遗迹，而一个未知的宇宙威胁正向人类逼近。他需要修复古老的机甲，找到失落的星际文明，拯救人类的未来。',
+    chapters: [
+      {title:'第一章 虫洞',content:'"警报！警报！前方出现不稳定空间波动——是虫洞！"\n\n陆辰的机甲"银翼"剧烈震动，驾驶舱内红光闪烁。他死死握住操纵杆，试图将机甲从那股恐怖的引力中挣脱出来。\n\n"不行！引力太大了！"\n\n仪表盘上的数字疯狂跳动，空间扭曲指数已经超过了临界值。陆辰感到整个机甲被一股不可抗拒的力量撕扯着，金属骨骼发出令人牙酸的吱嘎声。\n\n"银翼"号的AI——他称为"小白"的人工智能系统——发出最后一条通讯：\n\n"指挥官，检测到虫洞内部时间流速异常。根据相对论计算，穿过虫洞后……外部时间可能过去数百年甚至数千年。是否确认进入？"\n\n陆辰咬了咬牙："我们没有选择——已经被卷进去了！"\n\n下一秒，银翼被虫洞彻底吞没。\n\n陆辰眼前一黑，失去了意识。\n\n——\n\n不知道过了多久。\n\n滴滴——滴滴——\n\n生命维持系统的提示音将陆辰从昏迷中唤醒。他吃力地睁开眼睛，驾驶舱内一片狼藉，大部分仪表已经熄灭。\n\n"小白？报告状态。"\n\n"……指挥官……"小白的声音断断续续，像是受到了严重的信号干扰，"我们……成功穿越了虫洞。但根据星图比对……"\n\n"比对什么？"\n\n"当前星域坐标与银河系已知星图……完全无法匹配。也就是说——银河系已经发生了彻底的改变。"\n\n陆辰心中涌起一股不祥的预感："改变到什么程度？"\n\n"根据对附近恒星的元素衰变分析……外部时间可能已经过去了——三千年。"\n\n三千年。\n\n陆辰瘫坐在座椅上，一时间说不出话来。三千年，他的家人、战友、他所属的星际舰队、他所熟知的一切——都不存在了。\n\n"能联系到人类文明吗？"\n\n小白沉默了几秒钟，然后回答："正在扫描通讯频段……检测到一个信号源。信号来自距此零点三光年外的一颗行星。信号内容正在解码……"\n\n通讯频道里响起了一个声音——是一个老人的声音，苍老而疲惫：\n\n"这里是……人类最后的避难所——「希望」殖民地。我们已于百年前与银河联邦失去联系。如果还有任何人能收到这条消息……请来帮助我们。它们……快来了。"\n\n"它们？"陆辰皱眉。\n\n通话结束。银翼号在虚空中静静漂流。陆辰看着窗外陌生的星空，握紧了操纵杆。\n\n三千年前，他是星际舰队最年轻的王牌机师。\n\n三千年后，他也许是人类最后的希望。'},
+      {title:'第二章 最后的避难所',content:'「希望」殖民地盘踞在一颗暗红色的矮星轨道上，由数百艘废弃的殖民船拼接而成。远远看去，像一个巨大的、锈迹斑斑的金属蜂巢。\n\n银翼号靠近时，殖民地派出了两架小型拦截机。\n\n"通报身份！"对方的声音充满了警觉。\n\n"陆辰，银河联邦星际舰队第三机甲师团少校。编号SC-2347-117。请求迫降。"\n\n通讯频道里传来一阵嘈杂的议论声。过了好一会儿，那个苍老的声音重新响起：\n\n"银河联邦……三千年前的番号？年轻人，你在开什么玩笑。"\n\n"我不是在开玩笑。我穿过了一个虫洞——对我来说，星际战争就发生在几个小时前。"\n\n又是一阵漫长的沉默。最后，对方终于松口：\n\n"允许迫降。但你必须接受检疫——我们已经很久没见过外面的人了。"\n\n——\n\n殖民地的内部比外观更加破败。狭窄的走廊里挤满了衣衫褴褛的居民，大多数人的脸上都带着营养不良的蜡黄色。他们用麻木的眼神看着陆辰这个"外来者"，目光中既有好奇也有戒备。\n\n殖民地领袖——一个名叫宋泰的白发老者，在指挥室接见了他。\n\n"你说你来自三千年前？"宋泰打量着陆辰的军装，"这件军服的制式我见过——在历史博物馆里。"\n\n"博物馆？"\n\n"跟我来。"\n\n宋泰带着陆辰穿过几条走廊，来到一个类似资料室的地方。墙壁上挂满了泛黄的照片和残破的旗帜——其中一面旗帜上，赫然绣着银河联邦的星徽。\n\n"一千年前，人类爆发了一场持续三百年的内战。"宋泰的语气沉重，"星际舰队分裂成两派，为了争夺能源大打出手。战争摧毁了大部分宜居星球，银河联邦土崩瓦解。\n\n"内战结束后，幸存的人类分散在银河系的废墟上，勉强维持着文明的火种。但真正的灾难在三百年前才刚刚开始。"\n\n"什么灾难？"\n\n宋泰指了指窗外的星空。\n\n"它们。我们称之为「虚空吞噬者」——一群来自银河系之外的未知生命体。它们以恒星能量为食，走到哪里，哪里的恒星就会在几年内完全熄灭。三百年间，它们已经吞噬了银河系外围超过三分之一的恒星。而现在——它们正在朝这片星域移动。"\n\n"我们还有多少时间？"\n\n"最多五年。"宋泰的声音带着绝望，"五年后，这颗矮星也会熄灭。我们无处可逃——因为我们已经没有可以跨星际航行的飞船了。"\n\n陆辰沉默片刻，忽然抬起头："也许——我有办法。"\n\n他的目光落在资料室角落里存放的一个破旧全息投影仪上。那投影仪的外壳上，刻着一个他无比熟悉的标志——银河联邦军事研发部。\n\n下面有一行小字：\n\n"Project Titan——远古巨人计划。"'},
+      {title:'第三章 远古巨人',content:'"远古巨人计划——我在联邦舰队服役时听说过。"陆辰抚去全息投影仪上的灰尘，"那是联邦最高机密。据说他们在银河系边缘发现了一个远古外星文明遗迹，里面封存着超越人类科技数千年的武器。"\n\n宋泰皱了皱眉："那个遗迹确实存在。我们叫它「巨人之墓」——但过去几百年，无数探险队进去过，没有一个活着出来。"\n\n"为什么？"\n\n"因为遗迹里的防御系统还活着。没有正确的启动密钥，进去就是送死。"\n\n陆辰思考了片刻，忽然想到了什么。他快步回到银翼号的驾驶舱，从座椅下方取出一个不起眼的金属匣子。\n\n"这个匣子是我在执行任务前，上级给我的。他说如果遇到绝境，就打开它。"\n\n他打开匣子——里面是一枚巴掌大的六角形水晶。水晶内部镌刻着复杂的纹路，隐隐散发着微弱的蓝光。\n\n"这是……"宋泰瞪大眼睛。\n\n"远古文明的启动密钥。我的上级说，它是从巨人之墓的第一层取出来的。但打开更深层所需的密钥不止这一枚——据资料记载，一共有六枚，分散在银河系各处。"\n\n"所以我们要集齐六枚密钥？五年时间够吗？"\n\n"不。"陆辰摇头，"我们没有时间集齐六枚。但我们有别的办法——银翼号搭载了联邦最新的量子破解系统。如果能分析出这枚水晶的结构，也许能模拟出其他五枚的量子特征。"\n\n"万一破解失败呢？"\n\n"那人类就真的完了。"陆辰看向宋泰，"所以我们必须成功。"\n\n——\n\n接下来的三个月里，殖民地的技术人员和陆辰一起，争分夺秒地分析着远古水晶。银翼号的量子核心日夜不停地运转，终于在一个深夜——\n\n"成功了！"\n\n小白的提示音将陆辰从浅眠中唤醒。\n\n"指挥官，已成功逆向解析远古水晶的量子结构。我设计了五枚模拟密钥，理论上的匹配度达到百分之七十八。实际成功率取决于遗迹本身的安全协议版本。"\n\n"足够了。"陆辰起身，走向驾驶舱，"银翼号，出发。"\n\n"目标？"\n\n"巨人之墓。"\n\n古老的机甲喷吐出蓝色的尾焰，滑出殖民地的停泊港。\n\n窗外，苍老的矮星发出微弱的光。而在更遥远的深空中，一片未知的黑暗正在悄然逼近——那是虚空吞噬者，留给人类的时间已经不多了。\"'},
+    ]
+  },
+  {
+    id: 'builtin_5',
+    title: '医品狂妃',
+    author: '玲珑月',
+    category: '言情',
+    tags: ['穿越', '女强', '医学'],
+    status: '连载中',
+    hot: 518000,
+    rating: 8.9,
+    cover: '💉',
+    coverGradient: 'linear-gradient(135deg,#831843,#be185d,#ec4899)',
+    desc: '现代医学博士苏晚晴穿越成丞相府不受宠的庶女，恰逢太子退婚羞辱。她微微一笑，转身亮出手术刀："退婚可以，违约金一文不少。另外，你家皇上的心脏病只有我能治，要谈吗？"从此，她以一手逆天医术搅动京都风云。',
+    chapters: [
+      {title:'第一章 穿越成弃女',content:'苏晚晴醒来的时候，首先闻到的是一股浓重的中药味。\n\n她勉强睁开眼睛，映入眼帘的是一间古色古香的房间。雕花的木窗、陈旧的纱帐、檀木的桌椅——一切都在告诉她，这里不是她熟悉的协和医院手术室。\n\n"三小姐，您终于醒了！"一个丫鬟模样的少女凑上来，眼眶红肿，"您已经昏迷三天了，奴婢还以为……以为您撑不过来了……"\n\n苏晚晴的太阳穴突突地疼，陌生记忆如潮水般涌来。\n\n原来这具身体的原主也叫苏晚晴，是丞相府的庶出三小姐。生母早逝，嫡母嫌她碍眼，嫡姐欺负她，连未婚夫——当朝太子——都在今天早上公然退婚，理由是她"无才无德、不堪为妃"。\n\n原主一时接受不了，撞柱寻死。\n\n然后她——二十一世纪协和医院最年轻的心外科博士、全国外科手术大赛冠军苏晚晴——就穿过来了。\n\n"行吧。"苏晚晴坐起来，活动了一下手腕，"退婚就退婚，我也没稀罕嫁一个没见过面的太子。"\n\n丫鬟翠儿急得跺脚："三小姐！您昏了头了？太子退婚是大事啊！以后您在京中都抬不起头了！"\n\n"抬不起头？"苏晚晴笑了，"翠儿，你去告诉丞相大人，就说我要见太子一面——退婚可以，但得当面谈。"\n\n——\n\n一个时辰后，太子楚云珩果然来了。\n\n他穿着玄色蟒袍，面容俊朗，只是看向苏晚晴的目光带着毫不掩饰的轻蔑。\n\n"苏三小姐，退婚诏书已经拟好，你只需要在上面画押即可。"\n\n苏晚晴坐在椅子上，不紧不慢地喝着茶："太子殿下，退婚我没意见。不过在画押之前——我有个条件。"\n\n"条件？你也配？"\n\n"配不配的，殿下听完再说。"苏晚晴放下茶盏，从袖中取出一张纸展开，"这是我列的退婚补偿清单。第一，赔偿白银五万两，作为名誉损失费。第二，将城东那间药材铺划入我的名下。第三——"\n\n"够了！"楚云珩一拍桌子，"苏晚晴，你是不是疯了？"\n\n"疯？"苏晚晴抬头，直视太子的眼睛，"殿下可以不答应。那我不画押，不退婚。反正我本就是个庶女，嫁入东宫做个侧妃也不算亏。"\n\n楚云珩脸色铁青。他要娶的可是镇北将军的嫡女——那才是能给他带来军权的婚姻。苏晚晴不退婚，这桩联姻就办不成。\n\n但他还没开口，外面忽然传来一阵骚动——\n\n"不好了！皇上在御书房晕倒了！太医们都束手无策！"\n\n苏晚晴眼中精光一闪。\n\n她知道她的机会来了。在穿过来之前，她刚好看过这位皇上的"病历"——在现代医学里，这症状叫心源性晕厥，病因是严重的冠心病。\n\n"太子殿下，带我去见皇上。"苏晚晴站起来，"我能救他。"\n\n"你？"楚云珩冷笑，"你连大字都不识几个，怎么救？"\n\n"试试不就知道了？"苏晚晴嘴角微扬，"如果我救不了，这条命赔你。但如果我救了——刚才那张清单，你照付。"\n\n那一刻，她眼中闪过的光让楚云珩心里微微一惊。\n\n那不是丞相府懦弱三小姐的眼神——那是一个见惯了生死、掌控一切的人，才会有的眼神。'},
+      {title:'第二章 妙手回春',content:'御书房内，气氛压抑到了极点。\n\n当今天子——楚元帝躺在龙榻上，面色青紫，呼吸微弱。三位太医跪在榻前，额头冷汗涔涔，谁也说不准皇上到底得的是什么病。\n\n"一群废物！"太后满脸泪痕，"治不好皇上，你们全都要陪葬！"\n\n就在这时，太子楚云珩带着一个身着素衣的少女走了进来。\n\n"皇祖母，这位苏三小姐说她能治父皇的病。"\n\n满殿哗然。\n\n太后打量着苏晚晴——一个刚被太子退婚的庶女，能有什么本事？但在这种情形下，哪怕只有一线希望她也得抓住。\n\n"你真的能治？"\n\n"让我看看。"苏晚晴越过太医们，径直走到龙榻前。\n\n楚元帝的症状很典型：胸闷、气短、肢体末端发绀、意识丧失——在她的诊断中，这是急性心肌缺血引起的晕厥。在缺少现代医疗器械的情况下，她需要立刻采取措施。\n\n"拿银针来。"\n\n"银针？"为首的太医嗤笑，"苏三小姐，皇上龙体岂是你能随便——"\n\n"闭嘴。"苏晚晴头也不回，"太后，如果出了差池，我以命相抵。但现在，每一秒都很珍贵。"\n\n太后犹豫片刻，还是让人取来了银针。\n\n苏晚晴深吸一口气。作为一名外科医生，中医针灸并非她的主攻方向，但医学博士的基础让她对人体穴位了如指掌。她选了三个关键穴位——内关、郄门、膻中——以银针刺入。\n\n"这是在做什么？"年轻太医窃窃私语。\n\n"内关通心包经，郄门为心包经郄穴，膻中为气会——她在疏通心脉之气！"一个老太医猛地睁大眼睛，"这手法……比我见过的御医都精准！"\n\n片刻之后——\n\n"咳……"楚元帝忽然咳嗽了一声，悠悠转醒。\n\n"皇上醒了！"\n\n满殿文武跪了一地。太后喜极而泣。\n\n楚元帝虚弱地睁开眼睛，目光落在苏晚晴身上："是……你救了朕？"\n\n"皇上暂勿多言。"苏晚晴收针，"您的心脉有淤堵，虽然这次缓过来了，但若不根治，三月内必会再犯。下一次——未必还能救回来。"\n\n"你能根治？"\n\n"能。"苏晚晴回答得很干脆，"但需要时间。皇上的病症，在臣女的师门中称为\'冠状动脉粥样硬化性心脏病\'。需要药物调理、饮食控制、适量活动三管齐下，三个月可以稳住，一年可以恢复大半。"\n\n楚元帝深深看了她一眼："好。朕就命你为御前医女，全权负责朕的调理。"\n\n太子楚云珩站在殿门口，表情复杂。\n\n他本来想用一个退婚来羞辱这个庶女——没想到她反手就救了皇帝一命，还成了御前红人。\n\n苏晚晴走出御书房时，路过他身边，轻声道：\n\n"殿下，我的那张清单，还在您那里呢。记得兑现。"\n\n楚云珩："……"'},
+      {title:'第三章 第一场手术',content:'接下来的一个月，苏晚晴每天入宫为楚元帝调理身体。\n\n她利用这个时间恶补了这个时代的药材和医理知识，同时暗中逐步改善皇帝的饮食结构。盐减量、油脂控制、多食蔬果——这些理念在古代听起来惊世骇俗，但皇上每天的精神状态越来越好，文武百官有目共睹。\n\n期间有三位太医不服，联名上书弹劾她，说她不通医理、以妖术蒙蔽圣听。\n\n苏晚晴的处理方式很简单：把三位太医叫到御前，当众问了他们三个医学问题——全部与现代心脏外科的基础知识相关。三位太医面面相觑，无一人能答。\n\n"连心脉阻塞的机理都说不清楚，也敢说我不通医理？"苏晚晴轻笑，"要不要我给你们上一课？"\n\n三位太医灰溜溜退下。\n\n从此，朝中再无人敢小看这位丞相府的庶女。\n\n——\n\n然而真正让苏晚晴名声大噪的，是一台前所未有的手术。\n\n那天，镇北将军的儿子——小将军周衍从边关回来，腹部中了一支毒箭，箭头断在了腹腔内。京城名医看过都摇头，说箭头位置刁钻，取出来的可能性不到一成，让将军府准备后事。\n\n周将军在沙场上杀敌无数，此刻却抱着奄奄一息的儿子老泪纵横。\n\n苏晚晴闻讯赶到将军府："让我试试。"\n\n周将军看着这个年纪尚轻的少女，本能地想要拒绝——满城名医都摇头的事，她一个小姑娘能有什么办法？\n\n但楚元帝亲自下了一道口谕："让苏晚晴去。"\n\n手术在一间临时消毒的房间里进行。苏晚晴让人准备了烈酒（消毒用）、煮沸的水（清洗）、羊肠线（缝合）、以及她临时打造的一套手术器械——虽然粗糙，但勉强能用。\n\n她给周衍灌了一大碗麻沸散，等他意识模糊后开始手术。\n\n没有X光机、没有监护仪、没有麻醉机——她几乎是凭借手感去探查腹腔中箭头的位置。\n\n汗珠从额头上滚落，翠儿用纱布帮她擦去。\n\n周围帮忙的丫鬟们大气都不敢出。\n\n"找到了。"\n\n苏晚晴用镊子小心翼翼地夹住了箭头的尾部。箭头刺破了肠壁，幸运的是没有完全切断。她将箭头取出后，用羊肠线缝合了破损的肠壁。\n\n缝合、消毒、包扎——一切按照她在手术室里做过无数次的标准流程进行。\n\n当苏晚晴走出房间、宣布手术成功时，满屋子的将军府家将齐刷刷跪了一地。\n\n"苏小姐大恩大德，周家世代铭记！"\n\n消息传开，京城震动。\n\n太子楚云珩站在东宫窗前，听着手下的汇报，手中握着的茶杯几乎捏碎。\n\n"她到底是什么人……"\n\n而苏晚晴已经躺在丞相府自己的床上，累得不想动了。\n\n她看着天花板，想起自己在现代的手术室，想起那台闪闪发亮的达芬奇手术机器人，想起宽敞明亮的ICU病房——\n\n好吧，那些都回不去了。\n\n但手术刀在手，病人需要她，无论在哪个时代，她都还是一个医者。\n\n这就够了。'}
+    ]
+  }
+];
+
+// ============================================================
+//  APP STATE
+// ============================================================
+const STATE = {
+  novels: [...BUILTIN_NOVELS],
+  userNovels: [],
+  currentNovelId: null,
+  currentChapterIdx: 0,
+  theme: 'sepia',
+  fontSize: 18,
+  fontFamily: 'serif',
+  readingProgress: {},     // {novelId: chapterIdx}
+  bookmarks: {},           // {novelId: [chapterIdx, ...]}
+  history: [],             // [{novelId, chapterIdx, time}]
+};
+
+// ============================================================
+//  INIT
+// ============================================================
+function init() {
+  loadState();
+  // 合并用户上传的小说
+  STATE.novels = [...BUILTIN_NOVELS, ...(typeof EXTRA_NOVELS !== "undefined" ? EXTRA_NOVELS : []), ...STATE.userNovels];
+  applyTheme();
+  applyFontSettings();
+
+    console.log('Books loaded:', STATE.novels.length, '| Builtin:', BUILTIN_NOVELS.length, '| Extra:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| User:', STATE.userNovels.length);
+  renderAllSections();
+  bindGlobalEvents();
+  updateReaderFontLabel();
+
+  // 恢复上次阅读
+  if (STATE.currentNovelId) {
+    const novel = STATE.novels.find(n => n.id === STATE.currentNovelId);
+    if (novel) openNovel(STATE.currentNovelId);
+  }
+}
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('ziqie_novel_state') || '{}');
+    if (saved.theme) STATE.theme = saved.theme;
+    if (saved.fontSize) STATE.fontSize = saved.fontSize;
+    if (saved.fontFamily) STATE.fontFamily = saved.fontFamily;
+    if (saved.readingProgress) STATE.readingProgress = saved.readingProgress;
+    if (saved.bookmarks) STATE.bookmarks = saved.bookmarks;
+    if (saved.history) STATE.history = saved.history;
+    if (saved.userNovels) STATE.userNovels = saved.userNovels;
+    if (saved.currentNovelId) STATE.currentNovelId = saved.currentNovelId;
+    if (saved.currentChapterIdx !== undefined) STATE.currentChapterIdx = saved.currentChapterIdx;
+  } catch(e) { /* ignore */ }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('ziqie_novel_state', JSON.stringify({
+      theme: STATE.theme,
+      fontSize: STATE.fontSize,
+      fontFamily: STATE.fontFamily,
+      readingProgress: STATE.readingProgress,
+      bookmarks: STATE.bookmarks,
+      history: STATE.history.slice(-50),
+      userNovels: STATE.userNovels,
+      currentNovelId: STATE.currentNovelId,
+      currentChapterIdx: STATE.currentChapterIdx,
+    }));
+  } catch(e) {
+    showToast('⚠️ 存储空间不足');
+  }
+}
+
+// ============================================================
+//  RENDER SECTIONS
+// ============================================================
+function renderAllSections() {
+  renderHotNovels();
+  renderNewNovels();
+  renderCompletedNovels();
+  renderAllNovels();
+}
+
+function renderNovelCards(novels, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = novels.map(n => createNovelCard(n)).join('');
+}
+
+function createNovelCard(n) {
+  const progress = STATE.readingProgress[n.id];
+  const progressStr = progress !== undefined
+    ? `已读 ${progress + 1}/${n.chapters.length}章`
+    : `${n.chapters.length}章`;
+  const ratingHtml = n.rating ? `<span>⭐ ${n.rating}</span>` : '';
+  const hotHtml = n.hot ? `<span class="hot">👁 ${formatNum(n.hot)}</span>` : '';
+
+  return `
+  <div class="novel-card" onclick="openNovelDetail('${n.id}')">
+    <div class="cover-wrap">
+      <div class="cover-img" style="background:${n.coverGradient || 'linear-gradient(135deg,#7c3aed,#5b21b6)'}">${n.cover || '📖'}</div>
+      ${n.status ? `<span class="cover-badge">${n.status}</span>` : ''}
+      ${n.category ? `<span class="cover-tag">${n.category}</span>` : ''}
+    </div>
+    <div class="info">
+      <h3>${escHtml(n.title)}</h3>
+      <div class="author">${escHtml(n.author)}</div>
+      <div class="meta">
+        <span>${progressStr}</span>
+        ${ratingHtml}
+        ${hotHtml}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderHotNovels() {
+  const sorted = [...STATE.novels].sort((a,b) => (b.hot||0) - (a.hot||0)).slice(0, 6);
+  renderNovelCards(sorted, 'hotNovelGrid');
+}
+
+function renderNewNovels() {
+  const sorted = [...STATE.novels].slice(-6).reverse();
+  renderNovelCards(sorted, 'newNovelGrid');
+}
+
+function renderCompletedNovels() {
+  const completed = STATE.novels.filter(n => n.status === '已完结').slice(0, 6);
+  renderNovelCards(completed, 'completedNovelGrid');
+}
+
+function renderAllNovels(filterCat = 'all') {
+  const grid = document.getElementById('allNovelGrid');
+  const empty = document.getElementById('searchEmpty');
+  let list = STATE.novels;
+  if (filterCat !== 'all') list = list.filter(n => n.category === filterCat);
+  if (list.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = '';
+  } else {
+    empty.style.display = 'none';
+    renderNovelCards(list, 'allNovelGrid');
+  }
+}
+
+// ============================================================
+//  NAVIGATION
+// ============================================================
+function goHome() {
+  document.getElementById('homePage').style.display = '';
+  document.getElementById('detailPage').style.display = 'none';
+  document.getElementById('readerView').style.display = 'none';
+  document.getElementById('readerView').classList.remove('active');
+  document.getElementById('allNovelsSection').style.display = 'none';
+  document.body.style.overflow = '';
+  setActiveNav('home');
+}
+
+function openNovelDetail(novelId) {
+  const novel = STATE.novels.find(n => n.id === novelId);
+  if (!novel) return;
+
+  document.getElementById('homePage').style.display = 'none';
+  document.getElementById('detailPage').style.display = '';
+  document.getElementById('readerView').style.display = 'none';
+  document.getElementById('readerView').classList.remove('active');
+  document.body.style.overflow = '';
+
+  STATE.currentNovelId = novelId;
+
+  document.getElementById('detailCover').style.background = novel.coverGradient || 'linear-gradient(135deg,#7c3aed,#5b21b6)';
+  document.getElementById('detailCover').textContent = novel.cover || '📖';
+  document.getElementById('detailTitle').textContent = novel.title;
+  document.getElementById('detailAuthor').textContent = `作者：${novel.author}`;
+  document.getElementById('detailTags').innerHTML = (novel.tags||[]).map(t => `<span>${t}</span>`).join('');
+  document.getElementById('detailDesc').textContent = novel.desc;
+  document.getElementById('detailStats').innerHTML = `
+    <span>📖 ${novel.chapters.length} 章</span>
+    ${novel.hot ? `<span>👁 ${formatNum(novel.hot)} 阅读</span>` : ''}
+    ${novel.rating ? `<span>⭐ ${novel.rating} 分</span>` : ''}
+    <span>${novel.status || ''}</span>
+  `;
+
+  // Continue reading button
+  const continueBtn = document.getElementById('detailContinueBtn');
+  const progress = STATE.readingProgress[novelId];
+  if (progress !== undefined && progress > 0) {
+    continueBtn.style.display = '';
+    continueBtn.textContent = `📌 继续阅读 (第${progress+1}章)`;
+  } else {
+    continueBtn.style.display = 'none';
+  }
+
+  // Chapter list
+  document.getElementById('chapterCount').textContent = `共 ${novel.chapters.length} 章`;
+  const listEl = document.getElementById('chapterListDetail');
+  listEl.innerHTML = novel.chapters.map((ch, i) => `
+    <div class="chapter-row" onclick="openNovel('${novelId}', ${i})">
+      <span class="ch-title">${escHtml(ch.title)}</span>
+      <span class="ch-meta">${Math.floor(ch.content.length/1000)+1}千字</span>
+    </div>
+  `).join('');
+
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  setActiveNav(null);
+}
+
+function startReading() {
+  const idx = STATE.readingProgress[STATE.currentNovelId] || 0;
+  openNovel(STATE.currentNovelId, idx);
+}
+
+function continueReading() {
+  const idx = STATE.readingProgress[STATE.currentNovelId] || 0;
+  openNovel(STATE.currentNovelId, idx);
+}
+
+function openNovel(novelId, chapterIdx = 0) {
+const novel = STATE.novels.find(n => n.id === novelId);
+  if (!novel) {
+    document.getElementById('readerChapterBody').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px">未找到小说: ' + novelId + '</p>';
+    document.getElementById('readerView').style.display = 'block';
+    document.getElementById('readerView').classList.add('active');
+    document.getElementById('homePage').style.display = 'none';
+    document.getElementById('detailPage').style.display = 'none';
+    return;
+  }
+
+  STATE.currentNovelId = novelId;
+  STATE.currentChapterIdx = chapterIdx;
+  
+  // Show initial status
+
+
+  document.getElementById('homePage').style.display = 'none';
+  document.getElementById('detailPage').style.display = 'none';
+  var rv = document.getElementById('readerView');
+  rv.style.display = 'block';
+  rv.style.position = 'fixed';
+  // Calculate header height dynamically
+  var header = document.querySelector('.header');
+  var headerH = header ? header.offsetHeight : 60;
+  rv.style.top = headerH + 'px';
+  rv.style.left = '0';
+  rv.style.right = '0';
+  rv.style.bottom = '0';
+  rv.style.zIndex = '50';
+  rv.style.overflowY = 'auto';
+  rv.style.overflowX = 'hidden';
+  rv.style.background = 'var(--bg)';
+  document.body.style.overflow = 'hidden';
+
+  // Desktop: show sidebar; Mobile: hide sidebar
+  var sb = document.getElementById('readerSidebar');
+  if (window.innerWidth >= 769) {
+    sb.classList.remove('collapsed');
+  } else {
+    sb.classList.add('collapsed');
+  }
+  
+  renderReaderChapter(novel);
+  renderReaderChapterList();
+  updateReaderProgress();
+  setActiveNav(null);
+}
+
+function closeReader() {
+  saveState();
+  document.getElementById('readerView').style.display = 'none';
+  document.getElementById('readerView').classList.remove('active');
+  document.body.style.overflow = '';
+  STATE.currentNovelId = null;
+  goHome();
+}
+
+function viewCategory(cat) {
+  document.getElementById('allNovelsSection').style.display = '';
+  document.getElementById('allNovelsTitle').textContent = cat === 'hot' ? '🔥 热门推荐' : cat === 'new' ? '🆕 最近更新' : '✅ 完本佳作';
+  document.getElementById('catTags').style.display = 'none';
+  let list;
+  if (cat === 'hot') list = [...STATE.novels].sort((a,b)=>(b.hot||0)-(a.hot||0));
+  else if (cat === 'completed') list = STATE.novels.filter(n => n.status === '已完结');
+  else list = [...STATE.novels].slice(-20).reverse();
+  renderNovelCards(list, 'allNovelGrid');
+  setActiveNav('category');
+  window.scrollTo({top: document.getElementById('allNovelsSection').offsetTop - 80, behavior: 'smooth'});
+}
+
+function filterByCategory(cat, el) {
+  document.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('allNovelsSection').style.display = '';
+  document.getElementById('allNovelsTitle').textContent = cat === 'all' ? '📚 全部小说' : `📚 ${cat}小说`;
+  document.getElementById('catTags').style.display = '';
+  renderAllNovels(cat);
+  setActiveNav('category');
+  window.scrollTo({top: document.getElementById('allNovelsSection').offsetTop - 80, behavior: 'smooth'});
+}
+
+function handleSearch(query) {
+  if (!query.trim()) {
+    document.getElementById('allNovelsSection').style.display = 'none';
+    return;
+  }
+  const q = query.toLowerCase();
+  const results = STATE.novels.filter(n =>
+    n.title.toLowerCase().includes(q) ||
+    n.author.toLowerCase().includes(q) ||
+    (n.category||'').toLowerCase().includes(q) ||
+    (n.tags||[]).some(t => t.toLowerCase().includes(q))
+  );
+  document.getElementById('allNovelsSection').style.display = '';
+  document.getElementById('allNovelsTitle').textContent = `🔍 搜索"${query}"的结果`;
+  document.getElementById('catTags').style.display = 'none';
+  renderNovelCards(results, 'allNovelGrid');
+  document.getElementById('searchEmpty').style.display = results.length ? 'none' : '';
+  window.scrollTo({top: document.getElementById('allNovelsSection').offsetTop - 80, behavior: 'smooth'});
+}
+
+function setActiveNav(page) {
+  document.querySelectorAll('#headerNav a').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === page);
+  });
+}
+
+// ============================================================
+//  READER
+// ============================================================
+function renderReaderChapterList() {
+  var novel = getCurrentNovel();
+  if (!novel) return;
+
+  var listEl = document.getElementById('readerChapterList');
+  var html = '';
+  for (var i = 0; i < novel.chapters.length; i++) {
+    var ch = novel.chapters[i];
+    var activeClass = (i === STATE.currentChapterIdx) ? ' active' : '';
+    html += '<button class="reader-ch-item' + activeClass + '" onclick="openNovel(\'' + novel.id + '\', ' + i + ')">' + escHtml(ch.title) + '</button>';
+  }
+  listEl.innerHTML = html;
+
+  // Scroll to active
+  setTimeout(function() {
+    var active = listEl.querySelector('.active');
+    if (active) active.scrollIntoView({block:'center',behavior:'smooth'});
+  }, 200);
+}
+
+function renderReaderChapter(novel) {
+  if (!novel) { novel = getCurrentNovel(); }
+  var body = document.getElementById('readerChapterBody');
+  if (!novel) return;
+  var ch = novel.chapters[STATE.currentChapterIdx];
+  if (!ch) return;
+
+  document.getElementById('readerChapterTitle').textContent = ch.title;
+  document.getElementById('readerChapterInfo').textContent = '《' + novel.title + '》· ' + novel.author;
+  document.getElementById('readerTitleInfo').textContent = '《' + novel.title + '》';
+
+  // Split into paragraphs
+  var paragraphs = ch.content.split(/\n\n+/);
+  // If only one paragraph (no double-newlines), split on single newlines
+  if (paragraphs.length <= 1) {
+    paragraphs = ch.content.split(/\n+/);
+  }
+  var htmlParts = [];
+  for (var i = 0; i < paragraphs.length; i++) {
+    var p = paragraphs[i].trim();
+    if (p === '') continue;
+    // Escape HTML entities
+    p = p.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    htmlParts.push('<p>' + p + '</p>');
+  }
+  body.innerHTML = htmlParts.join('');
+
+  // Update chapter list highlight
+  var items = document.querySelectorAll('.reader-ch-item');
+  for (var j = 0; j < items.length; j++) {
+    if (j === STATE.currentChapterIdx) {
+      items[j].classList.add('active');
+    } else {
+      items[j].classList.remove('active');
+    }
+  }
+
+  // Save progress
+  STATE.readingProgress[novel.id] = STATE.currentChapterIdx;
+  STATE.history.push({novelId: novel.id, chapterIdx: STATE.currentChapterIdx, time: Date.now()});
+  if (STATE.history.length > 100) STATE.history = STATE.history.slice(-50);
+  saveState();
+}
+
+function updateReaderProgress() {
+  const novel = getCurrentNovel();
+  if (!novel) return;
+
+  const pct = ((STATE.currentChapterIdx + 1) / novel.chapters.length * 100).toFixed(0);
+  document.getElementById('readerProgressFill').style.width = pct + '%';
+  document.getElementById('readerProgressText').textContent = (STATE.currentChapterIdx + 1) + '/' + novel.chapters.length;
+  
+  // Also update toolbar progress
+  var tpt = document.getElementById('toolbarProgressText');
+  if (tpt) tpt.textContent = (STATE.currentChapterIdx + 1) + '/' + novel.chapters.length;
+  
+  var tpb = document.getElementById('toolbarPrevBtn');
+  if (tpb) tpb.style.opacity = STATE.currentChapterIdx === 0 ? '0.3' : '1';
+  
+  var tnb = document.getElementById('toolbarNextBtn');  
+  if (tnb) tnb.style.opacity = STATE.currentChapterIdx >= novel.chapters.length - 1 ? '0.3' : '1';
+
+  document.getElementById('readerPrevBtn').disabled = STATE.currentChapterIdx === 0;
+  document.getElementById('readerNextBtn').disabled = STATE.currentChapterIdx >= novel.chapters.length - 1;
+
+}
+
+function readerPrevChapter() {
+  if (STATE.currentChapterIdx > 0) {
+    STATE.currentChapterIdx--;
+    renderReaderChapter();
+    renderReaderChapterList();
+    updateReaderProgress();
+  }
+}
+
+function readerNextChapter() {
+  const novel = getCurrentNovel();
+  if (novel && STATE.currentChapterIdx < novel.chapters.length - 1) {
+    STATE.currentChapterIdx++;
+    renderReaderChapter();
+    renderReaderChapterList();
+    updateReaderProgress();
+  }
+}
+
+function toggleReaderSidebar() {
+  document.getElementById('readerSidebar').classList.toggle('collapsed');
+}
+
+// ============================================================
+//  SETTINGS
+// ============================================================
+function setTheme(theme) {
+  STATE.theme = theme;
+  applyTheme();
+  saveState();
+  updateThemeDots();
+}
+
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', STATE.theme);
+  document.body.className = 'theme-' + STATE.theme;
+  updateThemeDots();
+}
+
+function updateThemeDots() {
+  document.querySelectorAll('.theme-dot').forEach(d => {
+    d.classList.toggle('active', d.dataset.theme === STATE.theme);
+  });
+}
+
+function toggleTheme() {
+  const themes = ['sepia', 'light', 'dark'];
+  const idx = themes.indexOf(STATE.theme);
+  setTheme(themes[(idx + 1) % themes.length]);
+  showToast(`主题: ${STATE.theme === 'sepia' ? '🌅 护眼' : STATE.theme === 'light' ? '☀️ 亮色' : '🌙 暗色'}`);
+}
+
+function changeReaderFontSize(delta) {
+  STATE.fontSize = Math.max(12, Math.min(32, STATE.fontSize + delta));
+  applyFontSettings();
+  saveState();
+  updateReaderFontLabel();
+}
+
+function applyFontSettings() {
+  const body = document.getElementById('readerChapterBody');
+  if (!body) return;
+  body.style.fontSize = STATE.fontSize + 'px';
+
+  let ff;
+  switch(STATE.fontFamily) {
+    case 'serif': ff = '"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif'; break;
+    case 'sans': ff = '"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif'; break;
+    case 'kai': ff = '"KaiTi","STKaiti","FangSong","STFangsong",serif'; break;
+    case 'yahei': ff = '"Microsoft YaHei","PingFang SC","Helvetica Neue",sans-serif'; break;
+    default: ff = '"Noto Serif SC",serif';
+  }
+  body.style.fontFamily = ff;
+}
+
+function setFontFamily(family) {
+  STATE.fontFamily = family;
+  applyFontSettings();
+  saveState();
+}
+
+function updateReaderFontLabel() {
+  const el = document.getElementById('readerFontSizeLabel');
+  const el2 = document.getElementById('settingsFontSize');
+  if (el) el.textContent = STATE.fontSize + 'px';
+  if (el2) el2.textContent = STATE.fontSize + 'px';
+}
+
+function openSettings() {
+  document.getElementById('settingsModal').classList.add('show');
+  updateThemeDots();
+  document.getElementById('settingsFontSize').textContent = STATE.fontSize + 'px';
+  document.getElementById('fontSelect').value = STATE.fontFamily;
+}
+
+function closeSettings() {
+  document.getElementById('settingsModal').classList.remove('show');
+}
+
+// ============================================================
+//  FILE UPLOAD
+// ============================================================
+function bindGlobalEvents() {
+  // File drop on entire page (only on home/detail)
+  document.addEventListener('dragover', e => { e.preventDefault(); });
+  document.addEventListener('drop', e => {
+    e.preventDefault();
+    if (document.getElementById('readerView').style.display !== 'none') return;
+    handleFiles(e.dataTransfer.files);
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+    if (document.getElementById('settingsModal').classList.contains('show')) return;
+
+    const readerVisible = document.getElementById('readerView').style.display !== 'none';
+    if (readerVisible) {
+      switch(e.key) {
+        case 'ArrowLeft': e.preventDefault(); readerPrevChapter(); break;
+        case 'ArrowRight': e.preventDefault(); readerNextChapter(); break;
+        case 'Escape': e.preventDefault(); closeReader(); break;
+        case 'm': case 'M': e.preventDefault(); toggleReaderSidebar(); break;
+      }
+    }
+  });
+
+  // Search input clear
+  document.getElementById('searchInput').addEventListener('input', function() {
+    if (!this.value.trim()) {
+      document.getElementById('allNovelsSection').style.display = 'none';
+    }
+  });
+
+  // Settings overlay click
+  document.getElementById('settingsModal').addEventListener('click', function(e) {
+    if (e.target === this) closeSettings();
+  });
+
+  // Header nav clicks
+  document.querySelectorAll('#headerNav a').forEach(a => {
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      const page = this.dataset.page;
+      if (page === 'home') goHome();
+      else if (page === 'category') {
+        goHome();
+        document.getElementById('allNovelsSection').style.display = '';
+        document.getElementById('allNovelsTitle').textContent = '📚 全部小说';
+        document.getElementById('catTags').style.display = '';
+        document.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
+        document.querySelector('.cat-tag[data-cat="all"]').classList.add('active');
+        renderAllNovels('all');
+        setActiveNav('category');
+        window.scrollTo({top: document.getElementById('allNovelsSection').offsetTop - 80, behavior: 'smooth'});
+      } else if (page === 'rank') {
+        goHome();
+        document.getElementById('allNovelsSection').style.display = '';
+        document.getElementById('allNovelsTitle').textContent = '🏆 排行榜';
+        document.getElementById('catTags').style.display = 'none';
+        const ranked = [...STATE.novels].sort((a,b) => (b.hot||0) - (a.hot||0));
+        renderNovelCards(ranked, 'allNovelGrid');
+        setActiveNav('rank');
+        window.scrollTo({top: document.getElementById('allNovelsSection').offsetTop - 80, behavior: 'smooth'});
+      }
+    });
+  });
+}
+
+function handleFiles(files) {
+  const txtFiles = Array.from(files).filter(f => f.name.endsWith('.txt'));
+  if (txtFiles.length === 0) {
+    showToast('⚠️ 请选择 .txt 文件');
+    return;
+  }
+
+  txtFiles.forEach(async file => {
+    try {
+      const text = await file.text();
+      const novel = parseNovel(file.name.replace(/\.txt$/i, ''), text);
+      // 检查是否已存在
+      const existIdx = STATE.userNovels.findIndex(n => n.title === novel.title);
+      if (existIdx >= 0) {
+        STATE.userNovels[existIdx] = novel;
+        showToast(`✅ 已更新「${novel.title}」`);
+      } else {
+        STATE.userNovels.push(novel);
+        showToast(`✅ 已添加「${novel.title}」(${novel.chapters.length}章)`);
+      }
+      STATE.novels = [...BUILTIN_NOVELS, ...(typeof EXTRA_NOVELS !== "undefined" ? EXTRA_NOVELS : []), ...STATE.userNovels];
+      saveState();
+    
+  console.log('Books loaded:', STATE.novels.length, '| Builtin:', BUILTIN_NOVELS.length, '| Extra:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| User:', STATE.userNovels.length);
+  renderAllSections();
+    } catch(err) {
+      showToast(`❌ 解析失败: ${err.message}`);
+    }
+  });
+}
+
+function parseNovel(title, text) {
+  text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+  const novel = {
+    id: 'user_' + Date.now() + '_' + Math.random().toString(36).slice(2,8),
+    title, author: '未知作者', category: '自定义',
+    tags: [], status: '连载中', cover: '📄',
+    coverGradient: 'linear-gradient(135deg,#6b7280,#4b5563,#374151)',
+    desc: '用户上传的小说',
+    chapters: [],
+  };
+
+  const patterns = [
+    /第[一二三四五六七八九十百千万零\d]+[章回节卷集篇部].*?(?=\n|$)/g,
+    /[Cc]hapter\s*\d+.*?(?=\n|$)/g,
+    /^\s*[\(\（]?[一二三四五六七八九十\d]+[\)\）]?[\.、．\s].*$/gm,
+    /^\s*\d+[\.、．\s].*$/gm,
+  ];
+
+  let chapters = null;
+  for (const p of patterns) {
+    const matches = [...text.matchAll(p)];
+    if (matches.length >= 2) { chapters = matches.map(m => ({title:m[0].trim(), index:m.index})); break; }
+  }
+
+  if (!chapters || chapters.length < 2) {
+    novel.chapters = [{title:'全文', content:text.trim()}];
+    return novel;
+  }
+
+  for (let i = 0; i < chapters.length; i++) {
+    const start = chapters[i].index;
+    const end = i < chapters.length - 1 ? chapters[i+1].index : text.length;
+    let content = text.slice(start, end);
+    const nl = content.indexOf('\n');
+    if (nl > 0 && nl < 100) content = content.slice(nl+1);
+    novel.chapters.push({title: chapters[i].title, content: content.trim()});
+  }
+
+  novel.chapters = novel.chapters.filter(ch => ch.content.length > 20);
+  if (novel.chapters.length === 0) novel.chapters = [{title:'全文', content:text.trim()}];
+  return novel;
+}
+
+// ============================================================
+//  UTILS
+// ============================================================
+function getCurrentNovel() {
+  return STATE.novels.find(n => n.id === STATE.currentNovelId) || null;
+}
+
+function escHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function formatNum(n) {
+  if (n >= 10000) return (n/10000).toFixed(1) + '万';
+  if (n >= 1000) return (n/1000).toFixed(1) + '千';
+  return n.toString();
+}
+
+function showToast(msg) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = msg;
+  container.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 2000);
+}
+
+// ============================================================
+//  BOOT
+// ============================================================
+init();
+console.log('🍆 紫茄小说已就绪');
+console.log(`   预置 ${BUILTIN_NOVELS.length} 本小说 · ${BUILTIN_NOVELS.reduce((s,n)=>s+n.chapters.length,0)} 章`);
+console.log('   拖拽 .txt 文件到页面可添加更多');
+console.log('   快捷键: ← → 翻章 | M 目录 | Esc 返回');
+</script>
+</body>
+</html>
