@@ -1070,47 +1070,36 @@ function renderReaderChapterList() {
 
 function renderReaderChapter() {
   var novel = getCurrentNovel();
-  if (!novel) return;
+  var body = document.getElementById('readerChapterBody');
+  if (!novel) { body.innerHTML = '<p>ERROR: no novel</p>'; return; }
   var ch = novel.chapters[STATE.currentChapterIdx];
-  if (!ch) return;
+  if (!ch) { body.innerHTML = '<p>ERROR: chapter ' + STATE.currentChapterIdx + ' not found (total: ' + novel.chapters.length + ')</p>'; return; }
 
   document.getElementById('readerChapterTitle').textContent = ch.title;
   document.getElementById('readerChapterInfo').textContent = '《' + novel.title + '》· ' + novel.author;
   document.getElementById('readerTitleInfo').textContent = '《' + novel.title + '》';
 
-  // Build content using safe DOM operations
-  var body = document.getElementById('readerChapterBody');
-  body.innerHTML = '';
-  
-  var lines = ch.content.split('\n');
-  var para = document.createElement('p');
-  for (var i = 0; i < lines.length; i++) {
-    var line = lines[i].trim();
-    if (line === '') {
-      if (para.textContent !== '') {
-        body.appendChild(para);
-        para = document.createElement('p');
-      }
-    } else {
-      if (para.textContent !== '') {
-        para.appendChild(document.createElement('br'));
-      }
-      para.appendChild(document.createTextNode(line));
-    }
+  // Simple content rendering
+  var content = ch.content;
+  if (!content || content.length === 0) {
+    body.innerHTML = '<p>ERROR: content is empty</p>';
+    return;
   }
-  if (para.textContent !== '') {
-    body.appendChild(para);
-  }
+
+  // Replace double newlines with paragraph breaks, single newlines with <br>
+  var html = content
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/&/g, '&amp;')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>');
+  html = '<p>' + html + '</p>';
+  body.innerHTML = html;
 
   // Update chapter list highlight
   var items = document.querySelectorAll('.reader-ch-item');
   for (var j = 0; j < items.length; j++) {
-    var isActive = (j === STATE.currentChapterIdx);
-    if (isActive) {
-      items[j].classList.add('active');
-    } else {
-      items[j].classList.remove('active');
-    }
+    items[j].classList.toggle('active', j === STATE.currentChapterIdx);
   }
 
   // Save progress
