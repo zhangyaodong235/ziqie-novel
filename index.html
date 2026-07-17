@@ -976,7 +976,7 @@ const novel = STATE.novels.find(n => n.id === novelId);
   }
   
   renderReaderChapterList();
-  renderReaderChapter();
+  renderReaderChapter(novel);
   updateReaderProgress();
   setActiveNav(null);
 }
@@ -1068,8 +1068,8 @@ function renderReaderChapterList() {
   }, 200);
 }
 
-function renderReaderChapter() {
-  var novel = getCurrentNovel();
+function renderReaderChapter(novel) {
+  if (!novel) { novel = getCurrentNovel(); }
   var body = document.getElementById('readerChapterBody');
   if (!novel) { body.innerHTML = '<p>ERROR: no novel</p>'; return; }
   var ch = novel.chapters[STATE.currentChapterIdx];
@@ -1080,17 +1080,17 @@ function renderReaderChapter() {
   document.getElementById('readerTitleInfo').textContent = '《' + novel.title + '》';
 
   // Simple content rendering
-  var content = ch.content;
-  if (!content || content.length === 0) {
-    body.innerHTML = '<p>ERROR: content is empty</p>';
+  var contentText = ch.content;
+  if (!contentText || contentText.length === 0) {
+    body.innerHTML = '<p>ERROR: content is empty (length=' + (contentText ? contentText.length : 0) + ')</p>';
     return;
   }
 
-  // Replace double newlines with paragraph breaks, single newlines with <br>
-  var html = content
+  // Replace newlines with <br>, double newlines with </p><p>
+  var html = contentText
+    .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/&/g, '&amp;')
     .replace(/\n\n/g, '</p><p>')
     .replace(/\n/g, '<br>');
   html = '<p>' + html + '</p>';
