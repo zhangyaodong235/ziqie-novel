@@ -1070,14 +1070,18 @@ function renderReaderChapter(novel) {
   document.getElementById('readerChapterInfo').textContent = '《' + novel.title + '》· ' + novel.author;
   document.getElementById('readerTitleInfo').textContent = '《' + novel.title + '》';
 
-  // Split into paragraphs by double-newlines
+  // Split into paragraphs
   var paragraphs = ch.content.split(/\n\n+/);
+  // If only one paragraph (no double-newlines), split on single newlines
+  if (paragraphs.length <= 1) {
+    paragraphs = ch.content.split(/\n+/);
+  }
   var htmlParts = [];
   for (var i = 0; i < paragraphs.length; i++) {
     var p = paragraphs[i].trim();
     if (p === '') continue;
-    // Escape HTML and replace single newlines with <br>
-    p = p.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+    // Escape HTML entities
+    p = p.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     htmlParts.push('<p>' + p + '</p>');
   }
   body.innerHTML = htmlParts.join('');
