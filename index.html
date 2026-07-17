@@ -940,7 +940,7 @@ function openNovel(novelId, chapterIdx = 0) {
     if (dbg) dbg.innerHTML = dbg.innerHTML + '<br><b style="color:red">FAILED: novel ' + novelId + ' not found!</b>';
     console.warn('Novel not found:', novelId, 'Available IDs:', STATE.novels.map(function(n){return n.id}));
     document.getElementById('readerChapterBody').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px">Novel not found: ' + novelId + '</p>';
-    document.getElementById('readerView').style.display = '';
+    document.getElementById('readerView').style.display = 'block';
     document.getElementById('homePage').style.display = 'none';
     document.getElementById('detailPage').style.display = 'none';
     return;
@@ -955,7 +955,7 @@ function openNovel(novelId, chapterIdx = 0) {
   
   document.getElementById('homePage').style.display = 'none';
   document.getElementById('detailPage').style.display = 'none';
-  document.getElementById('readerView').style.display = '';
+  document.getElementById('readerView').style.display = 'block';
   document.body.style.overflow = 'hidden';
 
   renderReaderChapterList();
