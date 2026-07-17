@@ -538,7 +538,7 @@ img{max-width:100%}
 <div class="reader-view" id="readerView">
   <div class="reader-layout">
     <!-- Reader Sidebar -->
-    <aside class="reader-sidebar" id="readerSidebar">
+    <aside class="reader-sidebar collapsed" id="readerSidebar">
       <div class="reader-sidebar-head">
         📑 目录
         <button class="btn-icon" onclick="toggleReaderSidebar()" style="font-size:14px">✕</button>
@@ -946,9 +946,12 @@ function openNovel(novelId, chapterIdx = 0) {
   document.getElementById('readerView').classList.add('active');
   document.body.style.overflow = 'hidden';
 
-  // Close mobile sidebar when selecting a chapter
-  if (window.innerWidth < 769) {
-    document.getElementById('readerSidebar').classList.add('collapsed');
+  // Desktop: show sidebar by default; Mobile: hide after selecting chapter
+  var sb = document.getElementById('readerSidebar');
+  if (window.innerWidth >= 769) {
+    sb.classList.remove('collapsed');
+  } else {
+    sb.classList.add('collapsed');
   }
   
   renderReaderChapterList();
