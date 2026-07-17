@@ -400,13 +400,19 @@ img{max-width:100%}
   .detail-header{flex-direction:column;align-items:center;text-align:center;gap:20px}
   .detail-cover{width:140px;min-width:140px}
   .detail-actions{justify-content:center}
-  .reader-sidebar{position:fixed;left:0;top:0;bottom:0;z-index:60}
-  .reader-sidebar.collapsed{transform:translateX(-100%);margin-left:0}
+  .reader-sidebar{position:fixed;left:0;top:0;bottom:0;z-index:60;transform:translateX(-100%);margin-left:0}
+  .reader-sidebar:not(.collapsed){transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,0.3)}
+  /* Mobile sidebar overlay */
+  .reader-sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:59}
+  .reader-sidebar:not(.collapsed) + .reader-sidebar-overlay{display:block}
   .reader-content-wrap{padding:20px 14px}
   .reader-content .chapter-body{font-size:16px;line-height:1.9}
   .reader-content h1.chapter-heading{font-size:22px}
   .main-container{padding:0 12px}
   .section-title{font-size:18px}
+  .reader-footer{flex-wrap:wrap;gap:8px;padding:10px 14px}
+  .reader-footer .btn-sm{font-size:12px;padding:6px 10px}
+  .reader-content .chapter-heading{font-size:22px}
 }
 </style>
 </head>
@@ -538,20 +544,16 @@ img{max-width:100%}
       </div>
       <div class="reader-sidebar-list" id="readerChapterList"></div>
     </aside>
+    <div class="reader-sidebar-overlay" id="readerSidebarOverlay" onclick="toggleReaderSidebar()"></div>
 
     <!-- Reader Main -->
     <div class="reader-main" id="readerMain">
       <div class="reader-toolbar">
-        <button class="btn-icon" onclick="toggleReaderSidebar()" style="flex-shrink:0">☰</button>
-        <button class="btn btn-outline btn-sm" onclick="readerPrevChapter()" id="toolbarPrevBtn" title="上一章" style="flex-shrink:0">◀</button>
-        <span style="font-size:12px;color:var(--text-muted);white-space:nowrap;flex-shrink:0" id="toolbarProgressText"></span>
+        <button class="btn-icon" onclick="closeReader()" style="flex-shrink:0">← 返回</button>
+        <button class="btn btn-outline btn-sm" onclick="readerPrevChapter()" id="toolbarPrevBtn" title="上一章" style="flex-shrink:0;margin-left:auto">◀</button>
+        <span style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;flex-shrink:0" id="toolbarProgressText"></span>
         <button class="btn btn-outline btn-sm" onclick="readerNextChapter()" id="toolbarNextBtn" title="下一章" style="flex-shrink:0">▶</button>
-        <span class="title-info" id="readerTitleInfo" style="flex-shrink:1">紫茄小说</span>
-        <button class="btn-icon" onclick="changeReaderFontSize(-1)" style="flex-shrink:0">A-</button>
-        <span style="font-size:12px;color:var(--text-muted);min-width:30px;text-align:center;flex-shrink:0" id="readerFontSizeLabel">18px</span>
-        <button class="btn-icon" onclick="changeReaderFontSize(1)" style="flex-shrink:0">A+</button>
-        <button class="btn-icon" onclick="openSettings()" style="flex-shrink:0">⚙️</button>
-        <button class="btn-icon" onclick="closeReader()" style="flex-shrink:0">✕</button>
+        <button class="btn-icon" onclick="toggleReaderSidebar()" style="flex-shrink:0;font-size:16px" title="目录">📑</button>
       </div>
 
       <div class="reader-content-wrap" id="readerContentWrap">
@@ -1024,7 +1026,7 @@ function renderReaderChapterList() {
   const listEl = document.getElementById('readerChapterList');
   listEl.innerHTML = novel.chapters.map((ch, i) => `
     <button class="reader-ch-item${i === STATE.currentChapterIdx ? ' active' : ''}"
-            onclick="openNovel('${novel.id}', ${i})">
+            onclick="openNovel('${novel.id}', ${i});if(window.innerWidth<769)document.getElementById('readerSidebar').classList.add('collapsed')">
       ${escHtml(ch.title)}
     </button>
   `).join('');
