@@ -852,7 +852,7 @@ function goHome() {
 }
 
 function openNovelDetail(novelId) {
-  const novel = STATE.novels.find(n => n.id === novelId);
+  var novel = null; for (var _i = 0; _i < STATE.novels.length; _i++) { if (STATE.novels[_i].id === novelId) { novel = STATE.novels[_i]; break; } }
   if (!novel) return;
 
   document.getElementById('homePage').style.display = 'none';
@@ -905,7 +905,7 @@ function continueReading() {
 }
 
 function openNovel(novelId, chapterIdx = 0) {
-const novel = STATE.novels.find(n => n.id === novelId);
+var novel = null; for (var _i = 0; _i < STATE.novels.length; _i++) { if (STATE.novels[_i].id === novelId) { novel = STATE.novels[_i]; break; } }
   if (!novel) {
     document.getElementById('readerChapterBody').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px">未找到小说: ' + novelId + '</p>';
     document.getElementById('readerView').style.display = 'block';
@@ -1350,7 +1350,10 @@ function parseNovel(title, text) {
 //  UTILS
 // ============================================================
 function getCurrentNovel() {
-  return STATE.novels.find(n => n.id === STATE.currentNovelId) || null;
+  for (var i = 0; i < STATE.novels.length; i++) {
+    if (STATE.novels[i].id === STATE.currentNovelId) return STATE.novels[i];
+  }
+  return null;
 }
 
 function escHtml(str) {
