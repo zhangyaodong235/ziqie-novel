@@ -1060,38 +1060,56 @@ function renderReaderChapterList() {
 }
 
 function renderReaderChapter(novel) {
-  try {
   if (!novel) { novel = getCurrentNovel(); }
   var body = document.getElementById('readerChapterBody');
-  if (!novel) { body.innerHTML = '<p>ERROR: no novel</p>'; return; }
+  if (!novel) return;
   var ch = novel.chapters[STATE.currentChapterIdx];
-  if (!ch) { body.innerHTML = '<p>ERROR: chapter ' + STATE.currentChapterIdx + ' not found (total: ' + novel.chapters.length + ')</p>'; return; }
+  if (!ch) return;
 
   document.getElementById('readerChapterTitle').textContent = ch.title;
   document.getElementById('readerChapterInfo').textContent = '《' + novel.title + '》· ' + novel.author;
   document.getElementById('readerTitleInfo').textContent = '《' + novel.title + '》';
 
-  // Simple content rendering
-  var contentText = ch.content;
-  if (!contentText || contentText.length === 0) {
-    body.innerHTML = '<p>ERROR: content is empty (length=' + (contentText ? contentText.length : 0) + ')</p>';
-    return;
+  // Clear body
+  while (body.firstChild) { body.removeChild(body.firstChild); }
+
+  // Render content line by line
+  var text = ch.content;
+  var lines = text.split('\n');
+  var p = document.createElement('p');
+  
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (line === '') {
+      // Blank line = new paragraph
+      if (p.childNodes.length > 0) {
+        body.appendChild(p);
+        p = document.createElement('p');
+      }
+    } else {
+      if (p.childNodes.length > 0) {
+        p.appendChild(document.createElement('br'));
+      }
+      p.appendChild(document.createTextNode(line));
+    }
+  }
+  if (p.childNodes.length > 0) {
+    body.appendChild(p);
   }
 
-  // Replace newlines with <br>, double newlines with </p><p>
-  var html = contentText
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/\n/g, '<br>');
-  html = '<p>' + html + '</p>';
-  body.innerHTML = html;
+  // If nothing was rendered, show a message
+  if (body.childNodes.length === 0 && text.length > 0) {
+    body.textContent = text;
+  }
 
   // Update chapter list highlight
   var items = document.querySelectorAll('.reader-ch-item');
   for (var j = 0; j < items.length; j++) {
-    items[j].classList.toggle('active', j === STATE.currentChapterIdx);
+    if (j === STATE.currentChapterIdx) {
+      items[j].classList.add('active');
+    } else {
+      items[j].classList.remove('active');
+    }
   }
 
   // Save progress
@@ -1099,10 +1117,6 @@ function renderReaderChapter(novel) {
   STATE.history.push({novelId: novel.id, chapterIdx: STATE.currentChapterIdx, time: Date.now()});
   if (STATE.history.length > 100) STATE.history = STATE.history.slice(-50);
   saveState();
-  } catch(e) {
-    var b = document.getElementById('readerChapterBody');
-    if (b) b.innerHTML = '<p style="color:red">EXCEPTION: ' + e.message + ' (line ' + e.lineNumber + ')</p>';
-  }
 }
 
 function updateReaderProgress() {
