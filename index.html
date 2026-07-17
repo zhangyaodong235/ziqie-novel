@@ -455,7 +455,7 @@ img{max-width:100%}
     <!-- Hero -->
     <div class="hero">
       <div class="hero-content">
-        <div class="hero-badge">🔥 今日推荐</div>
+        <div class="hero-badge">🔥 今日推荐 <span style="font-size:10px;opacity:0.7">build 0717-3</span></div>
         <h1>一池洮河水</h1>
         <p>作者森燚。一部关于水、土地与人心的长篇纪实小说。在陇中黄土高原，年均降水不足三百毫米，一代代人守着干涸的河床，等待着引洮河水的到来。从1958年到2021年，六十三年，一条河，几代人的命运。</p>
         <div class="hero-stats">
@@ -936,6 +936,7 @@ function continueReading() {
 }
 
 function openNovel(novelId, chapterIdx = 0) {
+  console.log('[DEBUG] openNovel called with', novelId, chapterIdx, 'window.innerWidth:', window.innerWidth);
   const novel = STATE.novels.find(n => n.id === novelId);
   if (!novel) {
     document.getElementById('readerChapterBody').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px">未找到小说: ' + novelId + '</p>';
@@ -1069,10 +1070,11 @@ function renderReaderChapterList() {
 
 function renderReaderChapter() {
   const novel = getCurrentNovel();
-  if (!novel) return;
+  if (!novel) { console.log('[DEBUG] renderReaderChapter: no novel found'); return; }
 
   const ch = novel.chapters[STATE.currentChapterIdx];
-  if (!ch) return;
+  if (!ch) { console.log('[DEBUG] renderReaderChapter: no chapter at index', STATE.currentChapterIdx); return; }
+  console.log('[DEBUG] renderReaderChapter: rendering', novel.title, 'ch', STATE.currentChapterIdx+1, 'content length:', ch.content.length);
 
   document.getElementById('readerChapterTitle').textContent = ch.title;
   document.getElementById('readerChapterInfo').textContent = `《${novel.title}》· ${novel.author}`;
