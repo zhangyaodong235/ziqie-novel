@@ -729,7 +729,8 @@ function init() {
   STATE.novels = [...BUILTIN_NOVELS, ...(typeof EXTRA_NOVELS !== "undefined" ? EXTRA_NOVELS : []), ...STATE.userNovels];
   applyTheme();
   applyFontSettings();
-  console.log('📚 小说总数:', STATE.novels.length, '| 内置:', BUILTIN_NOVELS.length, '| 扩展:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| 用户:', STATE.userNovels.length); renderAllSections();
+  console.log('Books loaded:', STATE.novels.length, '| Builtin:', BUILTIN_NOVELS.length, '| Extra:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| User:', STATE.userNovels.length);
+  renderAllSections();
   bindGlobalEvents();
   updateReaderFontLabel();
 
@@ -917,7 +918,14 @@ function continueReading() {
 
 function openNovel(novelId, chapterIdx = 0) {
   const novel = STATE.novels.find(n => n.id === novelId);
-  if (!novel) { console.warn('Novel not found:', novelId, 'Available:', STATE.novels.map(n=>n.id)); document.getElementById('readerChapterBody').innerHTML='<p style="color:var(--text-muted);text-align:center;padding:40px">⚠️ 小说数据未加载，请刷新页面重试</p>'; document.getElementById('readerView').style.display=''; document.getElementById('homePage').style.display='none'; document.getElementById('detailPage').style.display='none'; return; }
+  if (!novel) { 
+    console.warn('Novel not found:', novelId, 'Available IDs:', STATE.novels.map(function(n){return n.id}));
+    document.getElementById('readerChapterBody').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px">Novel not found: ' + novelId + '</p>';
+    document.getElementById('readerView').style.display = '';
+    document.getElementById('homePage').style.display = 'none';
+    document.getElementById('detailPage').style.display = 'none';
+    return;
+  }
 
   STATE.currentNovelId = novelId;
   STATE.currentChapterIdx = chapterIdx;
@@ -1029,13 +1037,14 @@ function renderReaderChapter() {
   document.getElementById('readerChapterInfo').textContent = `《${novel.title}》· ${novel.author}`;
   document.getElementById('readerTitleInfo').textContent = `《${novel.title}》`;
 
-  const paragraphs = ch.content.split(/\n\n+/).filter(p => p.trim());
+  let paragraphs = ch.content.split(/\n\n+/).filter(p => p.trim());
+  // If only one paragraph, split on single newlines for better readability
+  if (paragraphs.length <= 1) {
+    paragraphs = ch.content.split(/\n+/).filter(p => p.trim());
+    if (paragraphs.length === 0) paragraphs = [ch.content];
+  }
   document.getElementById('readerChapterBody').innerHTML = paragraphs
-    .map(p => `<p>${escHtml(p.trim()).replace(/\n/g, '<br>')}</p>`).join('\n');
-
-  if (!ch || !ch.content || ch.content.trim() === '') { document.getElementById('readerChapterBody').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px">⚠️ 本章内容为空</p>'; return; }
-  document.getElementById('readerContentWrap').scrollTop = 0;
-
+    .map(p => `<p>${escHtml(p.trim())}</p>`).join('\n');
   // Update chapter list highlight
   document.querySelectorAll('.reader-ch-item').forEach((btn, i) => {
     btn.classList.toggle('active', i === STATE.currentChapterIdx);
@@ -1249,7 +1258,8 @@ function handleFiles(files) {
       }
       STATE.novels = [...BUILTIN_NOVELS, ...(typeof EXTRA_NOVELS !== "undefined" ? EXTRA_NOVELS : []), ...STATE.userNovels];
       saveState();
-      console.log('📚 小说总数:', STATE.novels.length, '| 内置:', BUILTIN_NOVELS.length, '| 扩展:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| 用户:', STATE.userNovels.length); renderAllSections();
+      console.log('Books loaded:', STATE.novels.length, '| Builtin:', BUILTIN_NOVELS.length, '| Extra:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| User:', STATE.userNovels.length);
+  renderAllSections();
     } catch(err) {
       showToast(`❌ 解析失败: ${err.message}`);
     }
