@@ -754,7 +754,7 @@ function init() {
     lines.push('Ch1 sample: ' + ch0.content.substring(0, 40).replace(/\n/g,' '));
   }
   dbg.innerHTML = lines.join('<br>');
-  console.log('Books loaded:', STATE.novels.length, '| Builtin:', BUILTIN_NOVELS.length, '| Extra:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| User:', STATE.userNovels.length);
+    console.log('Books loaded:', STATE.novels.length, '| Builtin:', BUILTIN_NOVELS.length, '| Extra:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| User:', STATE.userNovels.length);
   renderAllSections();
   bindGlobalEvents();
   updateReaderFontLabel();
