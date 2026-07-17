@@ -952,6 +952,16 @@ function openNovel(novelId, chapterIdx = 0) {
   document.getElementById('readerView').classList.add('active');
   document.body.style.overflow = 'hidden';
 
+  // If mobile sidebar is open, close it after selecting chapter
+  if (window.innerWidth < 769) {
+    var sb = document.getElementById('readerSidebar');
+    var ov = document.getElementById('readerSidebarOverlay');
+    if (sb && sb.classList.contains('open')) {
+      sb.classList.remove('open');
+      if (ov) ov.classList.remove('show');
+    }
+  }
+  
   renderReaderChapterList();
   renderReaderChapter();
   updateReaderProgress();
@@ -963,7 +973,7 @@ function closeReader() {
   // Reset sidebar state
   var sidebar = document.getElementById('readerSidebar');
   var overlay = document.getElementById('readerSidebarOverlay');
-  if (sidebar) { sidebar.classList.remove('open'); sidebar.classList.add('collapsed'); }
+  if (sidebar) { sidebar.classList.remove('open'); }
   if (overlay) overlay.classList.remove('show');
   document.getElementById('readerView').style.display = 'none';
   document.getElementById('readerView').classList.remove('active');
@@ -1037,7 +1047,7 @@ function renderReaderChapterList() {
   const listEl = document.getElementById('readerChapterList');
   listEl.innerHTML = novel.chapters.map((ch, i) => `
     <button class="reader-ch-item${i === STATE.currentChapterIdx ? ' active' : ''}"
-            onclick="openNovel('${novel.id}', ${i});if(window.innerWidth<769)document.getElementById('readerSidebar').classList.remove('open');var o=document.getElementById('readerSidebarOverlay');if(o)o.classList.remove('show')">
+            onclick="openNovel('${novel.id}', ${i})">
       ${escHtml(ch.title)}
     </button>
   `).join('');
@@ -1068,11 +1078,6 @@ function renderReaderChapter() {
   }
   document.getElementById('readerChapterBody').innerHTML = paragraphs
     .map(p => `<p>${escHtml(p.trim())}</p>`).join('\n');
-  
-  // Update diagnostic
-  if (dbg) {
-    dbg.innerHTML += '<br><b style="color:#0f0">✓ Rendered: ' + novel.title + ' Ch' + (STATE.currentChapterIdx+1) + ' (' + paragraphs.length + ' paras, body=' + document.getElementById('readerChapterBody').innerHTML.length + ' bytes)</b>';
-  }
   // Update chapter list highlight
   document.querySelectorAll('.reader-ch-item').forEach((btn, i) => {
     btn.classList.toggle('active', i === STATE.currentChapterIdx);
@@ -1130,17 +1135,20 @@ function readerNextChapter() {
 function toggleReaderSidebar() {
   var sidebar = document.getElementById('readerSidebar');
   var overlay = document.getElementById('readerSidebarOverlay');
-  // Mobile: toggle 'open' class
-  var isOpen = sidebar.classList.contains('open');
-  if (isOpen) {
-    sidebar.classList.remove('open');
-    if (overlay) overlay.classList.remove('show');
+  if (window.innerWidth < 769) {
+    // Mobile: use overlay sidebar
+    var isOpen = sidebar.classList.contains('open');
+    if (isOpen) {
+      sidebar.classList.remove('open');
+      if (overlay) overlay.classList.remove('show');
+    } else {
+      sidebar.classList.add('open');
+      if (overlay) overlay.classList.add('show');
+    }
   } else {
-    sidebar.classList.add('open');
-    if (overlay && window.innerWidth < 769) overlay.classList.add('show');
+    // Desktop: use flex sidebar
+    sidebar.classList.toggle('collapsed');
   }
-  // Desktop: also toggle 'collapsed' for flex layout
-  sidebar.classList.toggle('collapsed');
 }
 
 // ============================================================
