@@ -1317,7 +1317,7 @@ function handleFiles(files) {
       STATE.novels = [...BUILTIN_NOVELS, ...(typeof EXTRA_NOVELS !== "undefined" ? EXTRA_NOVELS : []), ...STATE.userNovels];
       saveState();
     
-  console.log('Books loaded:', STATE.novels.length, '| Builtin:', BUILTIN_NOVELS.length, '| Extra:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| User:', STATE.userNovels.length);
+  
   renderAllSections();
     } catch(err) {
       showToast(`❌ 解析失败: ${err.message}`);
