@@ -297,11 +297,11 @@ img{max-width:100%}
 .reader-ch-item.active{background:var(--primary);color:#fff;font-weight:500}
 .reader-main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--reader-bg);transition:background var(--transition)}
 .reader-toolbar{
-  display:flex;align-items:center;gap:8px;padding:10px 20px;
+  display:flex;align-items:center;gap:6px;padding:10px 14px;
   background:var(--bg-header);backdrop-filter:blur(8px);
-  border-bottom:1px solid var(--border);flex-wrap:wrap;position:sticky;top:0;z-index:10;
+  border-bottom:1px solid var(--border);flex-wrap:nowrap;position:sticky;top:0;z-index:10;overflow-x:auto;
 }
-.reader-toolbar .title-info{flex:1;font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.reader-toolbar .title-info{flex:0 1 auto;font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
 .reader-content-wrap{
   flex:1;overflow-y:auto;padding:32px 20px;display:flex;justify-content:center;
 }
@@ -542,18 +542,16 @@ img{max-width:100%}
     <!-- Reader Main -->
     <div class="reader-main" id="readerMain">
       <div class="reader-toolbar">
-        <button class="btn-icon" onclick="toggleReaderSidebar()">☰</button>
-        <span class="title-info" id="readerTitleInfo">紫茄小说</span>
-        <div style="display:flex;align-items:center;gap:4px">
-          <button class="btn-icon" onclick="changeReaderFontSize(-1)">A-</button>
-          <span style="font-size:12px;color:var(--text-muted);min-width:36px;text-align:center" id="readerFontSizeLabel">18px</span>
-          <button class="btn-icon" onclick="changeReaderFontSize(1)">A+</button>
-        </div>
-        <button class="btn btn-outline btn-sm" onclick="readerPrevChapter()" id="toolbarPrevBtn" title="上一章">◀ 上一章</button>
-        <span style="font-size:12px;color:var(--text-muted);min-width:50px;text-align:center" id="toolbarProgressText"></span>
-        <button class="btn btn-outline btn-sm" onclick="readerNextChapter()" id="toolbarNextBtn" title="下一章">下一章 ▶</button>
-        <button class="btn-icon" onclick="openSettings()">⚙️</button>
-        <button class="btn-icon" onclick="closeReader()">✕</button>
+        <button class="btn-icon" onclick="toggleReaderSidebar()" style="flex-shrink:0">☰</button>
+        <button class="btn btn-outline btn-sm" onclick="readerPrevChapter()" id="toolbarPrevBtn" title="上一章" style="flex-shrink:0">◀</button>
+        <span style="font-size:12px;color:var(--text-muted);white-space:nowrap;flex-shrink:0" id="toolbarProgressText"></span>
+        <button class="btn btn-outline btn-sm" onclick="readerNextChapter()" id="toolbarNextBtn" title="下一章" style="flex-shrink:0">▶</button>
+        <span class="title-info" id="readerTitleInfo" style="flex-shrink:1">紫茄小说</span>
+        <button class="btn-icon" onclick="changeReaderFontSize(-1)" style="flex-shrink:0">A-</button>
+        <span style="font-size:12px;color:var(--text-muted);min-width:30px;text-align:center;flex-shrink:0" id="readerFontSizeLabel">18px</span>
+        <button class="btn-icon" onclick="changeReaderFontSize(1)" style="flex-shrink:0">A+</button>
+        <button class="btn-icon" onclick="openSettings()" style="flex-shrink:0">⚙️</button>
+        <button class="btn-icon" onclick="closeReader()" style="flex-shrink:0">✕</button>
       </div>
 
       <div class="reader-content-wrap" id="readerContentWrap">
