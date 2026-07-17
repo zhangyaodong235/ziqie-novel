@@ -802,10 +802,10 @@ function renderNovelCards(novels, containerId) {
 function createNovelCard(n) {
   const progress = STATE.readingProgress[n.id];
   const progressStr = progress !== undefined
-    ? `已读 ${progress + 1}/${n.chapters.length}章`
-    : `${n.chapters.length}章`;
-  const ratingHtml = n.rating ? `<span>⭐ ${n.rating}</span>` : '';
-  const hotHtml = n.hot ? `<span class="hot">👁 ${formatNum(n.hot)}</span>` : '';
+    ? '已读 ' + (progress + 1) + '/' + n.chapters.length + '章'
+    : n.chapters.length + '章';
+  var ratingHtml = n.rating ? '<span>⭐ ' + n.rating + '</span>' : '';
+  var hotHtml = n.hot ? '<span class="hot">👁 ' + formatNum(n.hot) + '</span>' : '';
 
   return `
   <div class="novel-card" onclick="openNovelDetail('${n.id}')">
@@ -883,35 +883,29 @@ function openNovelDetail(novelId) {
   document.getElementById('detailCover').style.background = novel.coverGradient || 'linear-gradient(135deg,#7c3aed,#5b21b6)';
   document.getElementById('detailCover').textContent = novel.cover || '📖';
   document.getElementById('detailTitle').textContent = novel.title;
-  document.getElementById('detailAuthor').textContent = `作者：${novel.author}`;
-  document.getElementById('detailTags').innerHTML = (novel.tags||[]).map(t => `<span>${t}</span>`).join('');
+  document.getElementById('detailAuthor').textContent = '作者：' + novel.author;
+  document.getElementById('detailTags').innerHTML = (novel.tags||[]).map(function(t) { return '<span>' + t + '</span>'; }).join('');
   document.getElementById('detailDesc').textContent = novel.desc;
-  document.getElementById('detailStats').innerHTML = `
-    <span>📖 ${novel.chapters.length} 章</span>
-    ${novel.hot ? `<span>👁 ${formatNum(novel.hot)} 阅读</span>` : ''}
-    ${novel.rating ? `<span>⭐ ${novel.rating} 分</span>` : ''}
-    <span>${novel.status || ''}</span>
-  `;
+  var ds = '<span>📖 ' + novel.chapters.length + ' 章</span>';
+  if (novel.hot) ds += '<span>👁 ' + formatNum(novel.hot) + ' 阅读</span>';
+  if (novel.rating) ds += '<span>⭐ ' + novel.rating + ' 分</span>';
+  ds += '<span>' + (novel.status || '') + '</span>';
+  document.getElementById('detailStats').innerHTML = ds;
 
   // Continue reading button
   const continueBtn = document.getElementById('detailContinueBtn');
   const progress = STATE.readingProgress[novelId];
   if (progress !== undefined && progress > 0) {
     continueBtn.style.display = '';
-    continueBtn.textContent = `📌 继续阅读 (第${progress+1}章)`;
+    continueBtn.textContent = '📌 继续阅读 (第' + (progress+1) + '章)';
   } else {
     continueBtn.style.display = 'none';
   }
 
   // Chapter list
-  document.getElementById('chapterCount').textContent = `共 ${novel.chapters.length} 章`;
+  document.getElementById('chapterCount').textContent = '共 ' + novel.chapters.length + ' 章';
   const listEl = document.getElementById('chapterListDetail');
-  listEl.innerHTML = novel.chapters.map((ch, i) => `
-    <div class="chapter-row" onclick="openNovel('${novelId}', ${i})">
-      <span class="ch-title">${escHtml(ch.title)}</span>
-      <span class="ch-meta">${Math.floor(ch.content.length/1000)+1}千字</span>
-    </div>
-  `).join('');
+  listEl.innerHTML = novel.chapters.map(function(ch, i) { return '<div class="chapter-row" onclick="openNovel(\'' + novelId + '\', ' + i + ')"><span class="ch-title">' + escHtml(ch.title) + '</span><span class="ch-meta">' + (Math.floor(ch.content.length/1000)+1) + '千字</span></div>'; }).join('');
 
   window.scrollTo({top: 0, behavior: 'smooth'});
   setActiveNav(null);
@@ -1002,7 +996,7 @@ function filterByCategory(cat, el) {
   document.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('allNovelsSection').style.display = '';
-  document.getElementById('allNovelsTitle').textContent = cat === 'all' ? '📚 全部小说' : `📚 ${cat}小说`;
+  document.getElementById('allNovelsTitle').textContent = cat === 'all' ? '📚 全部小说' : '📚 ' + cat + '小说';
   document.getElementById('catTags').style.display = '';
   renderAllNovels(cat);
   setActiveNav('category');
@@ -1022,7 +1016,7 @@ function handleSearch(query) {
     (n.tags||[]).some(t => t.toLowerCase().includes(q))
   );
   document.getElementById('allNovelsSection').style.display = '';
-  document.getElementById('allNovelsTitle').textContent = `🔍 搜索"${query}"的结果`;
+  document.getElementById('allNovelsTitle').textContent = '🔍 搜索"' + query + '"的结果';
   document.getElementById('catTags').style.display = 'none';
   renderNovelCards(results, 'allNovelGrid');
   document.getElementById('searchEmpty').style.display = results.length ? 'none' : '';
@@ -1174,7 +1168,7 @@ function toggleTheme() {
   const themes = ['sepia', 'light', 'dark'];
   const idx = themes.indexOf(STATE.theme);
   setTheme(themes[(idx + 1) % themes.length]);
-  showToast(`主题: ${STATE.theme === 'sepia' ? '🌅 护眼' : STATE.theme === 'light' ? '☀️ 亮色' : '🌙 暗色'}`);
+  var themeMsg = '主题: ' + (STATE.theme === 'sepia' ? '🌅 护眼' : STATE.theme === 'light' ? '☀️ 亮色' : '🌙 暗色'); showToast(themeMsg);
 }
 
 function changeReaderFontSize(delta) {
@@ -1309,10 +1303,10 @@ function handleFiles(files) {
       const existIdx = STATE.userNovels.findIndex(n => n.title === novel.title);
       if (existIdx >= 0) {
         STATE.userNovels[existIdx] = novel;
-        showToast(`✅ 已更新「${novel.title}」`);
+        showToast('✅ 已更新「' + novel.title + '」');
       } else {
         STATE.userNovels.push(novel);
-        showToast(`✅ 已添加「${novel.title}」(${novel.chapters.length}章)`);
+        showToast('✅ 已添加「' + novel.title + '」(' + novel.chapters.length + '章)');
       }
       STATE.novels = [...BUILTIN_NOVELS, ...(typeof EXTRA_NOVELS !== "undefined" ? EXTRA_NOVELS : []), ...STATE.userNovels];
       saveState();
@@ -1320,7 +1314,7 @@ function handleFiles(files) {
   
   renderAllSections();
     } catch(err) {
-      showToast(`❌ 解析失败: ${err.message}`);
+      showToast('❌ 解析失败: ' + err.message);
     }
   });
 }
