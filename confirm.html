@@ -405,7 +405,9 @@ img{max-width:100%}
     transform:translateX(-100%);margin-left:0;
     transition:transform 0.25s;
   }
-  .reader-sidebar:not(.collapsed){transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,0.3)}
+  .reader-sidebar.open{transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,0.3)}
+  .reader-sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:65}
+  .reader-sidebar-overlay.show{display:block}
 
   .reader-content-wrap{padding:20px 14px}
   .reader-content .chapter-body{font-size:16px;line-height:1.9}
