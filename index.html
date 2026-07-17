@@ -957,9 +957,10 @@ var novel = null; for (var _i = 0; _i < STATE.novels.length; _i++) { if (STATE.n
 
 function closeReader() {
   saveState();
-  // Reset sidebar state for next open
   var sb = document.getElementById('readerSidebar');
-  if (sb) sb.classList.add('collapsed');
+  if (sb) { sb.classList.remove('open'); sb.classList.add('collapsed'); }
+  var overlay = document.getElementById('readerSidebarOverlay');
+  if (overlay) overlay.classList.remove('show');
   document.getElementById('readerView').style.display = 'none';
   document.getElementById('readerView').classList.remove('active');
   document.body.style.overflow = '';
@@ -1127,7 +1128,20 @@ function readerNextChapter() {
 }
 
 function toggleReaderSidebar() {
-  document.getElementById('readerSidebar').classList.toggle('collapsed');
+  var sidebar = document.getElementById('readerSidebar');
+  if (window.innerWidth < 769) {
+    var overlay = document.getElementById('readerSidebarOverlay');
+    var isOpen = sidebar.classList.contains('open');
+    if (isOpen) {
+      sidebar.classList.remove('open');
+      if (overlay) overlay.classList.remove('show');
+    } else {
+      sidebar.classList.add('open');
+      if (overlay) overlay.classList.add('show');
+    }
+  } else {
+    sidebar.classList.toggle('collapsed');
+  }
 }
 
 // ============================================================
