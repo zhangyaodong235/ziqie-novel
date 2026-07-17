@@ -400,11 +400,17 @@ img{max-width:100%}
   .detail-header{flex-direction:column;align-items:center;text-align:center;gap:20px}
   .detail-cover{width:140px;min-width:140px}
   .detail-actions{justify-content:center}
-  .reader-sidebar{position:fixed;left:0;top:0;bottom:0;z-index:60;transform:translateX(-100%);margin-left:0}
-  .reader-sidebar:not(.collapsed){transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,0.3)}
-  /* Mobile sidebar overlay */
-  .reader-sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:59}
-  .reader-sidebar:not(.collapsed) + .reader-sidebar-overlay{display:block}
+  .reader-sidebar{
+    position:fixed;left:0;top:0;bottom:0;z-index:70;
+    transform:translateX(-100%);margin-left:0;
+    transition:transform 0.3s;
+  }
+  .reader-sidebar.open{transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,0.3)}
+  /* Overlay behind sidebar on mobile */
+  .reader-sidebar-overlay{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:65;
+  }
+  .reader-sidebar-overlay.show{display:block}
   .reader-content-wrap{padding:20px 14px}
   .reader-content .chapter-body{font-size:16px;line-height:1.9}
   .reader-content h1.chapter-heading{font-size:22px}
@@ -549,11 +555,11 @@ img{max-width:100%}
     <!-- Reader Main -->
     <div class="reader-main" id="readerMain">
       <div class="reader-toolbar">
-        <button class="btn-icon" onclick="closeReader()" style="flex-shrink:0">← 返回</button>
-        <button class="btn btn-outline btn-sm" onclick="readerPrevChapter()" id="toolbarPrevBtn" title="上一章" style="flex-shrink:0;margin-left:auto">◀</button>
-        <span style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;flex-shrink:0" id="toolbarProgressText"></span>
-        <button class="btn btn-outline btn-sm" onclick="readerNextChapter()" id="toolbarNextBtn" title="下一章" style="flex-shrink:0">▶</button>
-        <button class="btn-icon" onclick="toggleReaderSidebar()" style="flex-shrink:0;font-size:16px" title="目录">📑</button>
+        <button class="btn-icon" onclick="closeReader()" style="flex-shrink:0" title="返回">✕</button>
+        <button class="btn-icon" onclick="readerPrevChapter()" id="toolbarPrevBtn" title="上一章" style="flex-shrink:0">◀</button>
+        <span style="font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;flex-shrink:0;min-width:40px;text-align:center" id="toolbarProgressText"></span>
+        <button class="btn-icon" onclick="readerNextChapter()" id="toolbarNextBtn" title="下一章" style="flex-shrink:0">▶</button>
+        <button class="btn-icon" onclick="toggleReaderSidebar()" style="flex-shrink:0" title="目录">📑</button>
       </div>
 
       <div class="reader-content-wrap" id="readerContentWrap">
@@ -954,6 +960,11 @@ function openNovel(novelId, chapterIdx = 0) {
 
 function closeReader() {
   saveState();
+  // Reset sidebar state
+  var sidebar = document.getElementById('readerSidebar');
+  var overlay = document.getElementById('readerSidebarOverlay');
+  if (sidebar) { sidebar.classList.remove('open'); sidebar.classList.add('collapsed'); }
+  if (overlay) overlay.classList.remove('show');
   document.getElementById('readerView').style.display = 'none';
   document.getElementById('readerView').classList.remove('active');
   document.body.style.overflow = '';
@@ -1026,7 +1037,7 @@ function renderReaderChapterList() {
   const listEl = document.getElementById('readerChapterList');
   listEl.innerHTML = novel.chapters.map((ch, i) => `
     <button class="reader-ch-item${i === STATE.currentChapterIdx ? ' active' : ''}"
-            onclick="openNovel('${novel.id}', ${i});if(window.innerWidth<769)document.getElementById('readerSidebar').classList.add('collapsed')">
+            onclick="openNovel('${novel.id}', ${i});if(window.innerWidth<769)document.getElementById('readerSidebar').classList.remove('open');var o=document.getElementById('readerSidebarOverlay');if(o)o.classList.remove('show')">
       ${escHtml(ch.title)}
     </button>
   `).join('');
@@ -1117,7 +1128,19 @@ function readerNextChapter() {
 }
 
 function toggleReaderSidebar() {
-  document.getElementById('readerSidebar').classList.toggle('collapsed');
+  var sidebar = document.getElementById('readerSidebar');
+  var overlay = document.getElementById('readerSidebarOverlay');
+  // Mobile: toggle 'open' class
+  var isOpen = sidebar.classList.contains('open');
+  if (isOpen) {
+    sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('show');
+  } else {
+    sidebar.classList.add('open');
+    if (overlay && window.innerWidth < 769) overlay.classList.add('show');
+  }
+  // Desktop: also toggle 'collapsed' for flex layout
+  sidebar.classList.toggle('collapsed');
 }
 
 // ============================================================
