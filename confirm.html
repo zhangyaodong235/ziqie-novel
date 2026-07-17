@@ -955,6 +955,9 @@ var novel = null; for (var _i = 0; _i < STATE.novels.length; _i++) { if (STATE.n
 
 function closeReader() {
   saveState();
+  // Reset sidebar state for next open
+  var sb = document.getElementById('readerSidebar');
+  if (sb) sb.classList.add('collapsed');
   document.getElementById('readerView').style.display = 'none';
   document.getElementById('readerView').classList.remove('active');
   document.body.style.overflow = '';
