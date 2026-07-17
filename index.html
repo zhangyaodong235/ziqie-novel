@@ -866,17 +866,7 @@ function renderAllNovels(filterCat = 'all') {
 function goHome() {
   document.getElementById('homePage').style.display = '';
   document.getElementById('detailPage').style.display = 'none';
-  var rv2 = document.getElementById('readerView');
-  rv2.style.display = 'none';
-  rv2.style.position = '';
-  rv2.style.top = '';
-  rv2.style.left = '';
-  rv2.style.right = '';
-  rv2.style.bottom = '';
-  rv2.style.zIndex = '';
-  rv2.style.overflowY = '';
-  rv2.style.overflowX = '';
-  rv2.style.background = '';
+  document.getElementById('readerView').style.display = 'none';
   document.getElementById('readerView').classList.remove('active');
   document.getElementById('allNovelsSection').style.display = 'none';
   document.body.style.overflow = '';
@@ -889,17 +879,7 @@ function openNovelDetail(novelId) {
 
   document.getElementById('homePage').style.display = 'none';
   document.getElementById('detailPage').style.display = '';
-  var rv2 = document.getElementById('readerView');
-  rv2.style.display = 'none';
-  rv2.style.position = '';
-  rv2.style.top = '';
-  rv2.style.left = '';
-  rv2.style.right = '';
-  rv2.style.bottom = '';
-  rv2.style.zIndex = '';
-  rv2.style.overflowY = '';
-  rv2.style.overflowX = '';
-  rv2.style.background = '';
+  document.getElementById('readerView').style.display = 'none';
   document.getElementById('readerView').classList.remove('active');
   document.body.style.overflow = '';
 
@@ -1004,17 +984,7 @@ function closeReader() {
   if (sidebar) { sidebar.classList.remove('open'); sidebar.classList.add('collapsed'); }
   var overlay = document.getElementById('readerSidebarOverlay');
   if (overlay) overlay.classList.remove('show');
-  var rv2 = document.getElementById('readerView');
-  rv2.style.display = 'none';
-  rv2.style.position = '';
-  rv2.style.top = '';
-  rv2.style.left = '';
-  rv2.style.right = '';
-  rv2.style.bottom = '';
-  rv2.style.zIndex = '';
-  rv2.style.overflowY = '';
-  rv2.style.overflowX = '';
-  rv2.style.background = '';
+  document.getElementById('readerView').style.display = 'none';
   document.getElementById('readerView').classList.remove('active');
   document.body.style.overflow = '';
   // Always go back to home page
