@@ -1095,8 +1095,17 @@ function renderReaderChapter() {
     paragraphs = ch.content.split(/\n+/).filter(p => p.trim());
     if (paragraphs.length === 0) paragraphs = [ch.content];
   }
-  document.getElementById('readerChapterBody').innerHTML = paragraphs
-    .map(function(p) { return '<p>' + escHtml(p.trim()) + '</p>'; }).join('\n');
+  // DEBUG: Check paragraphs
+  var debugHtml = '<p style="color:blue">DEBUG: ' + paragraphs.length + ' paragraphs</p>';
+  try {
+    var mapped = paragraphs.map(function(p) { return '<p>' + escHtml(p.trim()) + '</p>'; });
+    debugHtml += '<p style="color:green">Map OK: ' + mapped.length + ' items, first item length: ' + (mapped[0] ? mapped[0].length : 0) + '</p>';
+    var result = mapped.join('\n');
+    debugHtml += '<p style="color:green">Join OK: ' + result.length + ' chars</p>';
+    document.getElementById('readerChapterBody').innerHTML = debugHtml + result;
+  } catch(e) {
+    document.getElementById('readerChapterBody').innerHTML = '<p style="color:red">ERROR in map/join: ' + e.message + '</p>';
+  }
   
   var st2 = document.getElementById('readerStatus');
   if (st2) { st2.textContent = 'OK: ' + novel.title + ' - Ch' + (STATE.currentChapterIdx+1) + ' (' + paragraphs.length + ' paragraphs, ' + document.getElementById('readerChapterBody').innerHTML.length + ' bytes)'; }
