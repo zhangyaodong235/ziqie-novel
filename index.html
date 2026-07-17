@@ -1049,44 +1049,69 @@ function setActiveNav(page) {
 //  READER
 // ============================================================
 function renderReaderChapterList() {
-  const novel = getCurrentNovel();
+  var novel = getCurrentNovel();
   if (!novel) return;
 
-  const listEl = document.getElementById('readerChapterList');
-  listEl.innerHTML = novel.chapters.map(function(ch, i) {
-    return '<button class="reader-ch-item' + (i === STATE.currentChapterIdx ? ' active' : '') + '" onclick="openNovel(\'' + novel.id + '\', ' + i + ')">' + escHtml(ch.title) + '</button>';
-  }).join('');
+  var listEl = document.getElementById('readerChapterList');
+  var html = '';
+  for (var i = 0; i < novel.chapters.length; i++) {
+    var ch = novel.chapters[i];
+    var activeClass = (i === STATE.currentChapterIdx) ? ' active' : '';
+    html += '<button class="reader-ch-item' + activeClass + '" onclick="openNovel(\'' + novel.id + '\', ' + i + ')">' + escHtml(ch.title) + '</button>';
+  }
+  listEl.innerHTML = html;
 
   // Scroll to active
-  setTimeout(() => {
-    const active = listEl.querySelector('.active');
+  setTimeout(function() {
+    var active = listEl.querySelector('.active');
     if (active) active.scrollIntoView({block:'center',behavior:'smooth'});
   }, 200);
 }
 
 function renderReaderChapter() {
-  const novel = getCurrentNovel();
-  if (!novel) { return; }
+  var novel = getCurrentNovel();
+  if (!novel) return;
+  var ch = novel.chapters[STATE.currentChapterIdx];
+  if (!ch) return;
 
-  const ch = novel.chapters[STATE.currentChapterIdx];
-  if (!ch) { return; }
-document.getElementById('readerChapterTitle').textContent = ch.title;
-  document.getElementById('readerChapterInfo').textContent = `《${novel.title}》· ${novel.author}`;
-  document.getElementById('readerTitleInfo').textContent = `《${novel.title}》`;
+  document.getElementById('readerChapterTitle').textContent = ch.title;
+  document.getElementById('readerChapterInfo').textContent = '《' + novel.title + '》· ' + novel.author;
+  document.getElementById('readerTitleInfo').textContent = '《' + novel.title + '》';
 
-  let paragraphs = ch.content.split(/\n\n+/).filter(p => p.trim());
-  // If only one paragraph, split on single newlines for better readability
-  if (paragraphs.length <= 1) {
-    paragraphs = ch.content.split(/\n+/).filter(p => p.trim());
-    if (paragraphs.length === 0) paragraphs = [ch.content];
-  }
-  document.getElementById('readerChapterBody').innerHTML = paragraphs
-    .map(function(p) { return '<p>' + escHtml(p.trim()) + '</p>'; }).join('\n');
+  // Build content using safe DOM operations
+  var body = document.getElementById('readerChapterBody');
+  body.innerHTML = '';
   
+  var lines = ch.content.split('\n');
+  var para = document.createElement('p');
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (line === '') {
+      if (para.textContent !== '') {
+        body.appendChild(para);
+        para = document.createElement('p');
+      }
+    } else {
+      if (para.textContent !== '') {
+        para.appendChild(document.createElement('br'));
+      }
+      para.appendChild(document.createTextNode(line));
+    }
+  }
+  if (para.textContent !== '') {
+    body.appendChild(para);
+  }
+
   // Update chapter list highlight
-  document.querySelectorAll('.reader-ch-item').forEach((btn, i) => {
-    btn.classList.toggle('active', i === STATE.currentChapterIdx);
-  });
+  var items = document.querySelectorAll('.reader-ch-item');
+  for (var j = 0; j < items.length; j++) {
+    var isActive = (j === STATE.currentChapterIdx);
+    if (isActive) {
+      items[j].classList.add('active');
+    } else {
+      items[j].classList.remove('active');
+    }
+  }
 
   // Save progress
   STATE.readingProgress[novel.id] = STATE.currentChapterIdx;
