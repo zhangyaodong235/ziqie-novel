@@ -739,7 +739,6 @@ function init() {
   applyTheme();
   applyFontSettings();
 
-    console.log('Books loaded:', STATE.novels.length, '| Builtin:', BUILTIN_NOVELS.length, '| Extra:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| User:', STATE.userNovels.length);
   renderAllSections();
   bindGlobalEvents();
   updateReaderFontLabel();
@@ -1406,10 +1405,6 @@ function showToast(msg) {
 //  BOOT
 // ============================================================
 init();
-console.log('🍆 紫茄小说已就绪');
-console.log(`   预置 ${BUILTIN_NOVELS.length} 本小说 · ${BUILTIN_NOVELS.reduce((s,n)=>s+n.chapters.length,0)} 章`);
-console.log('   拖拽 .txt 文件到页面可添加更多');
-console.log('   快捷键: ← → 翻章 | M 目录 | Esc 返回');
 </script>
 </body>
 </html>
