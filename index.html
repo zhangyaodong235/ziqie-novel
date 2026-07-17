@@ -866,7 +866,17 @@ function renderAllNovels(filterCat = 'all') {
 function goHome() {
   document.getElementById('homePage').style.display = '';
   document.getElementById('detailPage').style.display = 'none';
-  document.getElementById('readerView').style.display = 'none';
+  var rv2 = document.getElementById('readerView');
+  rv2.style.display = 'none';
+  rv2.style.position = '';
+  rv2.style.top = '';
+  rv2.style.left = '';
+  rv2.style.right = '';
+  rv2.style.bottom = '';
+  rv2.style.zIndex = '';
+  rv2.style.overflowY = '';
+  rv2.style.overflowX = '';
+  rv2.style.background = '';
   document.getElementById('readerView').classList.remove('active');
   document.getElementById('allNovelsSection').style.display = 'none';
   document.body.style.overflow = '';
@@ -879,7 +889,17 @@ function openNovelDetail(novelId) {
 
   document.getElementById('homePage').style.display = 'none';
   document.getElementById('detailPage').style.display = '';
-  document.getElementById('readerView').style.display = 'none';
+  var rv2 = document.getElementById('readerView');
+  rv2.style.display = 'none';
+  rv2.style.position = '';
+  rv2.style.top = '';
+  rv2.style.left = '';
+  rv2.style.right = '';
+  rv2.style.bottom = '';
+  rv2.style.zIndex = '';
+  rv2.style.overflowY = '';
+  rv2.style.overflowX = '';
+  rv2.style.background = '';
   document.getElementById('readerView').classList.remove('active');
   document.body.style.overflow = '';
 
@@ -949,8 +969,17 @@ function openNovel(novelId, chapterIdx = 0) {
 
   document.getElementById('homePage').style.display = 'none';
   document.getElementById('detailPage').style.display = 'none';
-  document.getElementById('readerView').style.display = 'block';
-  document.getElementById('readerView').classList.add('active');
+  var rv = document.getElementById('readerView');
+  rv.style.display = 'block';
+  rv.style.position = 'fixed';
+  rv.style.top = '60px';
+  rv.style.left = '0';
+  rv.style.right = '0';
+  rv.style.bottom = '0';
+  rv.style.zIndex = '50';
+  rv.style.overflowY = 'auto';
+  rv.style.overflowX = 'hidden';
+  rv.style.background = 'var(--bg)';
   document.body.style.overflow = 'hidden';
 
   // Desktop: show sidebar; Mobile: hide sidebar after chapter select
@@ -975,7 +1004,17 @@ function closeReader() {
   if (sidebar) { sidebar.classList.remove('open'); sidebar.classList.add('collapsed'); }
   var overlay = document.getElementById('readerSidebarOverlay');
   if (overlay) overlay.classList.remove('show');
-  document.getElementById('readerView').style.display = 'none';
+  var rv2 = document.getElementById('readerView');
+  rv2.style.display = 'none';
+  rv2.style.position = '';
+  rv2.style.top = '';
+  rv2.style.left = '';
+  rv2.style.right = '';
+  rv2.style.bottom = '';
+  rv2.style.zIndex = '';
+  rv2.style.overflowY = '';
+  rv2.style.overflowX = '';
+  rv2.style.background = '';
   document.getElementById('readerView').classList.remove('active');
   document.body.style.overflow = '';
   // Always go back to home page
