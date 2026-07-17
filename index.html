@@ -401,16 +401,11 @@ img{max-width:100%}
   .detail-cover{width:140px;min-width:140px}
   .detail-actions{justify-content:center}
   .reader-sidebar{
-    position:fixed;left:0;top:0;bottom:0;z-index:70;
+    position:fixed;left:0;top:0;bottom:0;z-index:70;width:280px;
     transform:translateX(-100%);margin-left:0;
-    transition:transform 0.3s;
+    transition:transform 0.25s;
   }
-  .reader-sidebar.open{transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,0.3)}
-  /* Overlay behind sidebar on mobile */
-  .reader-sidebar-overlay{
-    display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:65;
-  }
-  .reader-sidebar-overlay.show{display:block}
+  .reader-sidebar:not(.collapsed){transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,0.3)}
   .reader-content-wrap{padding:20px 14px}
   .reader-content .chapter-body{font-size:16px;line-height:1.9}
   .reader-content h1.chapter-heading{font-size:22px}
@@ -550,7 +545,6 @@ img{max-width:100%}
       </div>
       <div class="reader-sidebar-list" id="readerChapterList"></div>
     </aside>
-    <div class="reader-sidebar-overlay" id="readerSidebarOverlay" onclick="toggleReaderSidebar()"></div>
 
     <!-- Reader Main -->
     <div class="reader-main" id="readerMain">
@@ -952,14 +946,9 @@ function openNovel(novelId, chapterIdx = 0) {
   document.getElementById('readerView').classList.add('active');
   document.body.style.overflow = 'hidden';
 
-  // If mobile sidebar is open, close it after selecting chapter
+  // Close mobile sidebar when selecting a chapter
   if (window.innerWidth < 769) {
-    var sb = document.getElementById('readerSidebar');
-    var ov = document.getElementById('readerSidebarOverlay');
-    if (sb && sb.classList.contains('open')) {
-      sb.classList.remove('open');
-      if (ov) ov.classList.remove('show');
-    }
+    document.getElementById('readerSidebar').classList.add('collapsed');
   }
   
   renderReaderChapterList();
@@ -970,11 +959,6 @@ function openNovel(novelId, chapterIdx = 0) {
 
 function closeReader() {
   saveState();
-  // Reset sidebar state
-  var sidebar = document.getElementById('readerSidebar');
-  var overlay = document.getElementById('readerSidebarOverlay');
-  if (sidebar) { sidebar.classList.remove('open'); }
-  if (overlay) overlay.classList.remove('show');
   document.getElementById('readerView').style.display = 'none';
   document.getElementById('readerView').classList.remove('active');
   document.body.style.overflow = '';
@@ -1133,22 +1117,7 @@ function readerNextChapter() {
 }
 
 function toggleReaderSidebar() {
-  var sidebar = document.getElementById('readerSidebar');
-  var overlay = document.getElementById('readerSidebarOverlay');
-  if (window.innerWidth < 769) {
-    // Mobile: use overlay sidebar
-    var isOpen = sidebar.classList.contains('open');
-    if (isOpen) {
-      sidebar.classList.remove('open');
-      if (overlay) overlay.classList.remove('show');
-    } else {
-      sidebar.classList.add('open');
-      if (overlay) overlay.classList.add('show');
-    }
-  } else {
-    // Desktop: use flex sidebar
-    sidebar.classList.toggle('collapsed');
-  }
+  document.getElementById('readerSidebar').classList.toggle('collapsed');
 }
 
 // ============================================================
