@@ -432,6 +432,7 @@ img{max-width:100%}
 
   <!-- ===== HOME PAGE ===== -->
   <div id="homePage">
+  <div id="debugPanel" style="position:fixed;bottom:10px;right:10px;z-index:9999;background:#1a1a2e;color:#0f0;padding:12px 16px;border-radius:8px;font-family:monospace;font-size:11px;max-width:350px;max-height:200px;overflow:auto;opacity:0.9;cursor:pointer" onclick="this.style.display='none'" title="Click to dismiss"></div>
 
     <!-- Hero -->
     <div class="hero">
@@ -729,6 +730,22 @@ function init() {
   STATE.novels = [...BUILTIN_NOVELS, ...(typeof EXTRA_NOVELS !== "undefined" ? EXTRA_NOVELS : []), ...STATE.userNovels];
   applyTheme();
   applyFontSettings();
+  // === SELF DIAGNOSTIC ===
+  var dbg = document.getElementById('debugPanel');
+  var lines = [];
+  lines.push('EXTRA_NOVELS: ' + (typeof EXTRA_NOVELS !== 'undefined' ? 'LOADED (' + EXTRA_NOVELS.length + ' novels)' : 'NOT LOADED!'));
+  lines.push('Total novels: ' + STATE.novels.length);
+  lines.push('IDs: ' + STATE.novels.map(function(n){return n.id;}).join(', '));
+  lines.push('builtin_6 found: ' + (STATE.novels.some(function(n){return n.id==='builtin_6';}) ? 'YES' : 'NO'));
+  lines.push('openNovel fn: ' + (typeof openNovel === 'function' ? 'OK' : 'MISSING'));
+  lines.push('renderChapter fn: ' + (typeof renderReaderChapter === 'function' ? 'OK' : 'MISSING'));
+  lines.push('escHtml fn: ' + (typeof escHtml === 'function' ? 'OK' : 'MISSING'));
+  if (typeof EXTRA_NOVELS !== 'undefined' && EXTRA_NOVELS.length > 0) {
+    var ch0 = EXTRA_NOVELS[0].chapters[0];
+    lines.push('Ch1 content: ' + ch0.content.length + ' chars');
+    lines.push('Ch1 sample: ' + ch0.content.substring(0, 40).replace(/\n/g,' '));
+  }
+  dbg.innerHTML = lines.join('<br>');
   console.log('Books loaded:', STATE.novels.length, '| Builtin:', BUILTIN_NOVELS.length, '| Extra:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| User:', STATE.userNovels.length);
   renderAllSections();
   bindGlobalEvents();
@@ -918,7 +935,9 @@ function continueReading() {
 
 function openNovel(novelId, chapterIdx = 0) {
   const novel = STATE.novels.find(n => n.id === novelId);
-  if (!novel) { 
+  if (!novel) {
+    var dbg = document.getElementById('debugPanel');
+    if (dbg) dbg.innerHTML = dbg.innerHTML + '<br><b style="color:red">FAILED: novel ' + novelId + ' not found!</b>';
     console.warn('Novel not found:', novelId, 'Available IDs:', STATE.novels.map(function(n){return n.id}));
     document.getElementById('readerChapterBody').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px">Novel not found: ' + novelId + '</p>';
     document.getElementById('readerView').style.display = '';
@@ -1258,7 +1277,23 @@ function handleFiles(files) {
       }
       STATE.novels = [...BUILTIN_NOVELS, ...(typeof EXTRA_NOVELS !== "undefined" ? EXTRA_NOVELS : []), ...STATE.userNovels];
       saveState();
-      console.log('Books loaded:', STATE.novels.length, '| Builtin:', BUILTIN_NOVELS.length, '| Extra:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| User:', STATE.userNovels.length);
+      // === SELF DIAGNOSTIC ===
+  var dbg = document.getElementById('debugPanel');
+  var lines = [];
+  lines.push('EXTRA_NOVELS: ' + (typeof EXTRA_NOVELS !== 'undefined' ? 'LOADED (' + EXTRA_NOVELS.length + ' novels)' : 'NOT LOADED!'));
+  lines.push('Total novels: ' + STATE.novels.length);
+  lines.push('IDs: ' + STATE.novels.map(function(n){return n.id;}).join(', '));
+  lines.push('builtin_6 found: ' + (STATE.novels.some(function(n){return n.id==='builtin_6';}) ? 'YES' : 'NO'));
+  lines.push('openNovel fn: ' + (typeof openNovel === 'function' ? 'OK' : 'MISSING'));
+  lines.push('renderChapter fn: ' + (typeof renderReaderChapter === 'function' ? 'OK' : 'MISSING'));
+  lines.push('escHtml fn: ' + (typeof escHtml === 'function' ? 'OK' : 'MISSING'));
+  if (typeof EXTRA_NOVELS !== 'undefined' && EXTRA_NOVELS.length > 0) {
+    var ch0 = EXTRA_NOVELS[0].chapters[0];
+    lines.push('Ch1 content: ' + ch0.content.length + ' chars');
+    lines.push('Ch1 sample: ' + ch0.content.substring(0, 40).replace(/\n/g,' '));
+  }
+  dbg.innerHTML = lines.join('<br>');
+  console.log('Books loaded:', STATE.novels.length, '| Builtin:', BUILTIN_NOVELS.length, '| Extra:', (typeof EXTRA_NOVELS!=='undefined'?EXTRA_NOVELS.length:0), '| User:', STATE.userNovels.length);
   renderAllSections();
     } catch(err) {
       showToast(`❌ 解析失败: ${err.message}`);
