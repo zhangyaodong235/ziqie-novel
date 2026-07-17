@@ -936,8 +936,6 @@ function openNovel(novelId, chapterIdx = 0) {
 const novel = STATE.novels.find(n => n.id === novelId);
   if (!novel) {
     document.getElementById('readerChapterBody').innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px">未找到小说: ' + novelId + '</p>';
-    var st3 = document.getElementById('readerStatus');
-    if (st3) { st3.style.display = 'block'; st3.textContent = 'ERROR: Novel not found: ' + novelId; }
     document.getElementById('readerView').style.display = 'block';
     document.getElementById('readerView').classList.add('active');
     document.getElementById('homePage').style.display = 'none';
