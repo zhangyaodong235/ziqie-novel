@@ -949,6 +949,10 @@ function openNovel(novelId, chapterIdx = 0) {
   STATE.currentNovelId = novelId;
   STATE.currentChapterIdx = chapterIdx;
 
+  // Update diagnostic
+  var dbg = document.getElementById('debugPanel');
+  if (dbg) dbg.innerHTML += '<br><b style="color:#ff0">➤ Opening: ' + novelId + ' ch' + (chapterIdx+1) + '</b>';
+  
   document.getElementById('homePage').style.display = 'none';
   document.getElementById('detailPage').style.display = 'none';
   document.getElementById('readerView').style.display = '';
@@ -1064,6 +1068,12 @@ function renderReaderChapter() {
   }
   document.getElementById('readerChapterBody').innerHTML = paragraphs
     .map(p => `<p>${escHtml(p.trim())}</p>`).join('\n');
+  
+  // Update diagnostic
+  var dbg = document.getElementById('debugPanel');
+  if (dbg) {
+    dbg.innerHTML += '<br><b style="color:#0f0">✓ Rendered: ' + novel.title + ' Ch' + (STATE.currentChapterIdx+1) + ' (' + paragraphs.length + ' paras, body=' + document.getElementById('readerChapterBody').innerHTML.length + ' bytes)</b>';
+  }
   // Update chapter list highlight
   document.querySelectorAll('.reader-ch-item').forEach((btn, i) => {
     btn.classList.toggle('active', i === STATE.currentChapterIdx);
