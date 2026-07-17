@@ -550,9 +550,9 @@ img{max-width:100%}
           <span style="font-size:12px;color:var(--text-muted);min-width:36px;text-align:center" id="readerFontSizeLabel">18px</span>
           <button class="btn-icon" onclick="changeReaderFontSize(1)">A+</button>
         </div>
-        <button class="btn-icon" onclick="readerPrevChapter()" id="toolbarPrevBtn" style="font-size:14px" title="上一章">◀</button>
-        <span style="font-size:12px;color:var(--text-muted)" id="toolbarProgressText"></span>
-        <button class="btn-icon" onclick="readerNextChapter()" id="toolbarNextBtn" style="font-size:14px" title="下一章">▶</button>
+        <button class="btn btn-outline btn-sm" onclick="readerPrevChapter()" id="toolbarPrevBtn" title="上一章">◀ 上一章</button>
+        <span style="font-size:12px;color:var(--text-muted);min-width:50px;text-align:center" id="toolbarProgressText"></span>
+        <button class="btn btn-outline btn-sm" onclick="readerNextChapter()" id="toolbarNextBtn" title="下一章">下一章 ▶</button>
         <button class="btn-icon" onclick="openSettings()">⚙️</button>
         <button class="btn-icon" onclick="closeReader()">✕</button>
       </div>
