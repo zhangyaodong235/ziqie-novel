@@ -867,6 +867,7 @@ function goHome() {
   document.getElementById('homePage').style.display = '';
   document.getElementById('detailPage').style.display = 'none';
   document.getElementById('readerView').style.display = 'none';
+  document.getElementById('readerView').classList.remove('active');
   document.getElementById('allNovelsSection').style.display = 'none';
   document.body.style.overflow = '';
   setActiveNav('home');
@@ -879,6 +880,7 @@ function openNovelDetail(novelId) {
   document.getElementById('homePage').style.display = 'none';
   document.getElementById('detailPage').style.display = '';
   document.getElementById('readerView').style.display = 'none';
+  document.getElementById('readerView').classList.remove('active');
   document.body.style.overflow = '';
 
   STATE.currentNovelId = novelId;
@@ -976,13 +978,9 @@ function closeReader() {
   document.getElementById('readerView').style.display = 'none';
   document.getElementById('readerView').classList.remove('active');
   document.body.style.overflow = '';
-
-  // Go back to detail page if we have a current novel
-  if (STATE.currentNovelId) {
-    openNovelDetail(STATE.currentNovelId);
-  } else {
-    goHome();
-  }
+  // Always go back to home page
+  STATE.currentNovelId = null;
+  goHome();
 }
 
 function viewCategory(cat) {
