@@ -1,6 +1,3 @@
-HTTP 200 
-Content-Type: text/html; charset=utf-8
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -627,7 +624,6 @@ img{max-width:100%}
 <!-- ==================== TOAST CONTAINER ==================== -->
 <div class="toast-container" id="toastContainer"></div>
 
-<script src="data.js"></script>
 <script>
 // ============================================================
 //  DATA: 预置小说库
@@ -768,7 +764,7 @@ const STATE = {
 function init() {
   loadState();
   // 合并用户上传的小说
-  STATE.novels = [...BUILTIN_NOVELS, ...(typeof EXTRA_NOVELS !== "undefined" ? EXTRA_NOVELS : []), ...STATE.userNovels];
+  STATE.novels = [...BUILTIN_NOVELS, ...STATE.userNovels];
   applyTheme();
   applyFontSettings();
 
@@ -1339,11 +1335,9 @@ function handleFiles(files) {
         STATE.userNovels.push(novel);
         showToast('✅ 已添加「' + novel.title + '」(' + novel.chapters.length + '章)');
       }
-      STATE.novels = [...BUILTIN_NOVELS, ...(typeof EXTRA_NOVELS !== "undefined" ? EXTRA_NOVELS : []), ...STATE.userNovels];
+      STATE.novels = [...BUILTIN_NOVELS, ...STATE.userNovels];
       saveState();
-    
-  
-  renderAllSections();
+      renderAllSections();
     } catch(err) {
       showToast('❌ 解析失败: ' + err.message);
     }
